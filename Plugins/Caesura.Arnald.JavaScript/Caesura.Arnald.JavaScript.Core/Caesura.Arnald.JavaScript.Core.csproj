@@ -6,6 +6,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    
+    <Version>0.0.0.1</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <Product>Caesura ARNaLD JavaScript plugin</Product>
+    <Description>$(Product)</Description>
+    
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <Company>Caesura Software Solutions</Company>
+    <Authors>$(Company)</Authors>
+    <Copyright>Copyright (C) $(Company) 2019</Copyright>
   </PropertyGroup>
 
 </Project>
