@@ -1,0 +1,8 @@
+
+.vscode
+bin/
+obj/
+Data/
+Output/
+*.txt
+!LICENSE.txt
