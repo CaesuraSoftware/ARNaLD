@@ -7,7 +7,8 @@ namespace Caesura.Arnald.Core.Plugin
     {
         None            = 1 << 0,
         General         = 1 << 1,
-        Scripting       = 1 << 2,
-        Communication   = 1 << 3,
+        Behavior        = 1 << 2,
+        Scripting       = 1 << 3,
+        Communication   = 1 << 4,
     }
 }
