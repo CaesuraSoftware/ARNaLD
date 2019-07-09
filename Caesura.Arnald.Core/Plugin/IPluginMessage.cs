@@ -8,7 +8,8 @@ namespace Caesura.Arnald.Core.Plugin
     public interface IPluginMessage
     {
         PluginKind Kind { get; }
-        String Name { get; set; }
+        String Sender { get; set; }
+        String Recipient { get; set; }
         String Message { get; set; }
         Dictionary<String, Object> Items { get; set; }
         T Get<T>(String name);

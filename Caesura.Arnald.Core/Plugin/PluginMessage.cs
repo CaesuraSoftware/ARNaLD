@@ -11,7 +11,8 @@ namespace Caesura.Arnald.Core.Plugin
     public class PluginMessage : IPluginMessage
     {
         public PluginKind Kind { get; set; }
-        public String Name { get; set; }
+        public String Sender { get; set; }
+        public String Recipient { get; set; }
         public String Message { get; set; }
         public Dictionary<String, Object> Items { get; set; }
         
