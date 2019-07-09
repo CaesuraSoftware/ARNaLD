@@ -22,7 +22,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Messages = new Mailbox();
         }
         
-        public virtual IEnumerable<Task> Execute()
+        public virtual IEnumerable<Task<IMessage>> Execute()
         {
             var msgs = this.Messages.ReceiveAll();
             return this.Personality.Execute(msgs);
