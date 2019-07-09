@@ -5,11 +5,16 @@ namespace Caesura.Arnald.Core
 {
     using System.Collections.Generic;
     
+    public interface IMessage<T> : IMessage
+    {
+        T Data { get; set; }
+    }
+    
     public interface IMessage
     {
         String Sender { get; set; }
         String Recipient { get; set; }
-        String Message { get; set; }
+        String Information { get; set; }
         Dictionary<String, Object> Items { get; set; }
         T Get<T>(String name);
         Boolean TryGet<T>(String name, out T item);
