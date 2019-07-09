@@ -7,7 +7,7 @@ namespace Caesura.Arnald.Core.Agents
     using System.Threading;
     using System.Threading.Tasks;
     
-    public interface IBehavior
+    public interface IBehavior : IComparable, IDisposable
     {
         String Name { get; }
         Int32 Priority { get; set; }
