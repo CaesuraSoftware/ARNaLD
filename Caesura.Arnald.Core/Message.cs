@@ -1,16 +1,13 @@
 
 using System;
 
-namespace Caesura.Arnald.Core.Plugin
+namespace Caesura.Arnald.Core
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using Caesura.Standard;
     
-    public class PluginMessage : IPluginMessage
+    public class PluginMessage : IMessage
     {
-        public PluginKind Kind { get; set; }
         public String Sender { get; set; }
         public String Recipient { get; set; }
         public String Message { get; set; }
@@ -21,14 +18,13 @@ namespace Caesura.Arnald.Core.Plugin
             this.Items = new Dictionary<String, Object>();
         }
         
-        public PluginMessage(IPluginMessage msg)
+        public PluginMessage(IMessage msg)
         {
             this.Copy(msg);
         }
         
-        public void Copy(IPluginMessage msg)
+        public virtual void Copy(IMessage msg)
         {
-            this.Kind       = msg.Kind;
             this.Sender     = msg.Sender;
             this.Recipient  = msg.Recipient;
             this.Message    = msg.Message;

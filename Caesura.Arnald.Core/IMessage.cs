@@ -1,13 +1,12 @@
 
 using System;
 
-namespace Caesura.Arnald.Core.Plugin
+namespace Caesura.Arnald.Core
 {
     using System.Collections.Generic;
     
-    public interface IPluginMessage
+    public interface IMessage
     {
-        PluginKind Kind { get; }
         String Sender { get; set; }
         String Recipient { get; set; }
         String Message { get; set; }
@@ -16,6 +15,6 @@ namespace Caesura.Arnald.Core.Plugin
         Boolean TryGet<T>(String name, out T item);
         Boolean Set<T>(String name, T item);
         Boolean Set<T>(String name, T item, Boolean force);
-        void Copy(IPluginMessage msg);
+        void Copy(IMessage msg);
     }
 }

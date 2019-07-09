@@ -9,5 +9,6 @@ namespace Caesura.Arnald.Core.Plugin
     {
         PluginKind Kind { get; }
         String Name { get; }
+        
     }
 }
