@@ -29,7 +29,8 @@ namespace Caesura.Arnald.Core.Plugin
         public void Copy(IPluginMessage msg)
         {
             this.Kind       = msg.Kind;
-            this.Name       = msg.Name;
+            this.Sender     = msg.Sender;
+            this.Recipient  = msg.Recipient;
             this.Message    = msg.Message;
             this.Items      = new Dictionary<String, Object>(msg.Items);
         }
