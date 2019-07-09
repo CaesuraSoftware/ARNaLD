@@ -77,6 +77,7 @@ namespace Caesura.Arnald.Core.Plugin
                 if (force)
                 {
                     this.Items[name] = item;
+                    return true;
                 }
                 return false;
             }
@@ -90,7 +91,7 @@ namespace Caesura.Arnald.Core.Plugin
         public override String ToString()
         {
             // TODO: turn into JSON
-            throw new NotImplementedException();
+            return base.ToString();
         }
     }
 }
