@@ -8,5 +8,6 @@ namespace Caesura.Arnald.Core.Plugin
     public interface IPlugin
     {
         PluginKind Kind { get; }
+        String Name { get; }
     }
 }
