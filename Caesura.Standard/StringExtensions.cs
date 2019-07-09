@@ -10,6 +10,31 @@ namespace Caesura.Standard
     {
         
         /// <summary>
+        /// Wrap a string in quotes if it does not already start or end with a quote.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static String Quote(this String str)
+        {
+            /**/ if (str.StartsWith("\"") && str.EndsWith("\""))
+            {
+                return str;
+            }
+            else if (str.StartsWith("\""))
+            {
+                return str + "\"";
+            }
+            else if (str.EndsWith("\""))
+            {
+                return "\"" + str;
+            }
+            else
+            {
+                return $"\"{str}\"";
+            }
+        }
+        
+        /// <summary>
         /// Generate a deterministic hashcode for a string. In .NET Core, strings 
         /// return a different hashcode per program instance. DO NOT use this for
         /// generating key values, as .NET specifically randomizes the hashcode
