@@ -12,12 +12,13 @@ namespace Caesura.Arnald.Core.Agents
         public String Name { get; protected set; }
         public Guid Identifier { get; protected set; }
         public Personality Personality { get; protected set; }
-        protected Mailbox Messages { get; set; }
+        protected IMailbox Messages { get; set; }
         
         public BaseAgent()
         {
             this.Identifier = Guid.NewGuid();
             this.Personality = new Personality();
+            this.Messages = new Mailbox();
         }
         
         public virtual IEnumerable<Task> Execute()
@@ -32,12 +33,12 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Send(IMessage message)
         {
-            throw new NotImplementedException();
+            this.Messages.Send(message);
         }
         
         public virtual void Send(IEnumerable<IMessage> messages)
         {
-            throw new NotImplementedException();
+            this.Messages.Send(messages);
         }
         
         public virtual void Dispose()
