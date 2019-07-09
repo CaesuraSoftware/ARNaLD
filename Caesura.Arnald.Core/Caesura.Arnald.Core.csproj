@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Caesura.Standard\Caesura.Standard.csproj" />
+    <ProjectReference Include="..\Caesura.Standard\Caesura.Standard\Caesura.Standard.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
