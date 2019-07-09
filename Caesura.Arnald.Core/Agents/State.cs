@@ -8,6 +8,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public class State : IState
     {
-        // TODO: state machine for agents to act based off message context (got a command, waiting for message, etc.)
+        // TODO: a state machine for state machines
+        private List<StateBehavior> Behaviors { get; set; }
     }
 }

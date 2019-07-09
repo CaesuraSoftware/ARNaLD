@@ -13,6 +13,7 @@ namespace Caesura.Arnald.Core.Agents
         public Guid Identifier { get; protected set; }
         public Personality Personality { get; protected set; }
         protected IMailbox Messages { get; set; }
+        protected IState State { get; set; }
         
         public BaseAgent()
         {
