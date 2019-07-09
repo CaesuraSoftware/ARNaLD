@@ -8,6 +8,6 @@ namespace Caesura.Arnald.Core.Agents
     
     public class IState
     {
-        
+        IAgent Owner { get; set; }
     }
 }

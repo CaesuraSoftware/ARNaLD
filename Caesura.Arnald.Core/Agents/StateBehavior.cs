@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Agents
     public class StateBehavior : IStateBehavior
     {
         // TODO: a state machine
+        public IState Parent { get; set; }
         private List<StateAtom> Atoms { get; set; }
     }
 }

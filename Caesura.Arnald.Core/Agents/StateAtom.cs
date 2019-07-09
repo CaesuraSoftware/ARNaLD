@@ -10,8 +10,9 @@ namespace Caesura.Arnald.Core.Agents
     public class StateAtom
     {
         // TODO: define one state here (and how it connects with other states)
+        public IStateBehavior Parent { get; set; }
         public String Name { get; set; }
-        public Action<Task> Action { get; set; }
+        public Action Action { get; set; }
         private List<StateAtom> ComesAfterState { get; set; }
         
         public StateAtom()

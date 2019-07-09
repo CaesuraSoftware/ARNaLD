@@ -7,6 +7,6 @@ namespace Caesura.Arnald.Core.Agents
     
     public interface IStateBehavior
     {
-        
+        IState Parent { get; set; }
     }
 }
