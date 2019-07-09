@@ -32,6 +32,17 @@ namespace Caesura.Arnald.Core
             }
         }
         
+        public void Send(IEnumerable<IMessage> messages)
+        {
+            lock (this.indexLock)
+            {
+                foreach (var message in messages)
+                {
+                    this._inbox.Enqueue(message);
+                }
+            }
+        }
+        
         public Maybe<IMessage> Peek()
         {
             lock (this.indexLock)
