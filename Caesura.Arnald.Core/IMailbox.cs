@@ -9,7 +9,9 @@ namespace Caesura.Arnald.Core
     public interface IMailbox
     {
         void Send(IMessage message);
+        Maybe<IMessage> Peek();
         Maybe<IMessage> Receive();
         IEnumerable<IMessage> ReceiveAll();
+        IEnumerable<IMessage> PeekAll();
     }
 }

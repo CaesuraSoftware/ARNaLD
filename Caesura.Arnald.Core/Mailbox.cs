@@ -12,26 +12,81 @@ namespace Caesura.Arnald.Core
     public class Mailbox : IMailbox
     {
         private readonly Object indexLock = new Object();
-        private ConcurrentQueue<IMessage> _inbox;
+        private Queue<IMessage> _inbox;
+        
+        public Mailbox()
+        {
+            this._inbox = new Queue<IMessage>();
+        }
+        
+        public Mailbox(IMailbox mailbox)
+        {
+            this.Copy(mailbox);
+        }
         
         public void Send(IMessage message)
         {
-            this._inbox.Enqueue(message);
+            lock (this.indexLock)
+            {
+                this._inbox.Enqueue(message);
+            }
+        }
+        
+        public Maybe<IMessage> Peek()
+        {
+            lock (this.indexLock)
+            {
+                if (this._inbox.Count > 0)
+                {
+                    var msg = this._inbox.Peek();
+                    return Maybe<IMessage>.Some(msg);
+                }
+            }
+            return Maybe<IMessage>.None;
         }
         
         public Maybe<IMessage> Receive()
         {
-            var success = this._inbox.TryDequeue(out var msg);
-            return success ? Maybe<IMessage>.Some(msg) : Maybe<IMessage>.None;
+            lock (this.indexLock)
+            {
+                var mmsg = this.Peek();
+                if (mmsg.HasValue)
+                {
+                    this._inbox.Dequeue();
+                    return mmsg;
+                }
+                return mmsg;
+            }
         }
         
         public IEnumerable<IMessage> ReceiveAll()
         {
-            lock (indexLock)
+            lock (this.indexLock)
             {
                 var msgs = this._inbox.ToList();
-                this._inbox = new ConcurrentQueue<IMessage>();
+                this._inbox.Clear();
                 return msgs;
+            }
+        }
+        
+        public IEnumerable<IMessage> PeekAll()
+        {
+            lock (this.indexLock)
+            {
+                var msgs = this._inbox.ToList();
+                return msgs;
+            }
+        }
+        
+        public void Copy(IMailbox mailbox)
+        {
+            if (mailbox is Mailbox mb)
+            {
+                this._inbox = mb._inbox ?? new Queue<IMessage>();
+            }
+            else
+            {
+                this._inbox = new Queue<IMessage>(mailbox.PeekAll());
             }
         }
     }
