@@ -7,7 +7,7 @@ namespace Caesura.Arnald.Core.Agents
     using System.Linq;
     using System.Threading.Tasks;
     
-    public class Personality : IDisposable
+    public class Personality : IPersonality
     {
         private List<IBehavior> Behaviors { get; set; }
         
