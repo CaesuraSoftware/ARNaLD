@@ -11,6 +11,6 @@ namespace Caesura.Arnald.Core.Agents
     {
         String Name { get; }
         Int32 Priority { get; set; }
-        Task Execute();
+        Task Execute(IEnumerable<IMessage> messages);
     }
 }

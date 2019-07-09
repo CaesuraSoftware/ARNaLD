@@ -16,12 +16,12 @@ namespace Caesura.Arnald.Core.Agents
             this.Behaviors = new List<IBehavior>();
         }
         
-        public IEnumerable<Task> Execute()
+        public IEnumerable<Task> Execute(IEnumerable<IMessage> messages)
         {
             var tasks = new List<Task>(this.Behaviors.Count);
             foreach (var behavior in this.Behaviors)
             {
-                var task = behavior.Execute();
+                var task = behavior.Execute(messages);
                 tasks.Add(task);
             }
             return tasks;

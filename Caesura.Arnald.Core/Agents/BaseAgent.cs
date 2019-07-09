@@ -23,7 +23,8 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual IEnumerable<Task> Execute()
         {
-            return this.Personality.Execute();
+            var msgs = this.Messages.ReceiveAll();
+            return this.Personality.Execute(msgs);
         }
         
         public virtual void Learn(IBehavior behavior)
