@@ -5,6 +5,7 @@ namespace Caesura.Arnald.Core
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     
     public class Message : Message<String>
     {
@@ -17,11 +18,12 @@ namespace Caesura.Arnald.Core
         public String Recipient { get; set; }
         public String Information { get; set; }
         public T Data { get; set; }
-        public Dictionary<String, Object> Items { get; set; }
+        private Dictionary<String, Object> _items;
+        public Dictionary<String, Object> Items { get => this.GetItems(); set => this._items = value; }
         
         public Message()
         {
-            this.Items = new Dictionary<String, Object>();
+            
         }
         
         public Message(IMessage msg)
@@ -94,6 +96,15 @@ namespace Caesura.Arnald.Core
                 this.Items.Add(name, item);
                 return true;
             }
+        }
+        
+        private Dictionary<String, Object> GetItems()
+        {
+            if (this._items is null)
+            {
+                this._items = new Dictionary<String, Object>();
+            }
+            return this._items;
         }
         
         public override String ToString()
