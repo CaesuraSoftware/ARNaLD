@@ -15,4 +15,15 @@ namespace Caesura.Standard
         public UnreachableCodeException(String message) : base(message) { }
         public UnreachableCodeException(String message, Exception inner) : base(message, inner) { }
     }
+    
+    /// <summary>
+    /// Thrown when attempting to add an element to a collection type that already contains that element.
+    /// </summary>
+    public class ElementExistsException : Exception
+    {
+        public ElementExistsException() : base() { }
+        public ElementExistsException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public ElementExistsException(String message) : base(message) { }
+        public ElementExistsException(String message, Exception inner) : base(message, inner) { }
+    }
 }

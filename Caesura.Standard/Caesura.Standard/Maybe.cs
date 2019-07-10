@@ -10,6 +10,7 @@ namespace Caesura.Standard
     {
         public T Value => this.GetValue();
         public Boolean HasValue => this._hasValue;
+        public Boolean NoValue => !this.HasValue;
         public static Maybe<T> None => Maybe<T>.Nothing();
         
         private T _value;
