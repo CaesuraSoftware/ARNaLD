@@ -12,6 +12,8 @@ namespace Caesura.Arnald.Core.Agents
         public String Name { get; set; }
         public Guid Identifier { get; set; }
         private List<IAgent> Agents { get; set; }
+        public event Action<Locator, IAgent> OnAdd;
+        public event Action<Locator, IAgent> OnRemove;
         
         public Locator()
         {
@@ -44,22 +46,23 @@ namespace Caesura.Arnald.Core.Agents
             return this.Agents.FindAll(predicate);
         }
         
-        public void Load(IAgent agent)
+        public void Add(IAgent agent)
         {
-            var success = this.TryLoad(agent);
+            var success = this.TryAdd(agent);
             if (!success)
             {
                 throw new ElementExistsException();
             }
         }
         
-        public Boolean TryLoad(IAgent agent)
+        public Boolean TryAdd(IAgent agent)
         {
             if (this.Find(agent.Name).HasValue)
             {
                 return false;
             }
             this.Agents.Add(agent);
+            this.OnAdd.Invoke(this, agent);
             return true;
         }
         
@@ -68,7 +71,9 @@ namespace Caesura.Arnald.Core.Agents
             var agent = this.Find(predicate);
             if (agent.HasValue)
             {
-                return this.Agents.Remove(agent.Value);
+                var success = this.Agents.Remove(agent.Value);
+                this.OnRemove.Invoke(this, agent.Value);
+                return success;
             }
             return false;
         }
