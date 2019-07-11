@@ -103,10 +103,9 @@ namespace Caesura.Arnald.Core.Agents
             this.Agents.Clear();
         }
         
-        public void Dispose()
+        public void Clear(Boolean disposeAgents)
         {
-            this.OnDispose?.Invoke(this);
-            if (this.DisposeAgentsOnDispose)
+            if (disposeAgents)
             {
                 foreach (var agent in this.Agents)
                 {
@@ -115,6 +114,12 @@ namespace Caesura.Arnald.Core.Agents
                 }
             }
             this.Clear();
+        }
+        
+        public void Dispose()
+        {
+            this.OnDispose?.Invoke(this);
+            this.Clear(this.DisposeAgentsOnDispose);
         }
     }
 }
