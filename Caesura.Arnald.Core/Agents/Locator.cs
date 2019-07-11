@@ -98,6 +98,11 @@ namespace Caesura.Arnald.Core.Agents
             return this.Remove(agent.Name);
         }
         
+        public void Clear()
+        {
+            this.Agents.Clear();
+        }
+        
         public void Dispose()
         {
             this.OnDispose?.Invoke(this);
@@ -109,6 +114,7 @@ namespace Caesura.Arnald.Core.Agents
                     agent.Dispose();
                 }
             }
+            this.Clear();
         }
     }
 }
