@@ -72,7 +72,7 @@ namespace Caesura.Arnald.Core.Agents
                 return false;
             }
             this.Agents.Add(agent);
-            this.OnAdd.Invoke(this, agent);
+            this.OnAdd?.Invoke(this, agent);
             return true;
         }
         
@@ -82,7 +82,7 @@ namespace Caesura.Arnald.Core.Agents
             if (agent.HasValue)
             {
                 var success = this.Agents.Remove(agent.Value);
-                this.OnRemove.Invoke(this, agent.Value);
+                this.OnRemove?.Invoke(this, agent.Value);
                 return success;
             }
             return false;
@@ -100,12 +100,12 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Dispose()
         {
-            this.OnDispose.Invoke(this);
+            this.OnDispose?.Invoke(this);
             if (this.DisposeAgentsOnDispose)
             {
                 foreach (var agent in this.Agents)
                 {
-                    this.OnDisposeAgent(this, agent);
+                    this.OnDisposeAgent?.Invoke(this, agent);
                     agent.Dispose();
                 }
             }
