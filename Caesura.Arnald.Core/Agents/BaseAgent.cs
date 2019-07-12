@@ -24,10 +24,13 @@ namespace Caesura.Arnald.Core.Agents
             this.AgentState     = State.LoadDefaults(this);
         }
         
-        public virtual IEnumerable<Task<IMessage>> Execute()
+        public virtual void Execute()
         {
-            var msgs = this.Messages.ReceiveAll();
-            return this.Personality.Execute(msgs);
+            var msg = this.Messages.Receive();
+            if (msg.HasValue)
+            {
+                this.AgentState.Next(msg.Value);
+            }
         }
         
         public virtual void Learn(IBehavior behavior)

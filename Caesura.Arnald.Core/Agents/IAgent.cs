@@ -12,7 +12,7 @@ namespace Caesura.Arnald.Core.Agents
         String Name { get; }
         Guid Identifier { get; }
         IPersonality Personality { get; }
-        IEnumerable<Task<IMessage>> Execute();
+        void Execute();
         void Learn(IBehavior behavior);
         void Send(IMessage message);
         void Send(IEnumerable<IMessage> messages);
