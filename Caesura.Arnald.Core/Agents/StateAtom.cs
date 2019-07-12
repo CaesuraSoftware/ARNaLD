@@ -6,33 +6,37 @@ namespace Caesura.Arnald.Core.Agents
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Caesura.Standard;
     
-    public class StateAtom
+    public class StateAtom : IStateAtom
     {
-        // TODO: define one state here (and how it connects with other states)
-        public IStateBehavior Parent { get; set; }
+        public IState Environment { get; set; }
         public String Name { get; set; }
-        public Action Action { get; set; }
-        private List<StateAtom> ComesAfterState { get; set; }
+        public Func<StateAtom, String> Callback { get; set; }
         
         public StateAtom()
         {
-            this.ComesAfterState = new List<StateAtom>();
+            
         }
         
-        public Boolean AddPreceedingState(StateAtom atom)
+        public StateAtom(IState parent) : this()
         {
-            if (this.ComesAfterState.Exists(x => x.Name == atom.Name || x.Name == this.Name))
+            this.Environment = parent;
+        }
+        
+        public StateAtom(IState parent, Func<StateAtom, String> callback) : this(parent)
+        {
+            this.Callback = callback;
+        }
+        
+        public Maybe<String> Call()
+        {
+            var result = this.Callback?.Invoke(this);
+            if (!String.IsNullOrEmpty(result))
             {
-                return false;
+                return result;
             }
-            this.ComesAfterState.Add(atom);
-            return true;
-        }
-        
-        public Boolean ComesAfter(String name)
-        {
-            return this.ComesAfterState.Exists(x => x.Name == name);
+            return Maybe.Unit;
         }
     }
 }

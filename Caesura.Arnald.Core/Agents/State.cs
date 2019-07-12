@@ -8,8 +8,13 @@ namespace Caesura.Arnald.Core.Agents
     
     public class State : IState
     {
-        // TODO: a state machine for state machines
-        public IAgent Owner { get; set; }
-        private List<StateBehavior> Behaviors { get; set; }
+        public IAgent Agent { get; set; }
+        private List<IStateAtom> Atoms { get; set; }
+        private IStateAtom Current { get; set; }
+        
+        public State()
+        {
+            this.Atoms = new List<IStateAtom>();
+        }
     }
 }
