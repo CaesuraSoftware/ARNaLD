@@ -16,5 +16,10 @@ namespace Caesura.Arnald.Core.Agents
         {
             this.Atoms = new List<IStateAtom>();
         }
+        
+        public void Next()
+        {
+            
+        }
     }
 }

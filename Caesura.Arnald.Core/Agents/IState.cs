@@ -6,8 +6,9 @@ namespace Caesura.Arnald.Core.Agents
     using System.Collections.Generic;
     using System.Linq;
     
-    public class IState
+    public interface IState
     {
-        IAgent Owner { get; set; }
+        IAgent Agent { get; set; }
+        void Next();
     }
 }
