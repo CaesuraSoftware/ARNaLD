@@ -12,6 +12,8 @@ namespace Caesura.Arnald.Core.Agents
     
     public class StateAtom : IStateAtom
     {
+        public static String Init = "INIT";
+        public static String End = "END";
         public IState Environment { get; set; }
         public String Name { get; set; }
         public IStateAtomCallback Callback { get; set; }
@@ -26,7 +28,12 @@ namespace Caesura.Arnald.Core.Agents
             this.Environment = parent;
         }
         
-        public StateAtom(IState parent, IStateAtomCallback callback) : this(parent)
+        public StateAtom(IState parent, String name) : this()
+        {
+            this.Name = name;
+        }
+        
+        public StateAtom(IState parent, String name, IStateAtomCallback callback) : this(parent, name)
         {
             this.Callback = callback;
         }
