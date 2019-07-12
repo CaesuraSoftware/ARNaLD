@@ -29,8 +29,8 @@ namespace Caesura.Arnald.Core.Agents
         public static State LoadDefaults(IAgent owner)
         {
             var state = new State();
-            var initstate = new StateAtom(state, StateAtom.Init, (self, message) => StateAtom.End );
-            var endstate  = new StateAtom(state, StateAtom.End , (self, message) => StateAtom.Init);
+            var initstate = new StateAtom(state, StateAtomState.Init, (self, message) => StateAtomState.End );
+            var endstate  = new StateAtom(state, StateAtomState.End , (self, message) => StateAtomState.Init);
             state.Agent = owner;
             state.Add(initstate);
             state.Add(endstate );

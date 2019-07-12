@@ -10,10 +10,15 @@ namespace Caesura.Arnald.Core.Agents
     
     public delegate String IStateAtomCallback(StateAtom atom, IMessage message);
     
-    public class StateAtom : IStateAtom
+    public static class StateAtomState
     {
         public static String Init = "INIT";
         public static String End = "END";
+        public static String Disposing = "DISPOSING";
+    }
+    
+    public class StateAtom : IStateAtom
+    {
         public IState Environment { get; set; }
         public String Name { get; set; }
         public IStateAtomCallback Callback { get; set; }
