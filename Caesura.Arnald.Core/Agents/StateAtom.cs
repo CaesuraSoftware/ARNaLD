@@ -36,7 +36,7 @@ namespace Caesura.Arnald.Core.Agents
             {
                 return result;
             }
-            return Maybe.Unit;
+            return Maybe.None;
         }
     }
 }

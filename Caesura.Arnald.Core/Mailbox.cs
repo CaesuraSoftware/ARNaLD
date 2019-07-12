@@ -53,7 +53,7 @@ namespace Caesura.Arnald.Core
                     return Maybe<IMessage>.Some(msg);
                 }
             }
-            return Maybe<IMessage>.None;
+            return Maybe.None;
         }
         
         public Maybe<IMessage> Receive()

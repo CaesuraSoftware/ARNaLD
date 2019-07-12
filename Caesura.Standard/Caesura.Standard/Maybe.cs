@@ -15,6 +15,7 @@ namespace Caesura.Standard
     {
         private static Unit _unit = new Unit();
         public static Unit Unit => _unit;
+        public static Unit None => _unit;
     }
     
     public struct Maybe<T>

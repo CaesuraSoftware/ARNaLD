@@ -41,7 +41,7 @@ namespace Caesura.Arnald.Core.Agents
             var agent = this.Agents.Find(predicate);
             if (agent is null)
             {
-                return Maybe<IAgent>.None;
+                return Maybe.None;
             }
             return Maybe<IAgent>.Some(agent);
         }
