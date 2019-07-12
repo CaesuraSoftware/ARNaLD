@@ -54,13 +54,23 @@ namespace Caesura.Arnald.Core
         }
         
         /// <summary>
-        /// Swap the Sender and Recipient properties.
+        /// Create a new Message and swap the Sender and Recipient properties.
         /// </summary>
-        public void SwapSender()
+        public IMessage SwapSender()
         {
-            var sender = this.Sender;
-            this.Sender = this.Recipient;
+            var msg = new Message(this);
+            var sender = msg.Sender;
+            this.Sender = msg.Recipient;
             this.Recipient = sender;
+            return msg;
+        }
+        
+        public IMessage CreateResponse(String sender)
+        {
+            var msg = new Message(this);
+            msg.Recipient = msg.Sender;
+            msg.Sender = sender;
+            return msg;
         }
         
         public R Get<R>(String name)
