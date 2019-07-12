@@ -12,6 +12,7 @@ namespace Caesura.Arnald.Core.Agents
         IStateAtom InitialState { get; set; }
         Boolean TryAdd(IStateAtom atom);
         void Add(IStateAtom atom);
+        void Add(String name, IStateAtomCallback callback);
         Boolean Remove(IStateAtom atom);
         IStateAtom Find(Predicate<IStateAtom> predicate);
         Boolean TrySetState(String name);

@@ -45,6 +45,12 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
+        public void Add(String name, IStateAtomCallback callback)
+        {
+            var state = new StateAtom(this, name, callback);
+            this.Add(state);
+        }
+        
         public Boolean Remove(IStateAtom atom)
         {
             return this.Atoms.Remove(atom);
