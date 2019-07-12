@@ -25,18 +25,25 @@ namespace Caesura.Arnald.Core.Agents
         protected CancellationTokenSource CancelToken { get; set; }
         protected IMailbox Messages { get; set; }
         protected IState AgentState { get; set; }
+        protected Thread AgentThread { get; set; }
         
         public BaseAgent()
         {
-            this.Identifier         = Guid.NewGuid();
-            this.Name               = this.Identifier.ToString("N").ToUpper();
-            this.AgentThreadState   = ThreadState.Unstarted;
-            this.AgentRunning       = false;
-            this.Personality        = new Personality();
-            this.Messages           = new Mailbox();
-            this.AgentState         = State.LoadDefaults(this);
+            this.Identifier                 = Guid.NewGuid();
+            this.Name                       = this.Identifier.ToString("N").ToUpper();
+            this.AgentThreadState           = ThreadState.Unstarted;
+            this.AgentRunning               = false;
+            this.Personality                = new Personality();
+            this.Messages                   = new Mailbox();
+            this.AgentState                 = State.LoadDefaults(this);
+            this.AgentThread                = new Thread(this.Run);
+            this.AgentThread.IsBackground   = true;
         }
         
+        /// <summary>
+        /// Start an agent in it's own thread. If this is not desired, use an Agent
+        /// collection and manually call their CycleOnce methods to Tasks.
+        /// </summary>
         public virtual void Start()
         {
             if (this.AgentRunning)
@@ -45,24 +52,24 @@ namespace Caesura.Arnald.Core.Agents
             }
             this.AgentThreadState = ThreadState.Running;
             this.CancelToken = new CancellationTokenSource();
-            // TODO: figure out a good way to handle a long-running agent, either make
-            // a dedicated thread, make a long-running task or simply make tasks in a
-            // loop while waiting for each one to finish (probably a bad idea).
-            // At the end of the central loop, set AgentRunning to false.
-            // TODO: maybe make those an option depending on if it'll be processor-bound
-            // or listening on for anything (will we need to make that decision if the
-            // message processor is going to block for messages?). if we make it
-            // configurable, make an enum for things like ProcessorBound, IOBound, etc.
-            // TODO: OR just have agents check their mailbox after the mailbox raises some
-            // kind of GotMail event, and skip the loop entirely. All of these sounds like
-            // good options to build in, but we need a default option too.
-            throw new NotImplementedException();
+            try
+            {
+                this.AgentThread.Start();
+            }
+            catch (ThreadStateException)
+            {
+                // no-op
+            }
         }
         
         public virtual void Stop()
         {
             lock (this._threadStateLock)
             {
+                if (this.AgentThreadState == ThreadState.StopRequested)
+                {
+                    return;
+                }
                 this.AgentThreadState = ThreadState.StopRequested;
             }
             this.AgentState.TrySetState(StateAtomState.Cancelled);
@@ -77,6 +84,9 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
+        /// <summary>
+        /// Run the Agent's main loop. This is a blocking call.
+        /// </summary>
         public virtual void Run()
         {
             this.AgentRunning = true;
@@ -94,6 +104,9 @@ namespace Caesura.Arnald.Core.Agents
             this.AgentRunning = false;
         }
         
+        /// <summary>
+        /// Cycle the Agent. If the agent does not have any messages, this will block.
+        /// </summary>
         public virtual void CycleOnce()
         {
             var msg = this.Messages.Receive(this.CancelToken.Token);
