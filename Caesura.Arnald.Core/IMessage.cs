@@ -5,6 +5,7 @@ namespace Caesura.Arnald.Core
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Caesura.Standard;
     
     public interface IMessage<T> : IMessage
     {
@@ -18,7 +19,7 @@ namespace Caesura.Arnald.Core
         String Information { get; set; }
         Dictionary<String, Object> Items { get; set; }
         T Get<T>(String name);
-        Boolean TryGet<T>(String name, out T item);
+        Maybe<T> TryGet<T>(String name);
         Boolean Set<T>(String name, T item);
         Boolean Set<T>(String name, T item, Boolean force);
         void Copy(IMessage msg);

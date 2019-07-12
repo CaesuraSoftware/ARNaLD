@@ -6,18 +6,32 @@ namespace Caesura.Arnald.Core
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Caesura.Standard;
     
-    public class Message : Message<String>
+    public class Message<T> : Message
     {
+        public T Data { get; set; }
         
+        public Message() : base()
+        {
+            
+        }
+        
+        public override void Copy(IMessage msg)
+        {
+            base.Copy(msg);
+            if (msg is IMessage<T> tmsg)
+            {
+                this.Data = tmsg.Data;
+            }
+        }
     }
     
-    public class Message<T> : IMessage<T>
+    public class Message : IMessage
     {
         public String Sender { get; set; }
         public String Recipient { get; set; }
         public String Information { get; set; }
-        public T Data { get; set; }
         private Dictionary<String, Object> _items;
         public Dictionary<String, Object> Items { get => this.GetItems(); set => this._items = value; }
         
@@ -37,10 +51,6 @@ namespace Caesura.Arnald.Core
             this.Recipient      = msg.Recipient;
             this.Information    = msg.Information;
             this.Items          = new Dictionary<String, Object>(msg.Items);
-            if (msg is IMessage<T> tmsg)
-            {
-                this.Data = tmsg.Data;
-            }
         }
         
         public R Get<R>(String name)
@@ -60,19 +70,17 @@ namespace Caesura.Arnald.Core
             }
         }
         
-        public Boolean TryGet<R>(String name, out R item)
+        public Maybe<R> TryGet<R>(String name)
         {
             if (this.Items.ContainsKey(name))
             {
                 var obj = this.Items[name];
                 if (obj is R nitem)
                 {
-                    item = nitem;
-                    return true;
+                    return Maybe<R>.Some(nitem);
                 }
             }
-            item = default;
-            return false;
+            return Maybe.None;
         }
         
         public Boolean Set<R>(String name, R item)
