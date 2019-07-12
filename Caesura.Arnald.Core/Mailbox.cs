@@ -11,95 +11,61 @@ namespace Caesura.Arnald.Core
     
     public class Mailbox : IMailbox
     {
-        private readonly Object indexLock = new Object();
-        private Queue<IMessage> _inbox;
+        public Boolean IsAddingCompleted => this._inbox.IsAddingCompleted;
+        private BlockingCollection<IMessage> _inbox;
         
         public Mailbox()
         {
-            this._inbox = new Queue<IMessage>();
+            this._inbox = new BlockingCollection<IMessage>();
         }
         
-        public Mailbox(IMailbox mailbox)
+        public Mailbox(Int32 capacity)
         {
-            this.Copy(mailbox);
+            this._inbox = new BlockingCollection<IMessage>(capacity);
+        }
+        
+        public Boolean TrySend(IMessage message)
+        {
+            var success = this._inbox.TryAdd(message);
+            return success;
         }
         
         public void Send(IMessage message)
         {
-            lock (this.indexLock)
+            var success = this.TrySend(message);
+            if (!success)
             {
-                this._inbox.Enqueue(message);
+                throw new InvalidOperationException($"{nameof(Mailbox)} is full.");
             }
         }
         
-        public void Send(IEnumerable<IMessage> messages)
+        public void WaitSend(IMessage message, CancellationToken token)
         {
-            lock (this.indexLock)
-            {
-                foreach (var message in messages)
-                {
-                    this._inbox.Enqueue(message);
-                }
-            }
+            this._inbox.Add(message, token);
         }
         
-        public Maybe<IMessage> Peek()
+        public IMessage Receive()
         {
-            lock (this.indexLock)
-            {
-                if (this._inbox.Count > 0)
-                {
-                    var msg = this._inbox.Peek();
-                    return Maybe<IMessage>.Some(msg);
-                }
-            }
-            return Maybe.None;
+            return this._inbox.Take();
         }
         
-        public Maybe<IMessage> Receive()
+        public IMessage Receive(CancellationToken token)
         {
-            // TODO: we need to block this in an asyncronous, task-friendly way.
-            lock (this.indexLock)
-            {
-                var mmsg = this.Peek();
-                if (mmsg)
-                {
-                    this._inbox.Dequeue();
-                    return mmsg;
-                }
-                return mmsg;
-            }
+            return this._inbox.Take(token);
         }
         
         public IEnumerable<IMessage> ReceiveAll()
         {
-            lock (this.indexLock)
-            {
-                var msgs = this._inbox.ToList();
-                this._inbox.Clear();
-                return msgs;
-            }
+            var bc = this._inbox;
+            this._inbox = new BlockingCollection<IMessage>();
+            var array = bc.ToArray();
+            bc.Dispose();
+            return array;
         }
         
-        public IEnumerable<IMessage> PeekAll()
+        public void Dispose()
         {
-            lock (this.indexLock)
-            {
-                var msgs = this._inbox.ToList();
-                return msgs;
-            }
-        }
-        
-        public void Copy(IMailbox mailbox)
-        {
-            if (mailbox is Mailbox mb)
-            {
-                this._inbox = mb._inbox ?? new Queue<IMessage>();
-            }
-            else
-            {
-                this._inbox = new Queue<IMessage>(mailbox.PeekAll());
-            }
+            this._inbox.Dispose();
         }
     }
 }
