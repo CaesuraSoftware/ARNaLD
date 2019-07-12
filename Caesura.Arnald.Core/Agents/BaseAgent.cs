@@ -11,7 +11,7 @@ namespace Caesura.Arnald.Core.Agents
     {
         public String Name { get; protected set; }
         public Guid Identifier { get; protected set; }
-        public Personality Personality { get; protected set; }
+        public IPersonality Personality { get; protected set; }
         protected IMailbox Messages { get; set; }
         protected IState AgentState { get; set; }
         
