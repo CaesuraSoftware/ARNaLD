@@ -20,6 +20,7 @@ namespace Caesura.Arnald.Core.Agents
         public Guid Identifier { get; protected set; }
         public IPersonality Personality { get; protected set; }
         public ThreadState AgentThreadState { get; protected set; }
+        protected Object _threadStateLock { get; set; } = new Object();
         protected Boolean AgentRunning { get; set; }
         protected CancellationTokenSource CancelToken { get; set; }
         protected IMailbox Messages { get; set; }
@@ -60,7 +61,10 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Stop()
         {
-            this.AgentThreadState = ThreadState.StopRequested;
+            lock (this._threadStateLock)
+            {
+                this.AgentThreadState = ThreadState.StopRequested;
+            }
             this.AgentState.TrySetState(StateAtomState.Cancelled);
             this.CancelToken.Cancel(false);
         }
@@ -80,20 +84,20 @@ namespace Caesura.Arnald.Core.Agents
             {
                 this.CycleOnce();
             }
-            if (this.AgentThreadState != ThreadState.Unstarted)
+            lock (this._threadStateLock)
             {
-                this.AgentThreadState = ThreadState.Stopped;
+                if (this.AgentThreadState != ThreadState.Unstarted)
+                {
+                    this.AgentThreadState = ThreadState.Stopped;
+                }
             }
             this.AgentRunning = false;
         }
         
         public virtual void CycleOnce()
         {
-            var msg = this.Messages.Receive();
-            if (msg)
-            {
-                this.AgentState.Next(msg.Value);
-            }
+            var msg = this.Messages.Receive(this.CancelToken.Token);
+            this.AgentState.Next(msg);
         }
         
         public virtual void Learn(IBehavior behavior)
@@ -101,14 +105,15 @@ namespace Caesura.Arnald.Core.Agents
             this.Personality.Learn(behavior);
         }
         
-        public virtual void Send(IMessage message)
+        public virtual Boolean Send(IMessage message)
         {
-            this.Messages.Send(message);
+            var success = this.Messages.TrySend(message);
+            return success;
         }
         
-        public virtual void Send(IEnumerable<IMessage> messages)
+        public virtual void Send(IMessage message, CancellationToken token)
         {
-            this.Messages.Send(messages);
+            this.Messages.WaitSend(message, token);
         }
         
         public virtual void Dispose()
@@ -118,17 +123,18 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Dispose(Boolean wait)
         {
-            this.AgentState?.Dispose();
-            this.Personality?.Dispose();
+            this.AgentState?.Dispose(); // set State to Disposing to handle cleanup before disposing anything else
             this.Stop();
             if (wait)
             {
-                // TODO: this could be a race condition, make sure to think
-                // of a way to consistently set AgentThreadState to WaitSleepJoin
-                // and then Stopped.
-                this.AgentThreadState = ThreadState.WaitSleepJoin;
+                lock (this._threadStateLock)
+                {
+                    this.AgentThreadState = ThreadState.WaitSleepJoin;
+                }
                 this.Wait();
             }
+            this.Personality?.Dispose();
+            this.Messages?.Dispose();
         }
     }
 }
