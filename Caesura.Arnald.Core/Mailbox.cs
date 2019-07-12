@@ -54,6 +54,16 @@ namespace Caesura.Arnald.Core
             return this._inbox.Take(token);
         }
         
+        public Maybe<IMessage> TryReceive()
+        {
+            var success = this._inbox.TryTake(out var msg);
+            if (success)
+            {
+                return Maybe<IMessage>.Some(msg);
+            }
+            return Maybe.None;
+        }
+        
         public void Dispose()
         {
             this._inbox.Dispose();

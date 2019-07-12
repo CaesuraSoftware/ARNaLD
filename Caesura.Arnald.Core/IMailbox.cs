@@ -15,5 +15,6 @@ namespace Caesura.Arnald.Core
         void WaitSend(IMessage message, CancellationToken token);
         IMessage Receive();
         IMessage Receive(CancellationToken token);
+        Maybe<IMessage> TryReceive();
     }
 }
