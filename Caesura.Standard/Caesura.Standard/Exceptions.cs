@@ -26,4 +26,15 @@ namespace Caesura.Standard
         public ElementExistsException(String message) : base(message) { }
         public ElementExistsException(String message, Exception inner) : base(message, inner) { }
     }
+    
+    /// <summary>
+    /// Thrown when attempting to get an element from a collection that does not contain it.
+    /// </summary>
+    public class ElementNotFoundException : Exception
+    {
+        public ElementNotFoundException() : base() { }
+        public ElementNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public ElementNotFoundException(String message) : base(message) { }
+        public ElementNotFoundException(String message, Exception inner) : base(message, inner) { }
+    }
 }
