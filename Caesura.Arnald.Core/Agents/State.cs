@@ -5,10 +5,12 @@ namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Caesura.Standard;
     
     public class State : IState
     {
         public IAgent Agent { get; set; }
+        public IStateAtom InitialState { get; set; }
         private List<IStateAtom> Atoms { get; set; }
         private IStateAtom Current { get; set; }
         
@@ -17,9 +19,82 @@ namespace Caesura.Arnald.Core.Agents
             this.Atoms = new List<IStateAtom>();
         }
         
+        public State(IStateAtom initial) : this()
+        {
+            this.InitialState = initial;
+            this.TryAdd(initial); // add the initial state to the Atoms if it's not already there.
+        }
+        
+        public Boolean TryAdd(IStateAtom atom)
+        {
+            var item = this.Find(x => x.Name == atom.Name);
+            if (item is null)
+            {
+                this.Atoms.Add(atom);
+                return true;
+            }
+            return false;
+        }
+        
+        public void Add(IStateAtom atom)
+        {
+            var success = this.TryAdd(atom);
+            if (!success)
+            {
+                throw new ElementExistsException();
+            }
+        }
+        
+        public Boolean Remove(IStateAtom atom)
+        {
+            return this.Atoms.Remove(atom);
+        }
+        
+        public IStateAtom Find(Predicate<IStateAtom> predicate)
+        {
+            return this.Atoms.Find(predicate);
+        }
+        
+        public Boolean TrySetState(String name)
+        {
+            var atom = this.Atoms.Find(x => x.Name == name);
+            if (atom is null)
+            {
+                return false;
+            }
+            this.Current = atom;
+            return true;
+        }
+        
+        public void SetState(String name)
+        {
+            var success = this.TrySetState(name);
+            if (!success)
+            {
+                throw new ArgumentException($"{nameof(IStateAtom)} is not present in this {nameof(State)} instance.");
+            }
+        }
+        
         public void Next()
         {
+            if (this.InitialState is null)
+            {
+                throw new InvalidOperationException($"{nameof(this.InitialState)} is null.");
+            }
+            if (this.Current is null)
+            {
+                this.Current = this.InitialState;
+            }
             
+            var result = this.Current.Call();
+            if (result.HasValue)
+            {
+                this.SetState(result.Value);
+            }
+            else
+            {
+                this.Current = this.InitialState;
+            }
         }
     }
 }

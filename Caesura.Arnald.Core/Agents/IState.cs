@@ -9,6 +9,13 @@ namespace Caesura.Arnald.Core.Agents
     public interface IState
     {
         IAgent Agent { get; set; }
+        IStateAtom InitialState { get; set; }
+        Boolean TryAdd(IStateAtom atom);
+        void Add(IStateAtom atom);
+        Boolean Remove(IStateAtom atom);
+        IStateAtom Find(Predicate<IStateAtom> predicate);
+        Boolean TrySetState(String name);
+        void SetState(String name);
         void Next();
     }
 }
