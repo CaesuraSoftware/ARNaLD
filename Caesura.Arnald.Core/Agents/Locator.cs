@@ -67,7 +67,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public Boolean TryAdd(IAgent agent)
         {
-            if (this.Find(agent.Name).HasValue)
+            if (this.Find(agent.Name))
             {
                 return false;
             }
@@ -79,7 +79,7 @@ namespace Caesura.Arnald.Core.Agents
         public Boolean Remove(Predicate<IAgent> predicate)
         {
             var agent = this.Find(predicate);
-            if (agent.HasValue)
+            if (agent)
             {
                 var success = this.Agents.Remove(agent.Value);
                 this.OnRemove?.Invoke(this, agent.Value);

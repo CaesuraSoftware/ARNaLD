@@ -106,7 +106,7 @@ namespace Caesura.Arnald.Core.Agents
             }
             
             var result = this.Current.Call(message);
-            if (result.HasValue)
+            if (result)
             {
                 this.SetState(result.Value);
             }

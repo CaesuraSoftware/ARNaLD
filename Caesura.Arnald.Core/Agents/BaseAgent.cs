@@ -33,7 +33,7 @@ namespace Caesura.Arnald.Core.Agents
         public virtual void Execute()
         {
             var msg = this.Messages.Receive();
-            if (msg.HasValue)
+            if (msg)
             {
                 this.AgentState.Next(msg.Value);
             }

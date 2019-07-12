@@ -62,7 +62,7 @@ namespace Caesura.Arnald.Core
             lock (this.indexLock)
             {
                 var mmsg = this.Peek();
-                if (mmsg.HasValue)
+                if (mmsg)
                 {
                     this._inbox.Dequeue();
                     return mmsg;
