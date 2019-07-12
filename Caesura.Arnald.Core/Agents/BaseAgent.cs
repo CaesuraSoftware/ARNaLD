@@ -55,7 +55,6 @@ namespace Caesura.Arnald.Core.Agents
         {
             while (this.AgentRunning)
             {
-                this.AgentThreadState = ThreadState.WaitSleepJoin;
                 Thread.Sleep(50); // 50 based on experiences from other developers
             }
         }
@@ -89,6 +88,7 @@ namespace Caesura.Arnald.Core.Agents
             this.AgentState?.Dispose();
             this.Personality?.Dispose();
             this.Stop();
+            this.AgentThreadState = ThreadState.WaitSleepJoin;
             this.Wait();
         }
     }
