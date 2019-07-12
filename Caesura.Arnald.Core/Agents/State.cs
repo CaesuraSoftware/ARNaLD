@@ -9,7 +9,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public class State : IState
     {
-        public IAgent Agent { get; set; }
+        public IAgent Owner { get; set; }
         public IStateAtom InitialState { get; set; }
         private List<IStateAtom> Atoms { get; set; }
         private IStateAtom Current { get; set; }
@@ -21,7 +21,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public State(IAgent owner, IStateAtom initial) : this()
         {
-            this.Agent = owner;
+            this.Owner = owner;
             this.InitialState = initial;
             this.TryAdd(initial); // add the initial state to the Atoms if it's not already there.
         }
@@ -31,7 +31,7 @@ namespace Caesura.Arnald.Core.Agents
             var state = new State();
             var initstate = new StateAtom(state, StateAtomState.Init, (self, message) => StateAtomState.End );
             var endstate  = new StateAtom(state, StateAtomState.End , (self, message) => StateAtomState.Init);
-            state.Agent = owner;
+            state.Owner = owner;
             state.Add(initstate);
             state.Add(endstate );
             state.InitialState = initstate;

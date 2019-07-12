@@ -8,7 +8,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public interface IState : IDisposable
     {
-        IAgent Agent { get; set; }
+        IAgent Owner { get; set; }
         IStateAtom InitialState { get; set; }
         Boolean TryAdd(IStateAtom atom);
         void Add(IStateAtom atom);
