@@ -54,15 +54,6 @@ namespace Caesura.Arnald.Core
             return this._inbox.Take(token);
         }
         
-        public IEnumerable<IMessage> ReceiveAll()
-        {
-            var bc = this._inbox;
-            this._inbox = new BlockingCollection<IMessage>();
-            var array = bc.ToArray();
-            bc.Dispose();
-            return array;
-        }
-        
         public void Dispose()
         {
             this._inbox.Dispose();
