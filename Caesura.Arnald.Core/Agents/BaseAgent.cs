@@ -47,8 +47,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Dispose()
         {
-            this.AgentState.TrySetState(StateAtomState.Disposing);
-            this.AgentState.Next(null);
+            this.AgentState?.Dispose();
             this.Personality?.Dispose();
         }
     }
