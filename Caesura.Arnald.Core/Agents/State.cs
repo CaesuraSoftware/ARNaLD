@@ -75,7 +75,7 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
-        public void Next()
+        public void Next(IMessage message)
         {
             if (this.InitialState is null)
             {
@@ -86,7 +86,7 @@ namespace Caesura.Arnald.Core.Agents
                 this.Current = this.InitialState;
             }
             
-            var result = this.Current.Call();
+            var result = this.Current.Call(message);
             if (result.HasValue)
             {
                 this.SetState(result.Value);

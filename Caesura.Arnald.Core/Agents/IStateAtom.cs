@@ -9,6 +9,6 @@ namespace Caesura.Arnald.Core.Agents
     public interface IStateAtom
     {
         String Name { get; set; }
-        Maybe<String> Call();
+        Maybe<String> Call(IMessage message);
     }
 }

@@ -16,6 +16,6 @@ namespace Caesura.Arnald.Core.Agents
         IStateAtom Find(Predicate<IStateAtom> predicate);
         Boolean TrySetState(String name);
         void SetState(String name);
-        void Next();
+        void Next(IMessage message);
     }
 }
