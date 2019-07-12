@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public class State : IState
     {
+        private readonly Object _stateLock = new Object();
         public IAgent Owner { get; set; }
         public IStateAtom InitialState { get; set; }
         private List<IStateAtom> Atoms { get; set; }
@@ -43,7 +44,10 @@ namespace Caesura.Arnald.Core.Agents
             var item = this.Find(x => x.Name == atom.Name);
             if (item is null)
             {
-                this.Atoms.Add(atom);
+                lock (this._stateLock)
+                {
+                    this.Atoms.Add(atom);
+                }
                 return true;
             }
             return false;
@@ -66,22 +70,31 @@ namespace Caesura.Arnald.Core.Agents
         
         public Boolean Remove(IStateAtom atom)
         {
-            return this.Atoms.Remove(atom);
+            lock (this._stateLock)
+            {
+                return this.Atoms.Remove(atom);
+            }
         }
         
         public IStateAtom Find(Predicate<IStateAtom> predicate)
         {
-            return this.Atoms.Find(predicate);
+            lock (this._stateLock)
+            {
+                return this.Atoms.Find(predicate);
+            }
         }
         
         public Boolean TrySetState(String name)
         {
-            var atom = this.Atoms.Find(x => x.Name == name);
+            var atom = this.Find(x => x.Name == name);
             if (atom is null)
             {
                 return false;
             }
-            this.Current = atom;
+            lock (this._stateLock)
+            {
+                this.Current = atom;
+            }
             return true;
         }
         
@@ -96,23 +109,26 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Next(IMessage message)
         {
-            if (this.InitialState is null)
+            lock (this._stateLock)
             {
-                throw new InvalidOperationException($"{nameof(this.InitialState)} is null.");
-            }
-            if (this.Current is null)
-            {
-                this.Current = this.InitialState;
-            }
-            
-            var result = this.Current.Call(message);
-            if (result)
-            {
-                this.SetState(result.Value);
-            }
-            else
-            {
-                this.Current = this.InitialState;
+                if (this.InitialState is null)
+                {
+                    throw new InvalidOperationException($"{nameof(this.InitialState)} is null.");
+                }
+                if (this.Current is null)
+                {
+                    this.Current = this.InitialState;
+                }
+                
+                var result = this.Current.Call(message);
+                if (result)
+                {
+                    this.SetState(result.Value);
+                }
+                else
+                {
+                    this.Current = this.InitialState;
+                }
             }
         }
         
