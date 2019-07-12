@@ -51,12 +51,11 @@ namespace Caesura.Arnald.Core.Agents
             this.CancelToken.Cancel(false);
         }
         
-        public virtual void StopAndWait()
+        public virtual void Wait()
         {
-            this.Stop();
-            this.AgentThreadState = ThreadState.WaitSleepJoin;
             while (this.AgentRunning)
             {
+                this.AgentThreadState = ThreadState.WaitSleepJoin;
                 Thread.Sleep(50); // 50 based on experiences from other developers
             }
         }
@@ -89,7 +88,8 @@ namespace Caesura.Arnald.Core.Agents
         {
             this.AgentState?.Dispose();
             this.Personality?.Dispose();
-            this.StopAndWait();
+            this.Stop();
+            this.Wait();
         }
     }
 }

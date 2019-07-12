@@ -15,7 +15,7 @@ namespace Caesura.Arnald.Core.Agents
         ThreadState AgentThreadState { get; }
         void Start();
         void Stop();
-        void StopAndWait();
+        void Wait();
         void Execute();
         void Learn(IBehavior behavior);
         void Send(IMessage message);
