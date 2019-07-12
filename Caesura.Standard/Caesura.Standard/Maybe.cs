@@ -6,6 +6,17 @@ namespace Caesura.Standard
     using System.Collections.Generic;
     using System.Linq;
     
+    public struct Unit
+    {
+        
+    }
+    
+    public static class Maybe
+    {
+        private static Unit _unit = new Unit();
+        public static Unit Unit => _unit;
+    }
+    
     public struct Maybe<T>
     {
         public T Value => this.GetValue();
@@ -42,6 +53,11 @@ namespace Caesura.Standard
         public static implicit operator Maybe<T>(T item)
         {
             return new Maybe<T>(item);
+        }
+        
+        public static implicit operator Maybe<T>(Unit unit)
+        {
+            return Maybe<T>.Nothing();
         }
         
         public static Boolean operator == (Maybe<T> m1, Maybe<T> m2)
