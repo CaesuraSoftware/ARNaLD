@@ -53,6 +53,16 @@ namespace Caesura.Arnald.Core
             this.Items          = new Dictionary<String, Object>(msg.Items);
         }
         
+        /// <summary>
+        /// Swap the Sender and Recipient properties.
+        /// </summary>
+        public void SwapSender()
+        {
+            var sender = this.Sender;
+            this.Sender = this.Recipient;
+            this.Recipient = sender;
+        }
+        
         public R Get<R>(String name)
         {
             if (!this.Items.ContainsKey(name))

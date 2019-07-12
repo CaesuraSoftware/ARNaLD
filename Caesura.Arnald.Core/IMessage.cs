@@ -22,6 +22,7 @@ namespace Caesura.Arnald.Core
         Maybe<T> TryGet<T>(String name);
         Boolean Set<T>(String name, T item);
         Boolean Set<T>(String name, T item, Boolean force);
+        void SwapSender();
         void Copy(IMessage msg);
     }
 }
