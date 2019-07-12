@@ -25,6 +25,14 @@ namespace Caesura.Arnald.Core.Agents
             this.TryAdd(initial); // add the initial state to the Atoms if it's not already there.
         }
         
+        public static State LoadDefaults()
+        {
+            var state = new State();
+            state.Add(StateAtom.Init, (self, message) => StateAtom.End );
+            state.Add(StateAtom.End , (self, message) => StateAtom.Init);
+            return state;
+        }
+        
         public Boolean TryAdd(IStateAtom atom)
         {
             var item = this.Find(x => x.Name == atom.Name);

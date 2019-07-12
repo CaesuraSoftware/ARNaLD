@@ -13,13 +13,15 @@ namespace Caesura.Arnald.Core.Agents
         public Guid Identifier { get; protected set; }
         public Personality Personality { get; protected set; }
         protected IMailbox Messages { get; set; }
-        protected IState State { get; set; }
+        protected IState AgentState { get; set; }
         
         public BaseAgent()
         {
-            this.Identifier = Guid.NewGuid();
-            this.Personality = new Personality();
-            this.Messages = new Mailbox();
+            this.Identifier     = Guid.NewGuid();
+            this.Name           = this.Identifier.ToString("N").ToUpper();
+            this.Personality    = new Personality();
+            this.Messages       = new Mailbox();
+            this.AgentState     = State.LoadDefaults();
         }
         
         public virtual IEnumerable<Task<IMessage>> Execute()
