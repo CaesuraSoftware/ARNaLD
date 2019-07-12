@@ -61,6 +61,16 @@ namespace Caesura.Standard
             return Maybe<T>.Nothing();
         }
         
+        public static Boolean operator true (Maybe<T> maybe)
+        {
+            return maybe.HasValue;
+        }
+        
+        public static Boolean operator false (Maybe<T> maybe)
+        {
+            return maybe.NoValue;
+        }
+        
         public static Boolean operator == (Maybe<T> m1, Maybe<T> m2)
         {
             return m1.Equals(m2);
