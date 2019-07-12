@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public interface IPersonality : IDisposable
     {
+        Task RunAsync(String name, IMessage message);
         void Run(String name, IMessage message);
         void Learn(IBehavior behavior);
         void Unlearn(IBehavior behavior);

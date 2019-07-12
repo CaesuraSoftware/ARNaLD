@@ -17,15 +17,28 @@ namespace Caesura.Arnald.Core.Agents
             this.Behaviors = new List<IBehavior>();
         }
         
+        public async Task RunAsync(String name, IMessage message)
+        {
+            var be = this.GetBehavior(x => x.Name == name);
+            if (be)
+            {
+                await Task.Run(() =>
+                {
+                    be.Value.Execute(message);
+                });
+            }
+        }
+        
         public void Run(String name, IMessage message)
         {
             var be = this.GetBehavior(x => x.Name == name);
             if (be)
             {
-                Task.Run(() =>
-                {
-                    be.Value.Execute(message);
-                });
+                be.Value.Execute(message);
+            }
+            else
+            {
+                throw new ElementNotFoundException();
             }
         }
         
