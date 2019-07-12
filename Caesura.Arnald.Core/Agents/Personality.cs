@@ -6,6 +6,7 @@ namespace Caesura.Arnald.Core.Agents
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Caesura.Standard;
     
     public class Personality : IPersonality
     {
@@ -16,17 +17,26 @@ namespace Caesura.Arnald.Core.Agents
             this.Behaviors = new List<IBehavior>();
         }
         
-        // TODO: make Personality more like a service locator and less like a state
-        // machine (we already have one)
+        public void Run(String name, IMessage message)
+        {
+            var be = this.GetBehavior(x => x.Name == name);
+            if (be)
+            {
+                Task.Run(() =>
+                {
+                    be.Value.Execute(message);
+                });
+            }
+        }
         
         public void Learn(IBehavior behavior)
         {
-            var b1 = this.GetBehavior(x => x.Name == behavior.Name);
-            if (b1 is IBehavior)
+            var be = this.GetBehavior(x => x.Name == behavior.Name);
+            if (be)
             {
-                this.Behaviors.Remove(b1);
+                this.Behaviors.Remove(be.Value);
             }
-            this.Behaviors.Add(b1);
+            this.Behaviors.Add(behavior);
             this.Behaviors.Sort();
         }
         
@@ -37,11 +47,11 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Unlearn(Predicate<IBehavior> predicate)
         {
-            var b1 = this.GetBehavior(predicate);
-            if (b1 is IBehavior)
+            var be = this.GetBehavior(predicate);
+            if (be)
             {
-                b1.Dispose();
-                this.Behaviors.Remove(b1);
+                be.Value.Dispose();
+                this.Behaviors.Remove(be.Value);
             }
         }
         
@@ -64,9 +74,14 @@ namespace Caesura.Arnald.Core.Agents
             return this.Behaviors.Exists(x => x.Name == name);
         }
         
-        public IBehavior GetBehavior(Predicate<IBehavior> predicate)
+        public Maybe<IBehavior> GetBehavior(Predicate<IBehavior> predicate)
         {
-            return this.Behaviors.Find(predicate);
+            var behavior = this.Behaviors.Find(predicate);
+            if (behavior is null)
+            {
+                return Maybe.None;
+            }
+            return Maybe<IBehavior>.Some(behavior);
         }
         
         public void Dispose()
