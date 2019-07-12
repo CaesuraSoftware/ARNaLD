@@ -19,17 +19,22 @@ namespace Caesura.Arnald.Core.Agents
             this.Atoms = new List<IStateAtom>();
         }
         
-        public State(IStateAtom initial) : this()
+        public State(IAgent owner, IStateAtom initial) : this()
         {
+            this.Agent = owner;
             this.InitialState = initial;
             this.TryAdd(initial); // add the initial state to the Atoms if it's not already there.
         }
         
-        public static State LoadDefaults()
+        public static State LoadDefaults(IAgent owner)
         {
             var state = new State();
-            state.Add(StateAtom.Init, (self, message) => StateAtom.End );
-            state.Add(StateAtom.End , (self, message) => StateAtom.Init);
+            var initstate = new StateAtom(state, StateAtom.Init, (self, message) => StateAtom.End );
+            var endstate  = new StateAtom(state, StateAtom.End , (self, message) => StateAtom.Init);
+            state.Agent = owner;
+            state.Add(initstate);
+            state.Add(endstate );
+            state.InitialState = initstate;
             return state;
         }
         

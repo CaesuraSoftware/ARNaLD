@@ -21,7 +21,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Name           = this.Identifier.ToString("N").ToUpper();
             this.Personality    = new Personality();
             this.Messages       = new Mailbox();
-            this.AgentState     = State.LoadDefaults();
+            this.AgentState     = State.LoadDefaults(this);
         }
         
         public virtual IEnumerable<Task<IMessage>> Execute()
