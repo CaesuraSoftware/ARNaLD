@@ -58,6 +58,7 @@ namespace Caesura.Arnald.Core
         
         public Maybe<IMessage> Receive()
         {
+            // TODO: we need to block this in an asyncronous, task-friendly way.
             lock (this.indexLock)
             {
                 var mmsg = this.Peek();
