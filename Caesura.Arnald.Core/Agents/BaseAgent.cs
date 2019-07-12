@@ -42,7 +42,6 @@ namespace Caesura.Arnald.Core.Agents
             {
                 throw new InvalidOperationException("Agent is already running.");
             }
-            this.AgentRunning = true;
             this.AgentThreadState = ThreadState.Running;
             this.CancelToken = new CancellationTokenSource();
             // TODO: figure out a good way to handle a long-running agent, either make
@@ -54,7 +53,8 @@ namespace Caesura.Arnald.Core.Agents
             // message processor is going to block for messages?). if we make it
             // configurable, make an enum for things like ProcessorBound, IOBound, etc.
             // TODO: OR just have agents check their mailbox after the mailbox raises some
-            // kind of GotMail event, and skip the loop entirely.
+            // kind of GotMail event, and skip the loop entirely. All of these sounds like
+            // good options to build in, but we need a default option too.
             throw new NotImplementedException();
         }
         
@@ -73,7 +73,21 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
-        public virtual void Execute()
+        public virtual void Run()
+        {
+            this.AgentRunning = true;
+            while (!this.CancelToken.Token.IsCancellationRequested)
+            {
+                this.CycleOnce();
+            }
+            if (this.AgentThreadState != ThreadState.Unstarted)
+            {
+                this.AgentThreadState = ThreadState.Stopped;
+            }
+            this.AgentRunning = false;
+        }
+        
+        public virtual void CycleOnce()
         {
             var msg = this.Messages.Receive();
             if (msg)
@@ -99,11 +113,22 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Dispose()
         {
+            this.Dispose(true);
+        }
+        
+        public virtual void Dispose(Boolean wait)
+        {
             this.AgentState?.Dispose();
             this.Personality?.Dispose();
             this.Stop();
-            this.AgentThreadState = ThreadState.WaitSleepJoin;
-            this.Wait();
+            if (wait)
+            {
+                // TODO: this could be a race condition, make sure to think
+                // of a way to consistently set AgentThreadState to WaitSleepJoin
+                // and then Stopped.
+                this.AgentThreadState = ThreadState.WaitSleepJoin;
+                this.Wait();
+            }
         }
     }
 }

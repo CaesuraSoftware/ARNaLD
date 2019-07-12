@@ -16,9 +16,11 @@ namespace Caesura.Arnald.Core.Agents
         void Start();
         void Stop();
         void Wait();
-        void Execute();
+        void Run();
+        void CycleOnce();
         void Learn(IBehavior behavior);
         void Send(IMessage message);
         void Send(IEnumerable<IMessage> messages);
+        void Dispose(Boolean wait);
     }
 }
