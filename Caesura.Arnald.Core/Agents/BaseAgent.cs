@@ -30,6 +30,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Identifier         = Guid.NewGuid();
             this.Name               = this.Identifier.ToString("N").ToUpper();
             this.AgentThreadState   = ThreadState.Unstarted;
+            this.AgentRunning       = false;
             this.Personality        = new Personality();
             this.Messages           = new Mailbox();
             this.AgentState         = State.LoadDefaults(this);
@@ -37,10 +38,17 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Start()
         {
+            if (this.AgentRunning)
+            {
+                throw new InvalidOperationException("Agent is already running.");
+            }
+            this.AgentRunning = true;
             this.AgentThreadState = ThreadState.Running;
             this.CancelToken = new CancellationTokenSource();
-            // TODO: create a long-running task here, store the cancellationtoken in this class
-            // call Execute in a loop
+            // TODO: figure out a good way to handle a long-running agent, either make
+            // a dedicated thread, make a long-running task or simply make tasks in a
+            // loop while waiting for each one to finish (probably a bad idea).
+            // At the end of the central loop, set AgentRunning to false.
             throw new NotImplementedException();
         }
         
