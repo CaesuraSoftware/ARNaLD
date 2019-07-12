@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core
     
     public interface IMailbox : IDisposable
     {
+        Int32 Count { get; }
         Boolean IsAddingCompleted { get; }
         Boolean TrySend(IMessage message);
         void Send(IMessage message);

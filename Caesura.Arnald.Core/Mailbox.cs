@@ -11,6 +11,7 @@ namespace Caesura.Arnald.Core
     
     public class Mailbox : IMailbox
     {
+        public Int32 Count => this._inbox.Count;
         public Boolean IsAddingCompleted => this._inbox.IsAddingCompleted;
         private BlockingCollection<IMessage> _inbox;
         
