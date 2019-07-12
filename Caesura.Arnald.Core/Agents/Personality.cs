@@ -16,19 +16,8 @@ namespace Caesura.Arnald.Core.Agents
             this.Behaviors = new List<IBehavior>();
         }
         
-        public IEnumerable<Task<IMessage>> Execute(IEnumerable<IMessage> messages)
-        {
-            var tasks = new List<Task<IMessage>>(this.Behaviors.Count);
-            foreach (var behavior in this.Behaviors)
-            {
-                foreach (var message in messages)
-                {
-                    var task = behavior.Execute(message);
-                    tasks.Add(task);
-                }
-            }
-            return tasks;
-        }
+        // TODO: make Personality more like a service locator and less like a state
+        // machine (we already have one)
         
         public void Learn(IBehavior behavior)
         {

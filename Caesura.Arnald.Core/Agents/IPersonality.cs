@@ -8,7 +8,6 @@ namespace Caesura.Arnald.Core.Agents
     
     public interface IPersonality : IDisposable
     {
-        IEnumerable<Task<IMessage>> Execute(IEnumerable<IMessage> messages);
         void Learn(IBehavior behavior);
     }
 }
