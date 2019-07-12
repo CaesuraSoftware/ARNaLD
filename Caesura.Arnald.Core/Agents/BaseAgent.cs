@@ -49,6 +49,12 @@ namespace Caesura.Arnald.Core.Agents
             // a dedicated thread, make a long-running task or simply make tasks in a
             // loop while waiting for each one to finish (probably a bad idea).
             // At the end of the central loop, set AgentRunning to false.
+            // TODO: maybe make those an option depending on if it'll be processor-bound
+            // or listening on for anything (will we need to make that decision if the
+            // message processor is going to block for messages?). if we make it
+            // configurable, make an enum for things like ProcessorBound, IOBound, etc.
+            // TODO: OR just have agents check their mailbox after the mailbox raises some
+            // kind of GotMail event, and skip the loop entirely.
             throw new NotImplementedException();
         }
         
