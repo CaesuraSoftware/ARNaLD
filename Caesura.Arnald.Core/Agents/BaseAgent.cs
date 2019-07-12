@@ -20,6 +20,8 @@ namespace Caesura.Arnald.Core.Agents
         public Guid Identifier { get; protected set; }
         public IPersonality Personality { get; protected set; }
         public ThreadState AgentThreadState { get; protected set; }
+        protected Boolean AgentRunning { get; set; }
+        protected CancellationTokenSource CancelToken { get; set; }
         protected IMailbox Messages { get; set; }
         protected IState AgentState { get; set; }
         
@@ -36,6 +38,7 @@ namespace Caesura.Arnald.Core.Agents
         public virtual void Start()
         {
             this.AgentThreadState = ThreadState.Running;
+            this.CancelToken = new CancellationTokenSource();
             // TODO: create a long-running task here, store the cancellationtoken in this class
             // call Execute in a loop
             throw new NotImplementedException();
@@ -44,15 +47,18 @@ namespace Caesura.Arnald.Core.Agents
         public virtual void Stop()
         {
             this.AgentThreadState = ThreadState.StopRequested;
-            // TODO: call the cancellationtoken's cancel here
-            throw new NotImplementedException();
+            this.AgentState.TrySetState(StateAtomState.Cancelled);
+            this.CancelToken.Cancel(false);
         }
         
         public virtual void StopAndWait()
         {
             this.Stop();
             this.AgentThreadState = ThreadState.WaitSleepJoin;
-            throw new NotImplementedException();
+            while (this.AgentRunning)
+            {
+                Thread.Sleep(50); // 50 based on experiences from other developers
+            }
         }
         
         public virtual void Execute()

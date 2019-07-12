@@ -12,9 +12,10 @@ namespace Caesura.Arnald.Core.Agents
     
     public static class StateAtomState
     {
-        public static String Init = "INIT";
+        public static String Begin = "BEGIN";
         public static String End = "END";
         public static String Disposing = "DISPOSING";
+        public static String Cancelled = "CANCELLED";
     }
     
     public class StateAtom : IStateAtom
