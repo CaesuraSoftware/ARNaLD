@@ -6,7 +6,7 @@ namespace Caesura.Arnald.Core.Agents
     using System.Collections.Generic;
     using System.Linq;
     
-    public interface IState
+    public interface IState : IDisposable
     {
         IAgent Agent { get; set; }
         IStateAtom InitialState { get; set; }

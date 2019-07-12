@@ -115,5 +115,16 @@ namespace Caesura.Arnald.Core.Agents
                 this.Current = this.InitialState;
             }
         }
+        
+        public void Dispose()
+        {
+            this.Dispose(null);
+        }
+        
+        public void Dispose(IMessage message)
+        {
+            this.TrySetState(StateAtomState.Disposing);
+            this.Next(message);
+        }
     }
 }
