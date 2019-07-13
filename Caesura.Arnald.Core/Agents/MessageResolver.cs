@@ -22,13 +22,18 @@ namespace Caesura.Arnald.Core.Agents
         public MessageResolver()
         {
             this.ResolverState = new State();
+            this.ExecuteCallback = (resolver) => this.ResolverState.Next(this.Current);
         }
         
-        public MessageResolver(IMessageHandler owner, String name, CheckCallback checker, ExecuteCallback execute) : this()
+        public MessageResolver(IMessageHandler owner, String name, CheckCallback checker) : this()
         {
             this.Owner              = owner;
             this.Name               = name;
             this.CheckCallback      = checker;
+        }
+        
+        public MessageResolver(IMessageHandler owner, String name, CheckCallback checker, ExecuteCallback execute) : this(owner, name, checker)
+        {
             this.ExecuteCallback    = execute;
         }
         
