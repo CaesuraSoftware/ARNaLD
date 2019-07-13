@@ -6,7 +6,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public delegate MessageResolverResult CheckCallback(MessageResolver resolver, IMessage message);
     
-    public delegate void ExecuteCallback(MessageResolver resolver);
+    public delegate void ExecuteCallback(MessageResolver resolver, IMessage message);
     
     public class MessageResolver : IMessageResolver
     {
@@ -23,7 +23,7 @@ namespace Caesura.Arnald.Core.Agents
             this.CheckIfRecipientIsHostName     = true;
             this.ResolverState                  = new State();
             this.CheckCallback                  = (resolver, message) => MessageResolverResult.Continue;
-            this.ExecuteCallback                = (resolver) => this.ResolverState.Next(this.Current);
+            this.ExecuteCallback                = (resolver, message) => this.ResolverState.Next(message);
         }
         
         public MessageResolver(String name) : this()
@@ -75,7 +75,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Execute()
         {
-            this.ExecuteCallback?.Invoke(this);
+            this.ExecuteCallback?.Invoke(this, this.Current);
         }
     }
 }
