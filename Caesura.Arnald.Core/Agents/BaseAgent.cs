@@ -20,12 +20,12 @@ namespace Caesura.Arnald.Core.Agents
         public virtual Guid Identifier { get; protected set; }
         public virtual IPersonality Personality { get; protected set; }
         public virtual IMessageHandler Resolver { get; set; }
+        public virtual IState AgentState { get; set; }
         public virtual ThreadState AgentThreadState { get; protected set; }
+        public virtual IMailbox Messages { get; set; }
         protected virtual Object _threadStateLock { get; set; } = new Object();
         protected virtual Boolean AgentRunning { get; set; }
         protected virtual CancellationTokenSource CancelToken { get; set; }
-        protected virtual IMailbox Messages { get; set; }
-        protected virtual IState AgentState { get; set; }
         protected virtual Thread AgentThread { get; set; }
         
         public BaseAgent()

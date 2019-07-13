@@ -39,8 +39,8 @@ namespace Caesura.Arnald.Core.Agents
             this.Identifier     = config.Identifier;
             this.Personality    = config.Personality;
             this.Resolver       = config.Resolver;
-            this.Messages       = config.Messages;
             this.AgentState     = config.AgentState;
+            this.Messages       = config.Messages;
         }
         
         public static AgentConfiguration CreateDefaults(String name, Guid guid)
@@ -51,8 +51,8 @@ namespace Caesura.Arnald.Core.Agents
                 Identifier      = guid,
                 Personality     = new Personality(),
                 Resolver        = new MessageHandler(),
+                AgentState      = new State(),
                 Messages        = new Mailbox(),
-                AgentState      = State.LoadDefaults(null),
             };
             return aconf;
         }
