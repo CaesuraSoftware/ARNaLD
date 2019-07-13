@@ -12,12 +12,22 @@
             "problemMatcher": "$tsc"
         },
         {
+            "label": "buildmanualtest",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Caesura.Arnald.Tests.Manual/Caesura.Arnald.Tests.Manual.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
             "label": "publish",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Caesura.Arnald.Tests/Caesura.Arnald.Tests.csproj"
+                "${workspaceFolder}/Caesura.Arnald.Service/Caesura.Arnald.Service.csproj"
             ],
             "problemMatcher": "$tsc"
         },

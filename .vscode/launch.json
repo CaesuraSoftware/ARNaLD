@@ -8,11 +8,11 @@
             "name": "Manual Test Environment",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "buildmanualtest",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Caesura.Arnald.Tests.Manual/bin/Debug/netcoreapp2.2/Caesura.Arnald.Tests.Manual.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Caesura.Arnald.Tests",
+            "cwd": "${workspaceFolder}/Caesura.Arnald.Tests.Manual",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
