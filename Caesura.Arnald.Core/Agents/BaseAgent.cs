@@ -138,6 +138,15 @@ namespace Caesura.Arnald.Core.Agents
             this.Resolver.Process(msg);
         }
         
+        public virtual void CycleOnceNoBlock()
+        {
+            var msg = this.Messages.TryReceive();
+            if (msg)
+            {
+                this.Resolver.Process(msg.Value);
+            }
+        }
+        
         public virtual void Learn(IBehavior behavior)
         {
             this.Personality.Learn(behavior);
