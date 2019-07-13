@@ -131,7 +131,10 @@ namespace Caesura.Arnald.Core.Agents
             
             foreach (var agent in autonomous)
             {
-                if (agent.AgentThreadState.HasFlag(ThreadState.Unstarted | ThreadState.Stopped))
+                // No, "agent.AgentThreadState.HasFlag(ThreadState.Unstarted | ThreadState.Stopped)"
+                // does not work, if you were wondering.
+                if (agent.AgentThreadState.HasFlag(ThreadState.Unstarted)
+                ||  agent.AgentThreadState.HasFlag(ThreadState.Stopped ))
                 {
                     agent.Start();
                 }
