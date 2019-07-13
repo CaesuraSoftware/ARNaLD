@@ -8,12 +8,6 @@ namespace Caesura.Arnald.Core.Agents
     using System.Threading;
     using System.Threading.Tasks;
     
-    /// <summary>
-    /// Internals of an Agent: The agent's state machine is activated every
-    /// time the agent gets a message, in which that message is passed to
-    /// the current state. That state then should call a Behavior from the
-    /// agent's Personality in order to act out tasks.
-    /// </summary>
     public abstract class BaseAgent : IAgent
     {
         public virtual String Name { get; protected set; }
