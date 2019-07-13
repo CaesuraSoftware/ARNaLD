@@ -30,7 +30,7 @@ namespace Caesura.Arnald.Core.Agents
             this.AgentThread.IsBackground   = true;
         }
         
-        public BaseAgent(AgentConfiguration config) : this()
+        public BaseAgent(IAgentConfiguration config) : this()
         {
             this.Setup(config);
         }
