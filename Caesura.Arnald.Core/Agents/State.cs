@@ -4,7 +4,6 @@ using System;
 namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Caesura.Standard;
     
     public class State : IState

@@ -4,8 +4,6 @@ using System;
 namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
-    using System.Collections.Concurrent;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Caesura.Standard;

@@ -3,8 +3,6 @@ using System;
 
 namespace Caesura.Arnald.Core.Agents
 {
-    using System.Collections.Generic;
-    using System.Linq;
     
     [Flags]
     public enum MessageResolverResult : Int32

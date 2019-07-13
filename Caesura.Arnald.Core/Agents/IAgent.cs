@@ -3,9 +3,7 @@ using System;
 
 namespace Caesura.Arnald.Core.Agents
 {
-    using System.Collections.Generic;
     using System.Threading;
-    using System.Threading.Tasks;
     
     public interface IAgent : IDisposable
     {

@@ -3,7 +3,6 @@ using System;
 
 namespace Caesura.Arnald.Core.Plugin
 {
-    using System.Collections.Generic;
     using Agents;
     
     public interface IPlugin : IDisposable

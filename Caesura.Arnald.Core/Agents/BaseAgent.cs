@@ -3,10 +3,7 @@ using System;
 
 namespace Caesura.Arnald.Core.Agents
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
     
     public abstract class BaseAgent : IAgent
     {

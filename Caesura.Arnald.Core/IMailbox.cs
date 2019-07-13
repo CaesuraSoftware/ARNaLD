@@ -3,7 +3,6 @@ using System;
 
 namespace Caesura.Arnald.Core
 {
-    using System.Collections.Generic;
     using System.Threading;
     using Caesura.Standard;
     
