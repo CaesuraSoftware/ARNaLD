@@ -8,6 +8,7 @@ namespace Caesura.Arnald.Core.Agents
     {
         IAgent HostAgent { get; set; }
         IStateAtom InitialState { get; set; }
+        IStateAtom Current { get; }
         Boolean TryAdd(IStateAtom atom);
         void Add(IStateAtom atom);
         void Add(String name, IStateAtomCallback callback);
@@ -15,6 +16,7 @@ namespace Caesura.Arnald.Core.Agents
         IStateAtom Find(Predicate<IStateAtom> predicate);
         Boolean TrySetState(String name);
         void SetState(String name);
+        void Next();
         void Next(IMessage message);
         void Dispose(IMessage message);
     }

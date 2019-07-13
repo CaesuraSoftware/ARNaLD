@@ -11,8 +11,8 @@ namespace Caesura.Arnald.Core.Agents
         private readonly Object _stateLock = new Object();
         public IAgent HostAgent { get; set; }
         public IStateAtom InitialState { get; set; }
+        public IStateAtom Current { get; private set; }
         private List<IStateAtom> Atoms { get; set; }
-        private IStateAtom Current { get; set; }
         
         public State()
         {
@@ -109,6 +109,11 @@ namespace Caesura.Arnald.Core.Agents
             {
                 throw new ArgumentException($"{nameof(IStateAtom)} \"{name}\" is not present in this {nameof(State)} instance.");
             }
+        }
+        
+        public void Next()
+        {
+            this.Next(null);
         }
         
         public void Next(IMessage message)
