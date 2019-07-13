@@ -120,6 +120,10 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void CycleOnce()
         {
+            // TODO: don't pass messages to the state machine. create some kind
+            // of message-handling framework that uses a callback to check the
+            // message and then run another callback. each message-handler can
+            // implement a state machine instead.
             var msg = this.Messages.Receive(this.CancelToken.Token);
             this.AgentState.Next(msg);
         }
