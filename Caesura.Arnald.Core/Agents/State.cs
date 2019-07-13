@@ -102,6 +102,17 @@ namespace Caesura.Arnald.Core.Agents
             return true;
         }
         
+        public Boolean TrySetInitialState(String name)
+        {
+            var atom = this.Find(x => x.Name == name);
+            if (atom is null)
+            {
+                return false;
+            }
+            this.InitialState = atom;
+            return true;
+        }
+        
         public void SetState(String name)
         {
             var success = this.TrySetState(name);
