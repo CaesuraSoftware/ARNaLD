@@ -12,7 +12,7 @@ namespace Caesura.Arnald.Core.Agents
     // configurable.
     // TODO: have Locator accept messages and act as a message broker/proxy
     
-    public class Locator : IDisposable
+    public class Locator : ILocator
     {
         public String Name { get; set; }
         public Guid Identifier { get; set; }
