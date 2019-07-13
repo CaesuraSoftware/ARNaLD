@@ -127,12 +127,17 @@ namespace Caesura.Arnald.Core.Agents
             
             while (!token.IsCancellationRequested)
             {
-                foreach (var agent in manual)
+                Thread.Sleep(50);
+                var agents = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
+                foreach (var agent in agents)
                 {
                     agent.CycleOnceNoBlock();
+                    
+                    if (token.IsCancellationRequested)
+                    {
+                        break;
+                    }
                 }
-                manual = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
-                Thread.Sleep(50);
             }
             
             this.ManualAgentCyclerRunning = false;
