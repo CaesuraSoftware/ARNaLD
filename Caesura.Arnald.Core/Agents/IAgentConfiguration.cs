@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Agents
     public interface IAgentConfiguration
     {
         IAgent Owner { get; set; }
+        ILocator Location { get; set; }
         String Name { get; set; }
         Guid Identifier { get; set; }
         IPersonality Personality { get; set; }

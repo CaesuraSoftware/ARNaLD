@@ -10,6 +10,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public abstract class BaseAgent : IAgent
     {
+        public virtual ILocator Location { get; set; }
         public virtual String Name { get; protected set; }
         public virtual Guid Identifier { get; protected set; }
         public virtual IPersonality Personality { get; protected set; }
@@ -41,6 +42,7 @@ namespace Caesura.Arnald.Core.Agents
         {
             config.Owner            = this;
             
+            this.Location           = config.Location;
             this.Name               = config.Name;
             this.Identifier         = config.Identifier;
             this.Personality        = config.Personality;

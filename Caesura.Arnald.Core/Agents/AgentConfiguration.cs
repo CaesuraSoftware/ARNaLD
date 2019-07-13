@@ -11,6 +11,7 @@ namespace Caesura.Arnald.Core.Agents
     {
         public static AgentConfiguration Default => CreateDefaults();
         public IAgent Owner { get; set; }
+        public ILocator Location { get; set; }
         public String Name { get; set; }
         public Guid Identifier { get; set; }
         public IPersonality Personality { get; set; }
@@ -38,6 +39,7 @@ namespace Caesura.Arnald.Core.Agents
         public void Copy(IAgentConfiguration config)
         {
             this.Owner          = config.Owner;
+            this.Location       = config.Location;
             this.Name           = config.Name;
             this.Identifier     = config.Identifier;
             this.Personality    = config.Personality;
@@ -48,10 +50,11 @@ namespace Caesura.Arnald.Core.Agents
             this.CancelToken    = config.CancelToken;
         }
         
-        public static AgentConfiguration CreateDefaults(String name, Guid guid)
+        public static AgentConfiguration CreateDefaults(ILocator location, String name, Guid guid)
         {
             var aconf = new AgentConfiguration()
             {
+                Location        = location,
                 Name            = name,
                 Identifier      = guid,
                 Personality     = new Personality(),
@@ -64,16 +67,16 @@ namespace Caesura.Arnald.Core.Agents
             return aconf;
         }
         
-        public static AgentConfiguration CreateDefaults(String name)
+        public static AgentConfiguration CreateDefaults(ILocator location, String name)
         {
-            return CreateDefaults(name, Guid.NewGuid());
+            return CreateDefaults(location, name, Guid.NewGuid());
         }
         
         public static AgentConfiguration CreateDefaults()
         {
             var guid = Guid.NewGuid();
             var name = guid.ToString("N").ToUpper();
-            return CreateDefaults(name, guid);
+            return CreateDefaults(null, name, guid);
         }
     }
 }
