@@ -193,7 +193,7 @@ namespace Caesura.Arnald.Core.Agents
                 return false;
             }
             
-            agent.Location = this;
+            agent.HostLocator = this;
             this.Agents.Add(agent);
             
             if ((this.ManualAgentCyclerRunning) 

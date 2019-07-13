@@ -12,7 +12,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public class MessageHandler : IMessageHandler
     {
-        public IAgent Owner { get; set; }
+        public IAgent HostAgent { get; set; }
         private List<IMessageResolver> Resolvers { get; set; }
         
         public MessageHandler()
@@ -22,12 +22,12 @@ namespace Caesura.Arnald.Core.Agents
         
         public MessageHandler(IAgent owner) : this()
         {
-            this.Owner = owner;
+            this.HostAgent = owner;
         }
         
         public void AddResolver(IMessageResolver resolver)
         {
-            resolver.Owner = this;
+            resolver.HostHandler = this;
             this.Resolvers.Add(resolver);
         }
         

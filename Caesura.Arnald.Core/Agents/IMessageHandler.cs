@@ -8,7 +8,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public interface IMessageHandler
     {
-        IAgent Owner { get; set; }
+        IAgent HostAgent { get; set; }
         void AddResolver(IMessageResolver resolver);
         Boolean RemoveResolver(IMessageResolver resolver);
         Maybe<IMessageResolver> GetResolver(Predicate<IMessageResolver> predicate);

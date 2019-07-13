@@ -10,7 +10,7 @@ namespace Caesura.Arnald.Core.Agents
     
     public abstract class BaseAgent : IAgent
     {
-        public virtual ILocator Location { get; set; }
+        public virtual ILocator HostLocator { get; set; }
         public virtual String Name { get; protected set; }
         public virtual Guid Identifier { get; protected set; }
         public virtual IPersonality Personality { get; protected set; }
@@ -40,20 +40,20 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Setup(IAgentConfiguration config)
         {
-            config.Owner            = this;
+            config.Owner                = this;
             
-            this.Location           = config.Location;
-            this.Name               = config.Name;
-            this.Identifier         = config.Identifier;
-            this.Personality        = config.Personality;
-            this.Resolver           = config.Resolver;
-            this.Messages           = config.Messages;
-            this.AgentState         = config.AgentState;
-            this.Autonomy           = config.Autonomy;
-            this.CancelToken        = config.CancelToken;
+            this.HostLocator            = config.Location;
+            this.Name                   = config.Name;
+            this.Identifier             = config.Identifier;
+            this.Personality            = config.Personality;
+            this.Resolver               = config.Resolver;
+            this.Messages               = config.Messages;
+            this.AgentState             = config.AgentState;
+            this.Autonomy               = config.Autonomy;
+            this.CancelToken            = config.CancelToken;
             
-            this.Resolver.Owner     = this;
-            this.AgentState.Owner   = this;
+            this.Resolver.HostAgent     = this;
+            this.AgentState.HostAgent   = this;
         }
         
         /// <summary>
@@ -165,7 +165,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Dispose(Boolean wait)
         {
-            this.Location?.Remove(this);
+            this.HostLocator?.Remove(this);
             this.AgentState?.Dispose(); // set State to Disposing to handle cleanup before disposing anything else
             this.Stop();
             if (wait)

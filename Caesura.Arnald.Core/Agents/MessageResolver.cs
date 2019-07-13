@@ -13,7 +13,7 @@ namespace Caesura.Arnald.Core.Agents
     public class MessageResolver : IMessageResolver
     {
         public String Name { get; set; }
-        public IMessageHandler Owner { get; set; }
+        public IMessageHandler HostHandler { get; set; }
         public IMessage Current { get; set; }
         public State ResolverState { get; set; }
         public CheckCallback CheckCallback { get; set; }

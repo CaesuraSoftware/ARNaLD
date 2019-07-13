@@ -10,7 +10,7 @@ namespace Caesura.Arnald.Core.Agents
     public class State : IState
     {
         private readonly Object _stateLock = new Object();
-        public IAgent Owner { get; set; }
+        public IAgent HostAgent { get; set; }
         public IStateAtom InitialState { get; set; }
         private List<IStateAtom> Atoms { get; set; }
         private IStateAtom Current { get; set; }
@@ -22,7 +22,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public State(IAgent owner) : this()
         {
-            this.Owner = owner;
+            this.HostAgent = owner;
         }
         
         public State(IAgent owner, IStateAtom initial) : this(owner)
@@ -36,7 +36,7 @@ namespace Caesura.Arnald.Core.Agents
             var defaultstate = new State();
             var initstate = new StateAtom(defaultstate, StateAtomState.Begin, (state, message) => StateAtomState.End  );
             var endstate  = new StateAtom(defaultstate, StateAtomState.End  , (state, message) => StateAtomState.Begin);
-            defaultstate.Owner = owner;
+            defaultstate.HostAgent = owner;
             defaultstate.Add(initstate);
             defaultstate.Add(endstate );
             defaultstate.InitialState = initstate;
