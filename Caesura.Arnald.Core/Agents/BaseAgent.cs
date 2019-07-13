@@ -24,32 +24,34 @@ namespace Caesura.Arnald.Core.Agents
         public virtual ThreadState AgentThreadState { get; protected set; }
         public virtual IMailbox Messages { get; set; }
         protected readonly Object _threadStateLock = new Object();
-        protected virtual Boolean AgentRunning { get; set; }
         protected virtual CancellationTokenSource CancelToken { get; set; }
+        protected virtual Boolean AgentThreadRunning { get; set; }
         protected virtual Thread AgentThread { get; set; }
         
         public BaseAgent()
         {
             this.AgentThreadState           = ThreadState.Unstarted;
-            this.AgentRunning               = false;
+            this.AgentThreadRunning         = false;
             this.AgentThread                = new Thread(this.Run);
             this.AgentThread.IsBackground   = true;
         }
         
         public BaseAgent(AgentConfiguration config) : this()
         {
-            config.Owner = this;
             this.Setup(config);
         }
         
         public virtual void Setup(IAgentConfiguration config)
         {
+            config.Owner            = this;
+            
             this.Name               = config.Name;
             this.Identifier         = config.Identifier;
             this.Personality        = config.Personality;
             this.Resolver           = config.Resolver;
             this.Messages           = config.Messages;
             this.AgentState         = config.AgentState;
+            this.CancelToken        = config.CancelToken;
             
             this.Resolver.Owner     = this;
             this.AgentState.Owner   = this;
@@ -61,12 +63,12 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void Start()
         {
-            if (this.AgentRunning)
+            if (this.AgentThreadRunning)
             {
                 throw new InvalidOperationException("Agent is already running.");
             }
+            
             this.AgentThreadState = ThreadState.Running;
-            this.CancelToken = new CancellationTokenSource();
             try
             {
                 this.AgentThread.Start();
@@ -93,7 +95,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Wait()
         {
-            while (this.AgentRunning)
+            while (this.AgentThreadRunning)
             {
                 Thread.Sleep(50); // 50 based on experiences from other developers
             }
@@ -104,7 +106,7 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void Run()
         {
-            this.AgentRunning = true;
+            this.AgentThreadRunning = true;
             while (!this.CancelToken.Token.IsCancellationRequested)
             {
                 this.CycleOnce();
@@ -116,7 +118,7 @@ namespace Caesura.Arnald.Core.Agents
                     this.AgentThreadState = ThreadState.Stopped;
                 }
             }
-            this.AgentRunning = false;
+            this.AgentThreadRunning = false;
         }
         
         /// <summary>

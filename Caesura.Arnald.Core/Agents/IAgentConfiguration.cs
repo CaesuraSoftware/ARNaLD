@@ -4,6 +4,7 @@ using System;
 namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
+    using System.Threading;
     
     public interface IAgentConfiguration
     {
@@ -14,6 +15,7 @@ namespace Caesura.Arnald.Core.Agents
         IMessageHandler Resolver { get; set; }
         IMailbox Messages { get; set; }
         IState AgentState { get; set; }
+        CancellationTokenSource CancelToken { get; set; }
         void Copy(IAgentConfiguration config);
     }
 }

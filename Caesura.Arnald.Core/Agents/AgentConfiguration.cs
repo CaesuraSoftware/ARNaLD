@@ -5,6 +5,7 @@ namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     
     public class AgentConfiguration : IAgentConfiguration
     {
@@ -16,6 +17,7 @@ namespace Caesura.Arnald.Core.Agents
         public IMessageHandler Resolver { get; set; }
         public IMailbox Messages { get; set; }
         public IState AgentState { get; set; }
+        public CancellationTokenSource CancelToken { get; set; }
         
         public AgentConfiguration()
         {
@@ -41,6 +43,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Resolver       = config.Resolver;
             this.AgentState     = config.AgentState;
             this.Messages       = config.Messages;
+            this.CancelToken    = config.CancelToken;
         }
         
         public static AgentConfiguration CreateDefaults(String name, Guid guid)
@@ -53,6 +56,7 @@ namespace Caesura.Arnald.Core.Agents
                 Resolver        = new MessageHandler(),
                 AgentState      = new State(),
                 Messages        = new Mailbox(),
+                CancelToken     = new CancellationTokenSource(),
             };
             return aconf;
         }
