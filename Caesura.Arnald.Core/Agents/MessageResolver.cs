@@ -22,6 +22,7 @@ namespace Caesura.Arnald.Core.Agents
         {
             this.CheckIfRecipientIsHostName     = true;
             this.ResolverState                  = new State();
+            this.CheckCallback                  = (resolver, message) => MessageResolverResult.Continue;
             this.ExecuteCallback                = (resolver) => this.ResolverState.Next(this.Current);
         }
         
@@ -33,6 +34,11 @@ namespace Caesura.Arnald.Core.Agents
         public MessageResolver(String name, CheckCallback checker) : this(name)
         {
             this.CheckCallback = checker;
+        }
+        
+        public MessageResolver(String name, ExecuteCallback execute) : this(name)
+        {
+            this.ExecuteCallback = execute;
         }
         
         public MessageResolver(String name, CheckCallback checker, ExecuteCallback execute) : this(name, checker)
