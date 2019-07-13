@@ -24,7 +24,6 @@ namespace Caesura.Arnald.Core.Agents
         void CycleOnce();
         void CycleOnce(CancellationToken token);
         void CycleOnceNoBlock();
-        void Learn(IBehavior behavior);
         Boolean Send(IMessage message);
         void Send(IMessage message, CancellationToken token);
         void Dispose(Boolean wait);

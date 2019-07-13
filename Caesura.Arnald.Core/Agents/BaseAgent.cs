@@ -147,11 +147,6 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
-        public virtual void Learn(IBehavior behavior)
-        {
-            this.Personality.Learn(behavior);
-        }
-        
         public virtual Boolean Send(IMessage message)
         {
             var success = this.Messages.TrySend(message);
