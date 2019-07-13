@@ -88,7 +88,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Stop()
         {
-            var autonomous = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
+            var autonomous = this.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
             foreach (var agent in autonomous)
             {
                 agent.Stop();
@@ -114,7 +114,7 @@ namespace Caesura.Arnald.Core.Agents
         {
             this.ManualAgentCyclerRunning = true;
             
-            var autonomous = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
+            var autonomous = this.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
             
             foreach (var agent in autonomous)
             {
@@ -126,7 +126,7 @@ namespace Caesura.Arnald.Core.Agents
             
             while (!token.IsCancellationRequested)
             {
-                var agents = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
+                var agents = this.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
                 
                 foreach (var agent in agents)
                 {
