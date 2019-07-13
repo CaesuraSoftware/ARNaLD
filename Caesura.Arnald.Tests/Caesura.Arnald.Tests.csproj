@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Caesura.Arnald.Core\Caesura.Arnald.Core.csproj" />
     <ProjectReference Include="..\Caesura.Arnald.Service\Caesura.Arnald.Service.csproj" />
+    <ProjectReference Include="..\Caesura.Standard\Caesura.Standard\Caesura.Standard.csproj" />
   </ItemGroup>
 
 </Project>
