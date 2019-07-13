@@ -8,6 +8,7 @@ namespace Caesura.Arnald.Core.Agents
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Caesura.Standard;
     
     public class MessageHandler : IMessageHandler
     {
@@ -17,6 +18,32 @@ namespace Caesura.Arnald.Core.Agents
         public MessageHandler()
         {
             this.Resolvers = new List<IMessageResolver>();
+        }
+        
+        public MessageHandler(IAgent owner) : this()
+        {
+            this.Owner = owner;
+        }
+        
+        public void AddResolver(IMessageResolver resolver)
+        {
+            resolver.Owner = this;
+            this.Resolvers.Add(resolver);
+        }
+        
+        public Boolean RemoveResolver(IMessageResolver resolver)
+        {
+            return this.Resolvers.Remove(resolver);
+        }
+        
+        public Maybe<IMessageResolver> GetResolver(Predicate<IMessageResolver> predicate)
+        {
+            var resolver = this.Resolvers.Find(predicate);
+            if (resolver is null)
+            {
+                return Maybe.None;
+            }
+            return Maybe<IMessageResolver>.Some(resolver);
         }
         
         public void Process(IMessage message)
