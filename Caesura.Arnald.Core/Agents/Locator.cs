@@ -5,29 +5,34 @@ namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Caesura.Standard;
-    
-    // TODO: seperate agents by autonomy (are they running their own thread
-    // or is the Locator calling their CycleOnce methods manually). have this
-    // configurable.
-    // TODO: have Locator accept messages and act as a message broker/proxy
     
     public class Locator : ILocator
     {
         public String Name { get; set; }
         public Guid Identifier { get; set; }
         public Boolean DisposeAgentsOnDispose { get; set; }
-        private List<IAgent> Agents { get; set; }
         public event Action<ILocator, IAgent> OnAdd;
         public event Action<ILocator, IAgent> OnRemove;
         public event Action<ILocator, IAgent> OnDisposeAgent;
         public event Action<ILocator> OnDispose;
         
+        private List<IAgent> Agents { get; set; }
+        private Thread ManualAgentCycler { get; set; }
+        private Boolean ManualAgentCyclerRunning { get; set; }
+        private CancellationTokenSource CancelToken { get; set; }
+        
         public Locator()
         {
-            this.Agents = new List<IAgent>();
-            this.Identifier = Guid.NewGuid();
-            this.DisposeAgentsOnDispose = true;
+            this.Agents                             = new List<IAgent>();
+            this.Identifier                         = Guid.NewGuid();
+            this.DisposeAgentsOnDispose             = true;
+            
+            this.ManualAgentCycler                  = new Thread(this.Run);
+            this.ManualAgentCycler.IsBackground     = true;
+            this.CancelToken                        = new CancellationTokenSource();
         }
         
         public Locator(String name, Boolean disposeAgentsOnDispose) : this()
@@ -39,6 +44,95 @@ namespace Caesura.Arnald.Core.Agents
         public Locator(String name) : this(name, true)
         {
             
+        }
+        
+        public Boolean Send(IMessage message)
+        {
+            var agent = this.Find(x => x.Name == message.Recipient);
+            if (agent)
+            {
+                agent.Value.Send(message);
+                return true;
+            }
+            return false;
+        }
+        
+        public void SendToAll(IMessage message)
+        {
+            foreach (var agent in this.Agents)
+            {
+                agent.Send(message);
+            }
+        }
+        
+        public void Start()
+        {
+            if (this.ManualAgentCyclerRunning)
+            {
+                return;
+            }
+            
+            try
+            {
+                if (this.CancelToken.IsCancellationRequested)
+                {
+                    this.CancelToken = new CancellationTokenSource();
+                }
+                this.ManualAgentCycler.Start();
+            }
+            catch (ThreadStateException)
+            {
+                // no-op
+            }
+        }
+        
+        public void Stop()
+        {
+            var autonomous = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
+            foreach (var agent in autonomous)
+            {
+                agent.Stop();
+            }
+            
+            this.CancelToken.Cancel(false);
+        }
+        
+        public void Wait()
+        {
+            while (this.ManualAgentCyclerRunning)
+            {
+                Thread.Sleep(50);
+            }
+        }
+        
+        public void Run()
+        {
+            this.Run(this.CancelToken);
+        }
+        
+        public void Run(CancellationTokenSource token)
+        {
+            this.ManualAgentCyclerRunning = true;
+            
+            var autonomous = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
+            var manual     = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle    ));
+            
+            foreach (var agent in autonomous)
+            {
+                agent.Start();
+            }
+            
+            while (!token.IsCancellationRequested)
+            {
+                foreach (var agent in manual)
+                {
+                    agent.CycleOnceNoBlock();
+                }
+                manual = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
+                Thread.Sleep(50);
+            }
+            
+            this.ManualAgentCyclerRunning = false;
         }
         
         public Maybe<IAgent> Find(Predicate<IAgent> predicate)
@@ -76,7 +170,16 @@ namespace Caesura.Arnald.Core.Agents
             {
                 return false;
             }
+            
             this.Agents.Add(agent);
+            
+            if ((this.ManualAgentCyclerRunning) 
+            && (!this.CancelToken.IsCancellationRequested)
+            && (agent.Autonomy.HasFlag(AgentAutonomy.IndependentThread)))
+            {
+                agent.Start();
+            }
+            
             this.OnAdd?.Invoke(this, agent);
             return true;
         }
@@ -123,6 +226,8 @@ namespace Caesura.Arnald.Core.Agents
         
         public void Dispose()
         {
+            this.Stop();
+            this.Wait();
             this.OnDispose?.Invoke(this);
             this.Clear(this.DisposeAgentsOnDispose);
         }
