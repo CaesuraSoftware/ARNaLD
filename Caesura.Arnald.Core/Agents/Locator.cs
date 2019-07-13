@@ -4,6 +4,7 @@ using System;
 namespace Caesura.Arnald.Core.Agents
 {
     using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -59,7 +60,8 @@ namespace Caesura.Arnald.Core.Agents
         
         public void SendToAll(IMessage message)
         {
-            foreach (var agent in this.Agents)
+            var agents = this.FindAll(x => true);
+            foreach (var agent in agents)
             {
                 agent.Send(message);
             }
