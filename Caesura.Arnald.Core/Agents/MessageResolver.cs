@@ -20,6 +20,8 @@ namespace Caesura.Arnald.Core.Agents
         
         public MessageResolver()
         {
+            var name                            = this.HostHandler?.HostAgent?.Name;
+            this.Name                           = name is null ? null : name + "Resolver";
             this.CheckIfRecipientIsHostName     = true;
             this.ResolverState                  = new State();
             this.ExecuteCallback                = (resolver) => this.ResolverState.Next(this.Current);
