@@ -227,7 +227,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public Boolean Remove(IAgent agent)
         {
-            return this.Remove(agent.Name);
+            return this.Agents.Remove(agent);
         }
         
         public void Clear()
