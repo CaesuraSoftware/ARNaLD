@@ -115,7 +115,6 @@ namespace Caesura.Arnald.Core.Agents
             this.ManualAgentCyclerRunning = true;
             
             var autonomous = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
-            var manual     = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle    ));
             
             foreach (var agent in autonomous)
             {
@@ -127,8 +126,8 @@ namespace Caesura.Arnald.Core.Agents
             
             while (!token.IsCancellationRequested)
             {
-                Thread.Sleep(50);
                 var agents = this.Agents.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
+                
                 foreach (var agent in agents)
                 {
                     agent.CycleOnceNoBlock();
@@ -190,6 +189,7 @@ namespace Caesura.Arnald.Core.Agents
             }
             
             this.OnAdd?.Invoke(this, agent);
+            
             return true;
         }
         
