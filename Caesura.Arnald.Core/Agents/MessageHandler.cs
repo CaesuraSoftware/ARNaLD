@@ -78,6 +78,9 @@ namespace Caesura.Arnald.Core.Agents
                     case MessageResolverResult.ContinueAsync:
                         resolvers.Add(resolver);
                         break;
+                    case MessageResolverResult.Halt:
+                        shouldBreak = true;
+                        break;
                     default:
                         break;
                 }

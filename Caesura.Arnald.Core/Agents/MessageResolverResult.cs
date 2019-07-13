@@ -13,5 +13,6 @@ namespace Caesura.Arnald.Core.Agents
         StopAsync       = 1 << 2,
         Continue        = 1 << 3,
         ContinueAsync   = 1 << 4,
+        Halt            = 1 << 5,
     }
 }
