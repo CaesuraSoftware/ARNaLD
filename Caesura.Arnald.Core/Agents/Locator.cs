@@ -91,12 +91,25 @@ namespace Caesura.Arnald.Core.Agents
         public void Stop()
         {
             var autonomous = this.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.IndependentThread));
-            foreach (var agent in autonomous)
+            var exceptions = new List<Exception>();
+            Parallel.ForEach(autonomous, (agent) =>
             {
-                agent.Stop();
-            }
+                try
+                {
+                    agent.Stop();
+                }
+                catch (Exception e)
+                {
+                    exceptions.Add(e);
+                }
+            });
             
             this.CancelToken.Cancel(false);
+            
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException(exceptions);
+            }
         }
         
         public void Wait()
