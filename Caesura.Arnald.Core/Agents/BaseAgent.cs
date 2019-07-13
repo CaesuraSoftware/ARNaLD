@@ -37,17 +37,19 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Setup(IAgentConfiguration config)
         {
-            config.Owner                = this;
+            var newconfig               = new AgentConfiguration(config);
             
-            this.HostLocator            = config.Location;
-            this.Name                   = config.Name;
-            this.Identifier             = config.Identifier;
-            this.Personality            = config.Personality;
-            this.Resolver               = config.Resolver;
-            this.Messages               = config.Messages;
-            this.AgentState             = config.AgentState;
-            this.Autonomy               = config.Autonomy;
-            this.CancelToken            = config.CancelToken;
+            newconfig.Owner             = this;
+            
+            this.HostLocator            = newconfig.Location;
+            this.Name                   = newconfig.Name;
+            this.Identifier             = newconfig.Identifier;
+            this.Personality            = newconfig.Personality;
+            this.Resolver               = newconfig.Resolver;
+            this.Messages               = newconfig.Messages;
+            this.AgentState             = newconfig.AgentState;
+            this.Autonomy               = newconfig.Autonomy;
+            this.CancelToken            = newconfig.CancelToken;
             
             this.Resolver.HostAgent     = this;
             this.AgentState.HostAgent   = this;
