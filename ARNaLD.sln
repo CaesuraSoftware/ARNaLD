@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caesura.Arnald.JavaScript.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caesura.Arnald.JavaScript.Tests", "Plugins\Caesura.Arnald.JavaScript\Caesura.Arnald.JavaScript.Tests\Caesura.Arnald.JavaScript.Tests.csproj", "{05B34FEE-AC2C-44CD-B372-9B209700B1D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caesura.Arnald.Tests.Manual", "Caesura.Arnald.Tests.Manual\Caesura.Arnald.Tests.Manual.csproj", "{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +166,18 @@ Global
 		{05B34FEE-AC2C-44CD-B372-9B209700B1D8}.Release|x64.Build.0 = Release|Any CPU
 		{05B34FEE-AC2C-44CD-B372-9B209700B1D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{05B34FEE-AC2C-44CD-B372-9B209700B1D8}.Release|x86.Build.0 = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|x64.Build.0 = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Debug|x86.Build.0 = Debug|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|x64.Build.0 = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{67E2BDDF-EEB5-4326-AA44-EE15E160FD3C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AE7C95EE-4199-4153-8E6E-8DD5D33E3B12} = {6CD4FFAB-E581-4417-8739-03BCA7442807}
