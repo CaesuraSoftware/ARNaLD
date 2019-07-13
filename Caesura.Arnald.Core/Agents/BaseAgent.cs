@@ -109,7 +109,7 @@ namespace Caesura.Arnald.Core.Agents
             this.AgentThreadRunning = true;
             while (!this.CancelToken.Token.IsCancellationRequested)
             {
-                this.CycleOnce();
+                this.Update();
             }
             lock (this._threadStateLock)
             {
@@ -124,24 +124,36 @@ namespace Caesura.Arnald.Core.Agents
         /// <summary>
         /// Cycle the Agent. If the agent does not have any messages, this will block.
         /// </summary>
-        public virtual void CycleOnce()
+        public virtual void Update()
         {
-            this.CycleOnce(this.CancelToken.Token);
+            this.Update(this.CancelToken.Token);
         }
         
-        public virtual void CycleOnce(CancellationToken token)
+        public virtual void Update(CancellationToken token)
         {
             var msg = this.Messages.Receive(token);
-            this.Resolver.Process(msg);
+            this.HandleMessage(msg);
         }
         
-        public virtual void CycleOnceNoBlock()
+        /// <summary>
+        /// Cycle the agent. If it has no messages (nothing to do), immediately return.
+        /// </summary>
+        public virtual void UpdateAndContinue()
         {
             var msg = this.Messages.TryReceive();
             if (msg)
             {
-                this.Resolver.Process(msg.Value);
+                this.HandleMessage(msg.Value);
             }
+        }
+        
+        /// <summary>
+        /// Called by all update methods. This should not be called directly.
+        /// </summary>
+        /// <param name="message"></param>
+        public virtual void HandleMessage(IMessage message)
+        {
+            this.Resolver.Process(message);
         }
         
         public virtual Boolean Send(IMessage message)

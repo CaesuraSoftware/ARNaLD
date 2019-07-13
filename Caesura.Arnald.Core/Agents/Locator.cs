@@ -143,7 +143,7 @@ namespace Caesura.Arnald.Core.Agents
                 
                 foreach (var agent in agents)
                 {
-                    agent.CycleOnceNoBlock();
+                    agent.UpdateAndContinue();
                     
                     if (token.IsCancellationRequested)
                     {

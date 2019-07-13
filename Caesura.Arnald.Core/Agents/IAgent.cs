@@ -20,9 +20,10 @@ namespace Caesura.Arnald.Core.Agents
         void Stop();
         void Wait();
         void Run();
-        void CycleOnce();
-        void CycleOnce(CancellationToken token);
-        void CycleOnceNoBlock();
+        void Update();
+        void Update(CancellationToken token);
+        void UpdateAndContinue();
+        void HandleMessage(IMessage message);
         Boolean Send(IMessage message);
         void Send(IMessage message, CancellationToken token);
         void Dispose(Boolean wait);
