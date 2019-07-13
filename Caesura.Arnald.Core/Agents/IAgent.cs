@@ -15,6 +15,7 @@ namespace Caesura.Arnald.Core.Agents
         IState AgentState { get; set; }
         ThreadState AgentThreadState { get; }
         AgentAutonomy Autonomy { get; set; }
+        Boolean Running { get; }
         void Setup(IAgentConfiguration config);
         void Start();
         void Stop();

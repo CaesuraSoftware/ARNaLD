@@ -15,6 +15,7 @@ namespace Caesura.Arnald.Core.Agents
         public virtual IState AgentState { get; set; }
         public virtual ThreadState AgentThreadState { get; protected set; }
         public virtual AgentAutonomy Autonomy { get; set; }
+        public virtual Boolean Running => this.AgentThreadRunning;
         public virtual IMailbox Messages { get; set; }
         protected readonly Object _threadStateLock = new Object();
         protected virtual CancellationTokenSource CancelToken { get; set; }
@@ -61,7 +62,7 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void Start()
         {
-            if (this.AgentThreadRunning)
+            if (this.AgentThreadRunning || (this.AgentThreadState == ThreadState.Running))
             {
                 throw new InvalidOperationException("Agent is already running.");
             }
