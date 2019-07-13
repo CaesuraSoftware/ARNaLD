@@ -52,6 +52,7 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
             
             this.Name = nameof(ConsoleInput);
             
+            this.ConsoleInputThreadRunning = false;
             this.ConsoleInputThread = new Thread(this.HandleConsoleInput);
             this.ConsoleInputThread.IsBackground = true;
         }
