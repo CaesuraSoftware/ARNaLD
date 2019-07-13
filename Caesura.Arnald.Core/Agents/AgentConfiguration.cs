@@ -13,6 +13,7 @@ namespace Caesura.Arnald.Core.Agents
         public String Name { get; set; }
         public Guid Identifier { get; set; }
         public IPersonality Personality { get; set; }
+        public IMessageHandler Resolver { get; set; }
         public IMailbox Messages { get; set; }
         public IState AgentState { get; set; }
         
@@ -37,6 +38,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Name           = config.Name;
             this.Identifier     = config.Identifier;
             this.Personality    = config.Personality;
+            this.Resolver       = config.Resolver;
             this.Messages       = config.Messages;
             this.AgentState     = config.AgentState;
         }
@@ -48,6 +50,7 @@ namespace Caesura.Arnald.Core.Agents
                 Name            = name,
                 Identifier      = guid,
                 Personality     = new Personality(),
+                Resolver        = new MessageHandler(),
                 Messages        = new Mailbox(),
                 AgentState      = State.LoadDefaults(null),
             };

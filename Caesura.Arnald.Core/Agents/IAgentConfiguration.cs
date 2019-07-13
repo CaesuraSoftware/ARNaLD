@@ -11,6 +11,7 @@ namespace Caesura.Arnald.Core.Agents
         String Name { get; set; }
         Guid Identifier { get; set; }
         IPersonality Personality { get; set; }
+        IMessageHandler Resolver { get; set; }
         IMailbox Messages { get; set; }
         IState AgentState { get; set; }
         void Copy(IAgentConfiguration config);

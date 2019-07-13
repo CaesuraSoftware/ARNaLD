@@ -16,16 +16,17 @@ namespace Caesura.Arnald.Core.Agents
     /// </summary>
     public abstract class BaseAgent : IAgent
     {
-        public String Name { get; protected set; }
-        public Guid Identifier { get; protected set; }
-        public IPersonality Personality { get; protected set; }
-        public ThreadState AgentThreadState { get; protected set; }
-        protected Object _threadStateLock { get; set; } = new Object();
-        protected Boolean AgentRunning { get; set; }
-        protected CancellationTokenSource CancelToken { get; set; }
-        protected IMailbox Messages { get; set; }
-        protected IState AgentState { get; set; }
-        protected Thread AgentThread { get; set; }
+        public virtual String Name { get; protected set; }
+        public virtual Guid Identifier { get; protected set; }
+        public virtual IPersonality Personality { get; protected set; }
+        public virtual IMessageHandler Resolver { get; set; }
+        public virtual ThreadState AgentThreadState { get; protected set; }
+        protected virtual Object _threadStateLock { get; set; } = new Object();
+        protected virtual Boolean AgentRunning { get; set; }
+        protected virtual CancellationTokenSource CancelToken { get; set; }
+        protected virtual IMailbox Messages { get; set; }
+        protected virtual IState AgentState { get; set; }
+        protected virtual Thread AgentThread { get; set; }
         
         public BaseAgent()
         {
@@ -41,13 +42,16 @@ namespace Caesura.Arnald.Core.Agents
             this.Setup(config);
         }
         
-        public void Setup(IAgentConfiguration config)
+        public virtual void Setup(IAgentConfiguration config)
         {
             this.Name               = config.Name;
             this.Identifier         = config.Identifier;
             this.Personality        = config.Personality;
+            this.Resolver           = config.Resolver;
             this.Messages           = config.Messages;
             this.AgentState         = config.AgentState;
+            
+            this.Resolver.Owner     = this;
             this.AgentState.Owner   = this;
         }
         
@@ -120,12 +124,8 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void CycleOnce()
         {
-            // TODO: don't pass messages to the state machine. create some kind
-            // of message-handling framework that uses a callback to check the
-            // message and then run another callback. each message-handler can
-            // implement a state machine instead.
             var msg = this.Messages.Receive(this.CancelToken.Token);
-            this.AgentState.Next(msg);
+            this.Resolver.Process(msg);
         }
         
         public virtual void Learn(IBehavior behavior)
