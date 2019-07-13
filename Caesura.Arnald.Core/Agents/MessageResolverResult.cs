@@ -8,9 +8,10 @@ namespace Caesura.Arnald.Core.Agents
     public enum MessageResolverResult : Int32
     {
         None            =      0,
-        Stop            = 1 << 0,
-        StopAsync       = 1 << 1,
-        Continue        = 1 << 2,
-        ContinueAsync   = 1 << 3,
+        Pass            = 1 << 0,
+        Stop            = 1 << 1,
+        StopAsync       = 1 << 2,
+        Continue        = 1 << 3,
+        ContinueAsync   = 1 << 4,
     }
 }

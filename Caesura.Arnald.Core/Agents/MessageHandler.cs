@@ -52,27 +52,31 @@ namespace Caesura.Arnald.Core.Agents
             
             foreach (var resolver in this.Resolvers)
             {
-                resolvers.Add(resolver);
-                
                 var result = resolver.Check(message);
                 var shouldBreak = false;
                 switch (result)
                 {
+                    case MessageResolverResult.Pass:
+                        break;
                     case MessageResolverResult.Stop:
                         // if a resolver returns Stop/Continue instead of StopAsync/
                         // ContinueAsync, then the agreement between all active resolvers 
                         // to work in parallel is broken and they will all be processed
                         // syncronously.
+                        resolvers.Add(resolver);
                         execAsync = false;
                         shouldBreak = true;
                         break;
                     case MessageResolverResult.StopAsync:
+                        resolvers.Add(resolver);
                         shouldBreak = true;
                         break;
                     case MessageResolverResult.Continue:
+                        resolvers.Add(resolver);
                         execAsync = false;
                         break;
                     case MessageResolverResult.ContinueAsync:
+                        resolvers.Add(resolver);
                         break;
                     default:
                         break;
