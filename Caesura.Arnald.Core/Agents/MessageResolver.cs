@@ -31,14 +31,24 @@ namespace Caesura.Arnald.Core.Agents
             this.Name = name;
         }
         
-        public MessageResolver(String name, CheckCallback checker) : this(name)
+        public MessageResolver(CheckCallback checker) : this()
         {
             this.CheckCallback = checker;
         }
         
-        public MessageResolver(String name, ExecuteCallback execute) : this(name)
+        public MessageResolver(ExecuteCallback execute) : this()
         {
             this.ExecuteCallback = execute;
+        }
+        
+        public MessageResolver(String name, CheckCallback checker) : this(checker)
+        {
+            this.Name = name;
+        }
+        
+        public MessageResolver(String name, ExecuteCallback execute) : this(execute)
+        {
+            this.Name = name;
         }
         
         public MessageResolver(String name, CheckCallback checker, ExecuteCallback execute) : this(name, checker)
