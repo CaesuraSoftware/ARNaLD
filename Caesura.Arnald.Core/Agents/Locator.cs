@@ -7,6 +7,11 @@ namespace Caesura.Arnald.Core.Agents
     using System.Linq;
     using Caesura.Standard;
     
+    // TODO: seperate agents by autonomy (are they running their own thread
+    // or is the Locator calling their CycleOnce methods manually). have this
+    // configurable.
+    // TODO: have Locator accept messages and act as a message broker/proxy
+    
     public class Locator : IDisposable
     {
         public String Name { get; set; }
