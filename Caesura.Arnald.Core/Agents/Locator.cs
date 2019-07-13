@@ -140,15 +140,28 @@ namespace Caesura.Arnald.Core.Agents
             while (!token.IsCancellationRequested)
             {
                 var agents = this.FindAll(x => x.Autonomy.HasFlag(AgentAutonomy.SimulateCycle));
+                var wait = true;
                 
                 foreach (var agent in agents)
                 {
+                    wait = false;
                     agent.UpdateAndContinue();
                     
                     if (token.IsCancellationRequested)
                     {
                         break;
                     }
+                }
+                
+                if (wait)
+                {
+                    // the foreach didn't run, so lets sleep.
+                    // 1000 instead of 50 because it's very
+                    // unlikely this loop will be doing anything
+                    // worth looping for. we'll just check if we
+                    // get an agent every second instead of every
+                    // 50ms.
+                    Thread.Sleep(1000);
                 }
             }
             
