@@ -22,6 +22,7 @@ namespace Caesura.Arnald.Core.Agents
         public virtual IMessageHandler Resolver { get; set; }
         public virtual IState AgentState { get; set; }
         public virtual ThreadState AgentThreadState { get; protected set; }
+        public virtual AgentAutonomy Autonomy { get; set; }
         public virtual IMailbox Messages { get; set; }
         protected readonly Object _threadStateLock = new Object();
         protected virtual CancellationTokenSource CancelToken { get; set; }
@@ -30,6 +31,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public BaseAgent()
         {
+            this.Autonomy                   = AgentAutonomy.None;
             this.AgentThreadState           = ThreadState.Unstarted;
             this.AgentThreadRunning         = false;
             this.AgentThread                = new Thread(this.Run);
@@ -51,6 +53,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Resolver           = config.Resolver;
             this.Messages           = config.Messages;
             this.AgentState         = config.AgentState;
+            this.Autonomy           = config.Autonomy;
             this.CancelToken        = config.CancelToken;
             
             this.Resolver.Owner     = this;

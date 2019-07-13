@@ -17,6 +17,7 @@ namespace Caesura.Arnald.Core.Agents
         public IMessageHandler Resolver { get; set; }
         public IMailbox Messages { get; set; }
         public IState AgentState { get; set; }
+        public AgentAutonomy Autonomy { get; set; }
         public CancellationTokenSource CancelToken { get; set; }
         
         public AgentConfiguration()
@@ -43,6 +44,7 @@ namespace Caesura.Arnald.Core.Agents
             this.Resolver       = config.Resolver;
             this.AgentState     = config.AgentState;
             this.Messages       = config.Messages;
+            this.Autonomy       = config.Autonomy;
             this.CancelToken    = config.CancelToken;
         }
         
@@ -56,6 +58,7 @@ namespace Caesura.Arnald.Core.Agents
                 Resolver        = new MessageHandler(),
                 AgentState      = new State(),
                 Messages        = new Mailbox(),
+                Autonomy        = AgentAutonomy.IndependentThread,
                 CancelToken     = new CancellationTokenSource(),
             };
             return aconf;
