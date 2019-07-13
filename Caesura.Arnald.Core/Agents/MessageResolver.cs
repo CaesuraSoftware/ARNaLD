@@ -15,15 +15,16 @@ namespace Caesura.Arnald.Core.Agents
         public String Name { get; set; }
         public IMessageHandler Owner { get; set; }
         public IMessage Current { get; set; }
+        public State ResolverState { get; set; }
         public CheckCallback CheckCallback { get; set; }
         public ExecuteCallback ExecuteCallback { get; set; }
         
         public MessageResolver()
         {
-            
+            this.ResolverState = new State();
         }
         
-        public MessageResolver(IMessageHandler owner, String name, CheckCallback checker, ExecuteCallback execute)
+        public MessageResolver(IMessageHandler owner, String name, CheckCallback checker, ExecuteCallback execute) : this()
         {
             this.Owner              = owner;
             this.Name               = name;
