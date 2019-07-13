@@ -38,6 +38,10 @@ namespace Caesura.Arnald.Core.Agents
                     }
                     if (result.HasFlag(MessageResolverResult.Continue))
                     {
+                        // if a resolver returns Continue instead of ContinueAsync,
+                        // then the agreement between all active resolvers to work
+                        // in parallel is broken and they will all be processed
+                        // syncronously.
                         execAsync = false;
                     }
                 }
@@ -61,7 +65,7 @@ namespace Caesura.Arnald.Core.Agents
             {
                 if (resolvers.Count == 1) // no need to do parallel on one resolver
                 {
-                    resolvers[0].Execute();
+                    resolvers.First().Execute();
                 }
                 else
                 {
