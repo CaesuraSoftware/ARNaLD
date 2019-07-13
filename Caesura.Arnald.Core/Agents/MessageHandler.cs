@@ -55,17 +55,24 @@ namespace Caesura.Arnald.Core.Agents
                 resolvers.Add(resolver);
                 
                 var result = resolver.Check(message);
-                if (result.HasFlag(MessageResolverResult.Stop))
+                switch (result)
                 {
-                    break;
-                }
-                if (result.HasFlag(MessageResolverResult.Continue))
-                {
-                    // if a resolver returns Continue instead of ContinueAsync,
-                    // then the agreement between all active resolvers to work
-                    // in parallel is broken and they will all be processed
-                    // syncronously.
-                    execAsync = false;
+                    case MessageResolverResult.Stop:
+                        // if a resolver returns Stop/Continue instead of StopAsync/
+                        // ContinueAsync, then the agreement between all active resolvers 
+                        // to work in parallel is broken and they will all be processed
+                        // syncronously.
+                        execAsync = false;
+                        break;
+                    case MessageResolverResult.StopAsync:
+                        break;
+                    case MessageResolverResult.Continue:
+                        execAsync = false;
+                        break;
+                    case MessageResolverResult.ContinueAsync:
+                        break;
+                    default:
+                        break;
                 }
             }
             

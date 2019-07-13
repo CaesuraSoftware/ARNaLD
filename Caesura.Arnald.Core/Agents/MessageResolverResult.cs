@@ -9,7 +9,8 @@ namespace Caesura.Arnald.Core.Agents
     {
         None            =      0,
         Stop            = 1 << 0,
-        Continue        = 1 << 1,
-        ContinueAsync   = 1 << 2,
+        StopAsync       = 1 << 1,
+        Continue        = 1 << 2,
+        ContinueAsync   = 1 << 3,
     }
 }
