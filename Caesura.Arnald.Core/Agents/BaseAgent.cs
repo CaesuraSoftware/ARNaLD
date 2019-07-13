@@ -165,6 +165,7 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Dispose(Boolean wait)
         {
+            this.Location?.Remove(this);
             this.AgentState?.Dispose(); // set State to Disposing to handle cleanup before disposing anything else
             this.Stop();
             if (wait)
