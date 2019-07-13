@@ -27,6 +27,10 @@ namespace Caesura.Arnald.Core.Agents
         public void AddResolver(IMessageResolver resolver)
         {
             resolver.HostHandler = this;
+            if (String.IsNullOrEmpty(resolver.Name) && !(this.HostAgent?.Name is null))
+            {
+                resolver.Name = this.HostAgent.Name + "Resolver";
+            }
             this.Resolvers.Add(resolver);
         }
         
