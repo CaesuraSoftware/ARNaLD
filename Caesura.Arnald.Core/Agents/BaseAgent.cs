@@ -129,7 +129,12 @@ namespace Caesura.Arnald.Core.Agents
         /// </summary>
         public virtual void CycleOnce()
         {
-            var msg = this.Messages.Receive(this.CancelToken.Token);
+            this.CycleOnce(this.CancelToken.Token);
+        }
+        
+        public virtual void CycleOnce(CancellationToken token)
+        {
+            var msg = this.Messages.Receive(token);
             this.Resolver.Process(msg);
         }
         
