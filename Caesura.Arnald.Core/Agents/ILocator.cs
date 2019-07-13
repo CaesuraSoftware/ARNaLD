@@ -11,10 +11,10 @@ namespace Caesura.Arnald.Core.Agents
         String Name { get; set; }
         Guid Identifier { get; set; }
         Boolean DisposeAgentsOnDispose { get; set; }
-        event Action<Locator, IAgent> OnAdd;
-        event Action<Locator, IAgent> OnRemove;
-        event Action<Locator, IAgent> OnDisposeAgent;
-        event Action<Locator> OnDispose;
+        event Action<ILocator, IAgent> OnAdd;
+        event Action<ILocator, IAgent> OnRemove;
+        event Action<ILocator, IAgent> OnDisposeAgent;
+        event Action<ILocator> OnDispose;
         
         Maybe<IAgent> Find(Predicate<IAgent> predicate);
         Maybe<IAgent> Find(String name);

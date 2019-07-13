@@ -18,10 +18,10 @@ namespace Caesura.Arnald.Core.Agents
         public Guid Identifier { get; set; }
         public Boolean DisposeAgentsOnDispose { get; set; }
         private List<IAgent> Agents { get; set; }
-        public event Action<Locator, IAgent> OnAdd;
-        public event Action<Locator, IAgent> OnRemove;
-        public event Action<Locator, IAgent> OnDisposeAgent;
-        public event Action<Locator> OnDispose;
+        public event Action<ILocator, IAgent> OnAdd;
+        public event Action<ILocator, IAgent> OnRemove;
+        public event Action<ILocator, IAgent> OnDisposeAgent;
+        public event Action<ILocator> OnDispose;
         
         public Locator()
         {
