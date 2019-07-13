@@ -119,7 +119,10 @@ namespace Caesura.Arnald.Core.Agents
             
             foreach (var agent in autonomous)
             {
-                agent.Start();
+                if (agent.AgentThreadState.HasFlag(ThreadState.Unstarted | ThreadState.Stopped))
+                {
+                    agent.Start();
+                }
             }
             
             while (!token.IsCancellationRequested)
@@ -175,7 +178,8 @@ namespace Caesura.Arnald.Core.Agents
             
             if ((this.ManualAgentCyclerRunning) 
             && (!this.CancelToken.IsCancellationRequested)
-            && (agent.Autonomy.HasFlag(AgentAutonomy.IndependentThread)))
+            && (agent.Autonomy.HasFlag(AgentAutonomy.IndependentThread))
+            && (agent.AgentThreadState.HasFlag(ThreadState.Unstarted | ThreadState.Stopped)))
             {
                 agent.Start();
             }
