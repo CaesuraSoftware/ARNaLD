@@ -13,6 +13,7 @@ namespace Caesura.Arnald.Core.Agents
         Guid Identifier { get; }
         IPersonality Personality { get; }
         ThreadState AgentThreadState { get; }
+        void Setup(IAgentConfiguration config);
         void Start();
         void Stop();
         void Wait();

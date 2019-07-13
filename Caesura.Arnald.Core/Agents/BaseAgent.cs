@@ -29,15 +29,26 @@ namespace Caesura.Arnald.Core.Agents
         
         public BaseAgent()
         {
-            this.Identifier                 = Guid.NewGuid();
-            this.Name                       = this.Identifier.ToString("N").ToUpper();
             this.AgentThreadState           = ThreadState.Unstarted;
             this.AgentRunning               = false;
-            this.Personality                = new Personality();
-            this.Messages                   = new Mailbox();
-            this.AgentState                 = State.LoadDefaults(this);
             this.AgentThread                = new Thread(this.Run);
             this.AgentThread.IsBackground   = true;
+        }
+        
+        public BaseAgent(AgentConfiguration config) : this()
+        {
+            config.Owner = this;
+            this.Setup(config);
+        }
+        
+        public void Setup(IAgentConfiguration config)
+        {
+            this.Name               = config.Name;
+            this.Identifier         = config.Identifier;
+            this.Personality        = config.Personality;
+            this.Messages           = config.Messages;
+            this.AgentState         = config.AgentState;
+            this.AgentState.Owner   = this;
         }
         
         /// <summary>
