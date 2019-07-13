@@ -78,6 +78,10 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Stop()
         {
+            if (!this.AgentThreadRunning)
+            {
+                return;
+            }
             lock (this._threadStateLock)
             {
                 if (this.AgentThreadState == ThreadState.StopRequested)
