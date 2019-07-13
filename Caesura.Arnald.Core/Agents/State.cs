@@ -20,35 +20,40 @@ namespace Caesura.Arnald.Core.Agents
             this.Atoms = new List<IStateAtom>();
         }
         
-        public State(IAgent owner, IStateAtom initial) : this()
+        public State(IAgent owner) : this()
         {
             this.Owner = owner;
+        }
+        
+        public State(IAgent owner, IStateAtom initial) : this(owner)
+        {
             this.InitialState = initial;
             this.TryAdd(initial); // add the initial state to the Atoms if it's not already there.
         }
         
         public static State LoadDefaults(IAgent owner)
         {
-            var state = new State();
-            var initstate = new StateAtom(state, StateAtomState.Begin, (self, message) => StateAtomState.End  );
-            var endstate  = new StateAtom(state, StateAtomState.End  , (self, message) => StateAtomState.Begin);
-            state.Owner = owner;
-            state.Add(initstate);
-            state.Add(endstate );
-            state.InitialState = initstate;
-            return state;
+            var defaultstate = new State();
+            var initstate = new StateAtom(defaultstate, StateAtomState.Begin, (state, message) => StateAtomState.End  );
+            var endstate  = new StateAtom(defaultstate, StateAtomState.End  , (state, message) => StateAtomState.Begin);
+            defaultstate.Owner = owner;
+            defaultstate.Add(initstate);
+            defaultstate.Add(endstate );
+            defaultstate.InitialState = initstate;
+            return defaultstate;
         }
         
         public Boolean TryAdd(IStateAtom atom)
         {
-            var item = this.Find(x => x.Name == atom.Name);
-            if (item is null)
+            lock (this._stateLock)
             {
-                lock (this._stateLock)
+                var item = this.Find(x => x.Name == atom.Name);
+                if (item is null)
                 {
+                    
                     this.Atoms.Add(atom);
+                    return true;
                 }
-                return true;
             }
             return false;
         }
@@ -103,7 +108,7 @@ namespace Caesura.Arnald.Core.Agents
             var success = this.TrySetState(name);
             if (!success)
             {
-                throw new ArgumentException($"{nameof(IStateAtom)} is not present in this {nameof(State)} instance.");
+                throw new ArgumentException($"{nameof(IStateAtom)} \"{name}\" is not present in this {nameof(State)} instance.");
             }
         }
         

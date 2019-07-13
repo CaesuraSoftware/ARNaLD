@@ -18,5 +18,6 @@ namespace Caesura.Arnald.Core.Agents
         Boolean TrySetState(String name);
         void SetState(String name);
         void Next(IMessage message);
+        void Dispose(IMessage message);
     }
 }
