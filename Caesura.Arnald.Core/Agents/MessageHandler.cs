@@ -23,37 +23,24 @@ namespace Caesura.Arnald.Core.Agents
         {
             Boolean execAsync = true;
             var resolvers = new List<IMessageResolver>();
-            var exceptions = new List<Exception>();
             
             foreach (var resolver in this.Resolvers)
             {
-                try
+                resolvers.Add(resolver);
+                
+                var result = resolver.Check(message);
+                if (result.HasFlag(MessageResolverResult.Stop))
                 {
-                    resolvers.Add(resolver);
-                    
-                    var result = resolver.Check(message);
-                    if (result.HasFlag(MessageResolverResult.Stop))
-                    {
-                        break;
-                    }
-                    if (result.HasFlag(MessageResolverResult.Continue))
-                    {
-                        // if a resolver returns Continue instead of ContinueAsync,
-                        // then the agreement between all active resolvers to work
-                        // in parallel is broken and they will all be processed
-                        // syncronously.
-                        execAsync = false;
-                    }
+                    break;
                 }
-                catch (Exception e)
+                if (result.HasFlag(MessageResolverResult.Continue))
                 {
-                    exceptions.Add(e);
+                    // if a resolver returns Continue instead of ContinueAsync,
+                    // then the agreement between all active resolvers to work
+                    // in parallel is broken and they will all be processed
+                    // syncronously.
+                    execAsync = false;
                 }
-            }
-            
-            if (exceptions.Count > 0)
-            {
-                throw new AggregateException(exceptions);
             }
             
             this.Execute(resolvers, execAsync);
