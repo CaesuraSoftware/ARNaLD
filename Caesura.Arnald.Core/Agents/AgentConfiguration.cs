@@ -50,11 +50,10 @@ namespace Caesura.Arnald.Core.Agents
             this.CancelToken    = config.CancelToken;
         }
         
-        public static AgentConfiguration CreateDefaults(ILocator location, String name, Guid guid)
+        public static AgentConfiguration CreateDefaults(String name, Guid guid)
         {
             var aconf = new AgentConfiguration()
             {
-                Location        = location,
                 Name            = name,
                 Identifier      = guid,
                 Personality     = new Personality(),
@@ -67,16 +66,16 @@ namespace Caesura.Arnald.Core.Agents
             return aconf;
         }
         
-        public static AgentConfiguration CreateDefaults(ILocator location, String name)
+        public static AgentConfiguration CreateDefaults(String name)
         {
-            return CreateDefaults(location, name, Guid.NewGuid());
+            return CreateDefaults(name, Guid.NewGuid());
         }
         
         public static AgentConfiguration CreateDefaults()
         {
             var guid = Guid.NewGuid();
             var name = guid.ToString("N").ToUpper();
-            return CreateDefaults(null, name, guid);
+            return CreateDefaults(name, guid);
         }
     }
 }
