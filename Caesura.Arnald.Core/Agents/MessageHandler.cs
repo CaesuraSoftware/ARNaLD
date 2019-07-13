@@ -91,6 +91,11 @@ namespace Caesura.Arnald.Core.Agents
                 }
             }
             
+            if (resolvers.Count == 0)
+            {
+                return;
+            }
+            
             this.Execute(resolvers, execAsync);
         }
         
