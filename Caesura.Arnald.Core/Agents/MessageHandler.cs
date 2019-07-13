@@ -55,6 +55,7 @@ namespace Caesura.Arnald.Core.Agents
                 resolvers.Add(resolver);
                 
                 var result = resolver.Check(message);
+                var shouldBreak = false;
                 switch (result)
                 {
                     case MessageResolverResult.Stop:
@@ -63,8 +64,10 @@ namespace Caesura.Arnald.Core.Agents
                         // to work in parallel is broken and they will all be processed
                         // syncronously.
                         execAsync = false;
+                        shouldBreak = true;
                         break;
                     case MessageResolverResult.StopAsync:
+                        shouldBreak = true;
                         break;
                     case MessageResolverResult.Continue:
                         execAsync = false;
@@ -73,6 +76,11 @@ namespace Caesura.Arnald.Core.Agents
                         break;
                     default:
                         break;
+                }
+                
+                if (shouldBreak)
+                {
+                    break;
                 }
             }
             
