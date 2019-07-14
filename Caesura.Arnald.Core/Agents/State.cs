@@ -12,6 +12,7 @@ namespace Caesura.Arnald.Core.Agents
         public IAgent HostAgent { get; set; }
         public IStateAtom InitialState { get; set; }
         public IStateAtom Current { get; private set; }
+        public String CurrentName => this.Current?.Name ?? String.Empty;
         private List<IStateAtom> Atoms { get; set; }
         
         public State()
@@ -110,6 +111,10 @@ namespace Caesura.Arnald.Core.Agents
                 return false;
             }
             this.InitialState = atom;
+            if (this.Current is null)
+            {
+                this.Current = this.InitialState;
+            }
             return true;
         }
         

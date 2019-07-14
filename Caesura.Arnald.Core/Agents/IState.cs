@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Agents
         IAgent HostAgent { get; set; }
         IStateAtom InitialState { get; set; }
         IStateAtom Current { get; }
+        String CurrentName { get; }
         Boolean TryAdd(IStateAtom atom);
         void Add(IStateAtom atom);
         void Add(String name, IStateAtomCallback callback);
