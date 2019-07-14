@@ -42,57 +42,85 @@ namespace Caesura.PerformanceMonitor.Monitor
         {
             if (!this.Started)
             {
-                this.InitialTime        = this.TargetProcess.TotalProcessorTime;
-                this.Started            = true;
+                this.InitialTime            = this.TargetProcess.TotalProcessorTime;
+                this.Started                = true;
             }
             
-            var currentTime             = this.TargetProcess.TotalProcessorTime - this.InitialTime;
+            var currentTime                 = this.TargetProcess.TotalProcessorTime - this.InitialTime;
             
-            var result                  = new MonitorResult();
+            var result                      = new MonitorResult();
             
-            result.ProcessorUsage       = (
+            result.ProcessId                = this.TargetProcess.Id;
+            
+            result.Name                     = this.TargetProcess.ProcessName;
+            
+            result.WindowTitle              = this.TargetProcess.MainWindowTitle;
+            
+            result.ProcessorUsage           = (
                 (currentTime - this.PreviousTime).TotalSeconds / 
                 (Environment.ProcessorCount * DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds)
             );
             
-            result.MemoryBytesUsed      = this.TargetProcess.WorkingSet64;
+            result.ProcessorTotalUsage      = (
+                currentTime.TotalSeconds / 
+                (Environment.ProcessorCount * DateTime.UtcNow.Subtract(StartTime).TotalSeconds)
+            );
             
-            var upthreads               = this.TargetProcess.Threads;
-            var threads                 = new List<ProcessThread>(upthreads.Count);
+            result.MemoryBytesWorkingSet    = this.TargetProcess.WorkingSet64;
+            
+            result.MemoryBytesTotal         = this.TargetProcess.PrivateMemorySize64;
+            
+            var upthreads                   = this.TargetProcess.Threads;
+            var threads                     = new List<ProcessThread>(upthreads.Count);
             foreach (ProcessThread thread in upthreads)
             {
                 threads.Add(thread);
             }
             foreach (var thread in threads)
             {
-                if (!this.ThreadTimes.Exists(x => x.ThreadId == thread.Id))
+                Int32 cid = 0;
+                try
                 {
-                    var ttt             = new ThreadTimeTracker();
-                    ttt.ThreadId        = thread.Id;
-                    ttt.InitialTime     = thread.TotalProcessorTime;
-                    this.ThreadTimes.Add(ttt);
+                    cid = thread.Id;
+                    if (!this.ThreadTimes.Exists(x => x.ThreadId == thread.Id))
+                    {
+                        var ttt             = new ThreadTimeTracker();
+                        ttt.ThreadId        = thread.Id;
+                        ttt.InitialTime     = thread.TotalProcessorTime;
+                        this.ThreadTimes.Add(ttt);
+                    }
+                    
+                    var tracker             = this.ThreadTimes.Find(x => x.ThreadId == thread.Id);
+                    var currentThreadTime   = thread.TotalProcessorTime - tracker.InitialTime;
+                    
+                    var mt                  = new MonitorResult.MonitorThread();
+                    mt.ThreadId             = thread.Id;
+                    mt.BasePriority         = thread.BasePriority;
+                    mt.CurrentPriority      = thread.CurrentPriority;
+                    mt.ProcessorUsage       = (
+                        ((currentThreadTime - tracker.PreviousTime).TotalSeconds / 
+                        DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds) /
+                        Environment.ProcessorCount
+                    );
+                    
+                    tracker.PreviousTime    = currentThreadTime;
+                    result.Threads.Add(mt);
                 }
-                
-                var tracker             = this.ThreadTimes.Find(x => x.ThreadId == thread.Id);
-                var currentThreadTime   = thread.TotalProcessorTime - tracker.InitialTime;
-                
-                var mt                  = new MonitorResult.MonitorThread();
-                mt.ThreadId             = thread.Id;
-                mt.BasePriority         = thread.BasePriority;
-                mt.CurrentPriority      = thread.CurrentPriority;
-                mt.ProcessorUsage       = (
-                    (currentTime - tracker.PreviousTime).TotalSeconds / 
-                    DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds
-                );
-                
-                tracker.PreviousTime    = currentThreadTime;
-                result.Threads.Add(mt);
+                catch (InvalidOperationException)
+                {
+                    var ttt = this.ThreadTimes.Find(x => x.ThreadId == cid);
+                    this.ThreadTimes.Remove(ttt);
+                }
             }
             // remove all threads that have exited
             this.ThreadTimes.RemoveAll(x => threads.All(y => x.ThreadId != y.Id));
+            foreach (var thread in threads)
+            {
+                thread.Dispose();
+            }
             
-            this.LastMonitorTime        = DateTime.UtcNow;
-            this.PreviousTime           = currentTime;
+            this.LastMonitorTime            = DateTime.UtcNow;
+            this.PreviousTime               = currentTime;
             
             return result;
         }
