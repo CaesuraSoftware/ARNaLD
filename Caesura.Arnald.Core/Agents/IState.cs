@@ -18,6 +18,7 @@ namespace Caesura.Arnald.Core.Agents
         Boolean TrySetState(String name);
         Boolean TrySetInitialState(String name);
         void SetState(String name);
+        void SetInitialState(String name);
         void Next();
         void Next(IMessage message);
         void Dispose(IMessage message);

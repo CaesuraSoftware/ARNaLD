@@ -127,6 +127,15 @@ namespace Caesura.Arnald.Core.Agents
             }
         }
         
+        public void SetInitialState(String name)
+        {
+            var success = this.TrySetInitialState(name);
+            if (!success)
+            {
+                throw new ArgumentException($"{nameof(IStateAtom)} \"{name}\" is not present in this {nameof(State)} instance.");
+            }
+        }
+        
         public void Next()
         {
             this.Next(null);

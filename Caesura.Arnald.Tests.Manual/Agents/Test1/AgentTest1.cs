@@ -56,7 +56,7 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
             
             this.AgentState.Add("ShowCursor", (atom, message) => "HideCursor");
             this.AgentState.Add("HideCursor", (atom, message) => "ShowCursor");
-            this.AgentState.TrySetInitialState("ShowCursor");
+            this.AgentState.SetInitialState("ShowCursor");
             
             this.Resolver.AddResolver(
                 new MessageResolver((resolver, message) =>
