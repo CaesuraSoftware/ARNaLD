@@ -13,6 +13,7 @@ namespace Caesura.PerformanceMonitor
         //    - shutdown after process ends (default: true)
         //  - put a simple static launcher method for this program
         //    in Caesura.Standard.
+        //  - Linux version probing /proc/{pid}
         static void Main(String[] args)
         {
             Console.WriteLine("Hello World!");
