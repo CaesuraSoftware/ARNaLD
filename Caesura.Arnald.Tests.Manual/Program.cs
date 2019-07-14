@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace Caesura.Arnald.Tests.Manual
 {
