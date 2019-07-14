@@ -43,6 +43,8 @@ namespace Caesura.PerformanceMonitor
             }
             else if (nargs.Count > 5)
             {
+                var argsHandled = 0;
+                
                 // --- Process ID argument filter --- //
                 var pidArg = nargs.Find(x => 
                    String.Equals(x, "-p"   , StringComparison.OrdinalIgnoreCase)
@@ -64,6 +66,7 @@ namespace Caesura.PerformanceMonitor
                         if (success)
                         {
                             ProcessId = pid;
+                            argsHandled += 2;
                         }
                         else
                         {
@@ -99,6 +102,7 @@ namespace Caesura.PerformanceMonitor
                         if (success && interval >= 0)
                         {
                             UpdateInterval = interval;
+                            argsHandled += 2;
                         }
                         else
                         {
@@ -133,6 +137,7 @@ namespace Caesura.PerformanceMonitor
                         if (success)
                         {
                             AutoShutdown = autoshutdown;
+                            argsHandled += 2;
                         }
                         else
                         {
@@ -144,6 +149,12 @@ namespace Caesura.PerformanceMonitor
                 else
                 {
                     // no-op
+                }
+                
+                if (nargs.Count > argsHandled)
+                {
+                    Console.WriteLine("Unrecognized argument(s). Try '--help'.");
+                    return;
                 }
             }
             else
