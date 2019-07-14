@@ -26,7 +26,7 @@ namespace Caesura.Arnald.Core.Agents
         {
             base.Setup(config);
             
-            this.ListenerThread                 = new Thread(this.InternalListen);
+            this.ListenerThread                 = new Thread(this.UpdateListen);
             this.ListenerThread.IsBackground    = true;
             this.ListenerRunning                = false;
         }
@@ -47,7 +47,7 @@ namespace Caesura.Arnald.Core.Agents
             base.Start();
         }
         
-        protected virtual void InternalListen()
+        protected virtual void UpdateListen()
         {
             this.ListenerRunning = true;
             this.BeginListen();
