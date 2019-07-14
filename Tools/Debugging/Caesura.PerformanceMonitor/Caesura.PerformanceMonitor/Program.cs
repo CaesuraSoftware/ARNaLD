@@ -1,7 +1,11 @@
-﻿using System;
+﻿
+using System;
 
 namespace Caesura.PerformanceMonitor
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    
     class Program
     {
         // TODO:
@@ -16,7 +20,140 @@ namespace Caesura.PerformanceMonitor
         //  - Linux version probing /proc/{pid}
         static void Main(String[] args)
         {
-            Console.WriteLine("Hello World!");
+            Int32 ProcessId      = 0;
+            Int32 UpdateInterval = 500;
+            Boolean AutoShutdown = true;
+            
+            var nargs = new List<String>(args);
+            if ((nargs.Count == 1)
+            && (String.Equals(nargs.First(), "-h"    , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(nargs.First(), "--help", StringComparison.OrdinalIgnoreCase) 
+            ||  String.Equals(nargs.First(), "/?"    , StringComparison.OrdinalIgnoreCase) 
+            ||  String.Equals(nargs.First(), "/h"    , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(nargs.First(), "/help" , StringComparison.OrdinalIgnoreCase)
+            ))
+            {
+                Console.WriteLine("Caesura Performance Monitor");
+                Console.WriteLine();
+                Console.WriteLine("Usage: [Caesura.PerformanceMonitor] [-p|--pid] Int32 [-u|--update] [Int32] [-s|--shutdown] [Boolean]");
+                Console.WriteLine();
+                Console.WriteLine(" [-p|--pid] Int32 - Process ID for the process to monitor the resources of.");
+                Console.WriteLine(" [-u|--update] [Int32] - Update interval in milliseconds. Default is 500.");
+                Console.WriteLine(" [-s|--shutdown] [Boolean] - Automatically shut down after the process to be monitored ends. Default is true.");
+            }
+            else if (nargs.Count > 5)
+            {
+                // --- Process ID argument filter --- //
+                var pidArg = nargs.Find(x => 
+                   String.Equals(x, "-p"   , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "--pid", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/p"   , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/pid" , StringComparison.OrdinalIgnoreCase)
+                );
+                if (pidArg != null)
+                {
+                    var pos = nargs.IndexOf(pidArg);
+                    if (nargs.Count <= pos + 1)
+                    {
+                        Console.WriteLine("Bad argument. Process ID argument needs a process ID. Try '--help'.");
+                        return;
+                    }
+                    else
+                    {
+                        var success = Int32.TryParse(nargs[pos + 1], out var pid);
+                        if (success)
+                        {
+                            ProcessId = pid;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Bad argument. Process ID argument needs a process ID. Try '--help'.");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Bad argument. Process ID argument required. Try '--help'.");
+                    return;
+                }
+                
+                // --- Update Interval argument filter. --- //
+                var updateArg = nargs.Find(x => 
+                   String.Equals(x, "-u"      , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "--update", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/u"      , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/update" , StringComparison.OrdinalIgnoreCase)
+                );
+                if (updateArg != null)
+                {
+                    var pos = nargs.IndexOf(updateArg);
+                    if (nargs.Count <= pos + 1)
+                    {
+                        Console.WriteLine("Bad argument. Update interval needs an integer. Try '--help'.");
+                        return;
+                    }
+                    else
+                    {
+                        var success = Int32.TryParse(nargs[pos + 1], out var interval);
+                        if (success && interval >= 0)
+                        {
+                            UpdateInterval = interval;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Bad argument. Update interval needs an integer. Try '--help'.");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    // no-op
+                }
+                
+                // --- Automatic Shutdown argument filter. --- //
+                var shutdownArg = nargs.Find(x => 
+                   String.Equals(x, "-s"        , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "--shutdown", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/s"        , StringComparison.OrdinalIgnoreCase)
+                || String.Equals(x, "/shutdown" , StringComparison.OrdinalIgnoreCase)
+                );
+                if (shutdownArg != null)
+                {
+                    var pos = nargs.IndexOf(shutdownArg);
+                    if (nargs.Count <= pos + 1)
+                    {
+                        Console.WriteLine("Bad argument. Auto-shutdown argument needs to be a boolean [True|False]. Try '--help'.");
+                        return;
+                    }
+                    else
+                    {
+                        var success = Boolean.TryParse(nargs[pos + 1], out var autoshutdown);
+                        if (success)
+                        {
+                            AutoShutdown = autoshutdown;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Bad argument. Auto-shutdown argument needs to be a boolean [True|False]. Try '--help'.");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    // no-op
+                }
+            }
+            else
+            {
+                Console.WriteLine("Bad argument. Try '--help'.");
+                return;
+            }
+            
+            // TODO:
+            // call a viewer for the monitor here
         }
     }
 }
