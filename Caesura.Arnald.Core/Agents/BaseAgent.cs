@@ -134,8 +134,15 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Update(CancellationToken token)
         {
-            var msg = this.Messages.Receive(token);
-            this.HandleMessage(msg);
+            try
+            {
+                var msg = this.Messages.Receive(token);
+                this.HandleMessage(msg);
+            }
+            catch (OperationCanceledException)
+            {
+                // no-op
+            }
         }
         
         /// <summary>
