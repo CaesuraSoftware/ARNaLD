@@ -22,9 +22,10 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         {
             Console.WriteLine("Initializing Test 1...");
             var locator = new Locator();
-            var config = AgentConfiguration.Default;
-            var input = new ConsoleInput(config);
-            var output = new ConsoleOutput(config);
+            var input_config = AgentConfiguration.Default;
+            var output_config = AgentConfiguration.Default;
+            var input = new ConsoleInput(input_config);
+            var output = new ConsoleOutput(output_config);
             locator.Add(input);
             locator.Add(output);
             locator.Run();
@@ -55,6 +56,21 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
             this.ConsoleInputThreadRunning = false;
             this.ConsoleInputThread = new Thread(this.HandleConsoleInput);
             this.ConsoleInputThread.IsBackground = true;
+            
+            this.AgentState.Add("ShowCursor", (atom, message) => "HideCursor");
+            this.AgentState.Add("HideCursor", (atom, message) => "ShowCursor");
+            this.AgentState.TrySetInitialState("ShowCursor");
+            this.AgentState.TrySetState("ShowCursor");
+            
+            this.Resolver.AddResolver(
+                new MessageResolver((resolver, message) =>
+                {
+                    if (message.Information == "ShowCursor")
+                    {
+                        this.AgentState.TrySetState("ShowCursor");
+                    }
+                })
+            );
         }
         
         public override void Start()
@@ -79,8 +95,12 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
             Console.WriteLine("Test 1: Agent Console Handler. Type 'quit' to end the session.");
             while (!this.CancelToken.IsCancellationRequested)
             {
-                // TODO: maybe use the state machine to only print the cursor
-                // after the Output agent has printed it's message.
+                if (this.AgentState.Current.Name == "HideCursor")
+                {
+                    Thread.Sleep(50);
+                    continue;
+                }
+                
                 Console.Write("> ");
                 var input = Console.ReadLine();
                 var msg = new Message()
@@ -89,6 +109,7 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
                     Recipient = nameof(ConsoleOutput),
                     Information = input,
                 };
+                this.AgentState.Next();
                 this.HostLocator.Send(msg);
             }
             this.ConsoleInputThreadRunning = false;
@@ -117,11 +138,17 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
                 new MessageResolver((resolver, message) =>
                 {
                     Console.WriteLine($"I got a message! {message.Information}");
+                    
                     if (String.Equals(message.Information, "quit", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine("bai bai!");
                         this.HostLocator.Stop();
+                        return;
                     }
+                    
+                    var response = message.SwapSender();
+                    response.Information = "ShowCursor";
+                    this.HostLocator.Send(response);
                 })
             );
         }
