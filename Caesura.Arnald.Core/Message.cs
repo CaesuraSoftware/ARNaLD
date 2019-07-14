@@ -48,7 +48,10 @@ namespace Caesura.Arnald.Core
             this.Sender         = msg.Sender;
             this.Recipient      = msg.Recipient;
             this.Information    = msg.Information;
-            this.Items          = new Dictionary<String, Object>(msg.Items);
+            if (msg.Items != null)
+            {
+                this.Items = new Dictionary<String, Object>(msg.Items);
+            }
         }
         
         /// <summary>
@@ -57,9 +60,8 @@ namespace Caesura.Arnald.Core
         public IMessage SwapSender()
         {
             var msg = new Message(this);
-            var sender = msg.Sender;
-            this.Sender = msg.Recipient;
-            this.Recipient = sender;
+            msg.Sender = this.Recipient;
+            msg.Recipient = this.Sender;
             return msg;
         }
         
