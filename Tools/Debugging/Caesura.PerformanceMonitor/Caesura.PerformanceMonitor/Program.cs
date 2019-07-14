@@ -77,7 +77,8 @@ namespace Caesura.PerformanceMonitor
                 }
                 else
                 {
-                    Console.WriteLine("Bad argument. Process ID argument required. Try '--help'.");
+                    var myPid = System.Diagnostics.Process.GetCurrentProcess().Id;
+                    ProcessId = myPid;
                     return;
                 }
                 
