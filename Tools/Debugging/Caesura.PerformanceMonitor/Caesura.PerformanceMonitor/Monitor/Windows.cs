@@ -32,6 +32,10 @@ namespace Caesura.PerformanceMonitor.Monitor
         public Windows(Int32 pid) : this()
         {
             this.TargetProcess = Process.GetProcessById(pid);
+            if (this.TargetProcess is null)
+            {
+                throw new ArgumentException($"Process by the ID of {pid} not found.");
+            }
         }
         
         public MonitorResult GetStatus()
@@ -77,9 +81,9 @@ namespace Caesura.PerformanceMonitor.Monitor
                 mt.BasePriority         = thread.BasePriority;
                 mt.CurrentPriority      = thread.CurrentPriority;
                 mt.ProcessorUsage       = (
-                        (currentTime - tracker.PreviousTime).TotalSeconds / 
-                        DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds
-                    );
+                    (currentTime - tracker.PreviousTime).TotalSeconds / 
+                    DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds
+                );
                 
                 tracker.PreviousTime    = currentThreadTime;
                 result.Threads.Add(mt);

@@ -41,7 +41,7 @@ namespace Caesura.PerformanceMonitor
                 Console.WriteLine(" [-u|--update] [Int32] - Update interval in milliseconds. Default is 500.");
                 Console.WriteLine(" [-s|--shutdown] [Boolean] - Automatically shut down after the process to be monitored ends. Default is true.");
             }
-            else if (nargs.Count > 5)
+            else
             {
                 var argsHandled = 0;
                 
@@ -79,7 +79,6 @@ namespace Caesura.PerformanceMonitor
                 {
                     var myPid = System.Diagnostics.Process.GetCurrentProcess().Id;
                     ProcessId = myPid;
-                    return;
                 }
                 
                 // --- Update Interval argument filter. --- //
@@ -158,14 +157,52 @@ namespace Caesura.PerformanceMonitor
                     return;
                 }
             }
-            else
-            {
-                Console.WriteLine("Bad argument. Try '--help'.");
-                return;
-            }
             
             // TODO:
             // call a viewer for the monitor here
+            // TEST CODE, DELETE LATER
+            
+            var t1 = new System.Threading.Thread(() => RunMe(1)) { IsBackground = true };
+            var t2 = new System.Threading.Thread(() => RunMe(2)) { IsBackground = true };
+            var t3 = new System.Threading.Thread(() => RunMe(3)) { IsBackground = true };
+            
+            t1.Start();
+            System.Threading.Thread.Sleep(300);
+            t2.Start();
+            System.Threading.Thread.Sleep(300);
+            t3.Start();
+            
+            var mon = new Monitor.Windows();
+            while (true)
+            {
+                Console.Write("> ");
+                var input = Console.ReadLine();
+                if (String.Equals(input, "quit", StringComparison.OrdinalIgnoreCase))
+                {
+                    break;
+                }
+                
+                var result = mon.GetStatus();
+                Console.WriteLine($"Process %: {result.ProcessorUsagePercent}");
+                Console.WriteLine($"Memory (MB): {result.MemoryMegabytesUsed}");
+                Console.WriteLine("Threads: ");
+                foreach (var thread in result.Threads)
+                {
+                    Console.WriteLine($" Thread ID {thread.ThreadId}: Process %: {thread.ProcessorUsagePercent}. Priority {thread.CurrentPriority}.");
+                }
+                Console.WriteLine();
+            }
+            
+            Console.ReadLine();
+        }
+        
+        static void RunMe(Int32 number)
+        {
+            while (true)
+            {
+                System.Threading.Thread.Sleep(1000);
+                Console.WriteLine(number);
+            }
         }
     }
 }
