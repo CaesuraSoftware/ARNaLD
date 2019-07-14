@@ -38,10 +38,6 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Setup(IAgentConfiguration config)
         {
-            // FIXME: this isn't making new instances/copies of
-            // the subclasses like the Mailbox or State. change it
-            // to create new instances so the config passed to this
-            // can be re-used for other agents.
             var newconfig               = new AgentConfiguration(config);
             
             newconfig.Owner             = this;
@@ -49,12 +45,12 @@ namespace Caesura.Arnald.Core.Agents
             this.HostLocator            = newconfig.Location;
             this.Name                   = newconfig.Name;
             this.Identifier             = newconfig.Identifier;
-            this.Personality            = newconfig.Personality;
-            this.Resolver               = newconfig.Resolver;
-            this.Messages               = newconfig.Messages;
-            this.AgentState             = newconfig.AgentState;
+            this.Personality            = newconfig.Personality ?? new Personality();
+            this.Resolver               = newconfig.Resolver    ?? new MessageHandler();
+            this.Messages               = newconfig.Messages    ?? new Mailbox();
+            this.AgentState             = newconfig.AgentState  ?? new State();
             this.Autonomy               = newconfig.Autonomy;
-            this.CancelToken            = newconfig.CancelToken;
+            this.CancelToken            = newconfig.CancelToken ?? new CancellationTokenSource();
             
             this.Resolver.HostAgent     = this;
             this.AgentState.HostAgent   = this;

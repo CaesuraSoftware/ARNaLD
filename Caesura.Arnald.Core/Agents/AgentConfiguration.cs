@@ -54,12 +54,7 @@ namespace Caesura.Arnald.Core.Agents
             {
                 Name            = name,
                 Identifier      = guid,
-                Personality     = new Personality(),
-                Resolver        = new MessageHandler(),
-                AgentState      = new State(),
-                Messages        = new Mailbox(),
                 Autonomy        = AgentAutonomy.IndependentThread,
-                CancelToken     = new CancellationTokenSource(),
             };
             return aconf;
         }

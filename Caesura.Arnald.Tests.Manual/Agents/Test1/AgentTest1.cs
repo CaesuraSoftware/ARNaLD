@@ -22,10 +22,9 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         {
             Console.WriteLine("Initializing Test 1...");
             var locator = new Locator();
-            var input_config = AgentConfiguration.Default;
-            var output_config = AgentConfiguration.Default;
-            var input = new ConsoleInput(input_config);
-            var output = new ConsoleOutput(output_config);
+            var config = AgentConfiguration.Default;
+            var input = new ConsoleInput(config);
+            var output = new ConsoleOutput(config);
             locator.Add(input);
             locator.Add(output);
             locator.Run();
