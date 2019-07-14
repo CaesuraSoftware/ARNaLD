@@ -64,11 +64,16 @@ namespace Caesura.Arnald.Core.Agents
             return CreateDefaults(name, Guid.NewGuid());
         }
         
+        public static AgentConfiguration CreateDefaults(Guid guid)
+        {
+            var name = guid.ToString("N").ToUpper();
+            return CreateDefaults(name, guid);
+        }
+        
         public static AgentConfiguration CreateDefaults()
         {
             var guid = Guid.NewGuid();
-            var name = guid.ToString("N").ToUpper();
-            return CreateDefaults(name, guid);
+            return CreateDefaults(null, guid);
         }
     }
 }

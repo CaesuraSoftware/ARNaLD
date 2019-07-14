@@ -50,8 +50,6 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         {
             base.Setup(config);
             
-            this.Name = nameof(ConsoleInput);
-            
             this.ConsoleInputThreadRunning = false;
             this.ConsoleInputThread = new Thread(this.HandleConsoleInput);
             this.ConsoleInputThread.IsBackground = true;
@@ -104,7 +102,7 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
                 var input = Console.ReadLine();
                 var msg = new Message()
                 {
-                    Sender = nameof(ConsoleInput),
+                    Sender = this.Name,
                     Recipient = nameof(ConsoleOutput),
                     Information = input,
                 };
@@ -130,8 +128,6 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         public override void Setup(IAgentConfiguration config)
         {
             base.Setup(config);
-            
-            this.Name = nameof(ConsoleOutput);
             
             this.Resolver.AddResolver(
                 new MessageResolver((resolver, message) =>

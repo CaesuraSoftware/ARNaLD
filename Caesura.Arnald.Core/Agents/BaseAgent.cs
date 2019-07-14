@@ -43,7 +43,7 @@ namespace Caesura.Arnald.Core.Agents
             newconfig.Owner             = this;
             
             this.HostLocator            = newconfig.Location;
-            this.Name                   = newconfig.Name;
+            this.Name                   = newconfig.Name        ?? this.GetType().Name;
             this.Identifier             = newconfig.Identifier;
             this.Personality            = newconfig.Personality ?? new Personality();
             this.Resolver               = newconfig.Resolver    ?? new MessageHandler();
