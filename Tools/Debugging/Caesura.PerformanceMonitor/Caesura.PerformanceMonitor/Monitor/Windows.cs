@@ -34,29 +34,27 @@ namespace Caesura.PerformanceMonitor.Monitor
             this.TargetProcess = Process.GetProcessById(pid);
         }
         
-        // TODO: method that calls all NextValue()'s for all PerformanceCounters and puts them all in some POCO
-        // TODO: foreach (ProcessThread pt in p.Threads) pt.TotalProcessorTime
         public MonitorResult GetStatus()
         {
             if (!this.Started)
             {
-                this.InitialTime = this.TargetProcess.TotalProcessorTime;
-                this.Started = true;
+                this.InitialTime        = this.TargetProcess.TotalProcessorTime;
+                this.Started            = true;
             }
             
-            var currentTime = this.TargetProcess.TotalProcessorTime - this.InitialTime;
+            var currentTime             = this.TargetProcess.TotalProcessorTime - this.InitialTime;
             
-            var result = new MonitorResult();
+            var result                  = new MonitorResult();
             
-            result.ProcessorUsage = (
+            result.ProcessorUsage       = (
                 (currentTime - this.PreviousTime).TotalSeconds / 
                 (Environment.ProcessorCount * DateTime.UtcNow.Subtract(this.LastMonitorTime).TotalSeconds)
             );
             
-            result.MemoryBytesUsed = this.TargetProcess.WorkingSet64;
+            result.MemoryBytesUsed      = this.TargetProcess.WorkingSet64;
             
-            var upthreads = this.TargetProcess.Threads;
-            var threads = new List<ProcessThread>(upthreads.Count);
+            var upthreads               = this.TargetProcess.Threads;
+            var threads                 = new List<ProcessThread>(upthreads.Count);
             foreach (ProcessThread thread in upthreads)
             {
                 threads.Add(thread);
@@ -89,8 +87,8 @@ namespace Caesura.PerformanceMonitor.Monitor
             // remove all threads that have exited
             this.ThreadTimes.RemoveAll(x => threads.All(y => x.ThreadId != y.Id));
             
-            this.LastMonitorTime = DateTime.UtcNow;
-            this.PreviousTime = currentTime;
+            this.LastMonitorTime        = DateTime.UtcNow;
+            this.PreviousTime           = currentTime;
             
             return result;
         }
