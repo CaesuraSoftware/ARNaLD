@@ -11,6 +11,8 @@ namespace Caesura.PerformanceMonitor
         //    - processid (default: itself, for debugging purposes)
         //    - update interval (default: 1000ms)
         //    - shutdown after process ends (default: true)
+        //  - put a simple static launcher method for this program
+        //    in Caesura.Standard.
         static void Main(String[] args)
         {
             Console.WriteLine("Hello World!");
