@@ -5,3 +5,4 @@ Data/
 Output/
 *.txt
 !LICENSE.txt
+!/Tools/Debugging/Caesura.PerformanceMonitor/Caesura.PerformanceMonitor/bin

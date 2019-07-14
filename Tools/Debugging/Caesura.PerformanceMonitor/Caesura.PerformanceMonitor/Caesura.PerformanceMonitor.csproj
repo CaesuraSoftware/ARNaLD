@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    
+    <Version>0.0.0.1</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <Product>Caesura Performance Monitor Utility</Product>
+    <Description>$(Product)</Description>
+    
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <Company>Caesura Software Solutions</Company>
+    <Authors>$(Company)</Authors>
+    <Copyright>Copyright (C) $(Company) 2019</Copyright>
+  </PropertyGroup>
+
+</Project>
