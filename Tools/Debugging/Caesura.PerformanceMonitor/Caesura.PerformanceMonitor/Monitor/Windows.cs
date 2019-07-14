@@ -7,8 +7,9 @@ namespace Caesura.PerformanceMonitor.Monitor
     using System.Linq;
     using System.Diagnostics;
     
-    public class Windows
+    public class Windows : IMonitor
     {
+        public Boolean ProcessIsAlive => !this.TargetProcess.HasExited;
         public String Name => this.TargetProcess.ProcessName;
         private Process TargetProcess { get; set; }
         private PerformanceCounter CpuCounter { get; set; }
@@ -33,5 +34,9 @@ namespace Caesura.PerformanceMonitor.Monitor
         
         // TODO: method that calls all NextValue()'s for all PerformanceCounters and puts them all in some POCO
         // TODO: foreach (ProcessThread pt in p.Threads) pt.TotalProcessorTime
+        public MonitorResult GetStatus()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
