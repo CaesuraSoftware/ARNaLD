@@ -38,6 +38,10 @@ namespace Caesura.Arnald.Core.Agents
         
         public virtual void Setup(IAgentConfiguration config)
         {
+            // FIXME: this isn't making new instances/copies of
+            // the subclasses like the Mailbox or State. change it
+            // to create new instances so the config passed to this
+            // can be re-used for other agents.
             var newconfig               = new AgentConfiguration(config);
             
             newconfig.Owner             = this;
