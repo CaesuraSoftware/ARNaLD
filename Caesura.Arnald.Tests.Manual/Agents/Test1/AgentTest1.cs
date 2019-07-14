@@ -31,11 +31,8 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         }
     }
     
-    public class ConsoleInput : BaseAgent
+    public class ConsoleInput : ListenerAgent
     {
-        private Thread ConsoleInputThread { get; set; }
-        private Boolean ConsoleInputThreadRunning { get; set; }
-        
         public ConsoleInput() : base()
         {
             
@@ -49,10 +46,6 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
         public override void Setup(IAgentConfiguration config)
         {
             base.Setup(config);
-            
-            this.ConsoleInputThreadRunning = false;
-            this.ConsoleInputThread = new Thread(this.HandleConsoleInput);
-            this.ConsoleInputThread.IsBackground = true;
             
             this.AgentState.Add("ShowCursor", (atom, message) => "HideCursor");
             this.AgentState.Add("HideCursor", (atom, message) => "ShowCursor");
@@ -69,46 +62,29 @@ namespace Caesura.Arnald.Tests.Manual.Agents.Test1
             );
         }
         
-        public override void Start()
+        protected override void BeginListen()
         {
-            if (!this.ConsoleInputThreadRunning)
-            {
-                try
-                {
-                    this.ConsoleInputThread.Start();
-                }
-                catch (ThreadStartException)
-                {
-                    // no-op
-                }
-            }
-            base.Start();
+            Console.WriteLine("Test 1: Agent Console Handler. Type 'quit' to end the session.");
         }
         
-        private void HandleConsoleInput()
+        protected override void Listen()
         {
-            this.ConsoleInputThreadRunning = true;
-            Console.WriteLine("Test 1: Agent Console Handler. Type 'quit' to end the session.");
-            while (!this.CancelToken.IsCancellationRequested)
+            if (this.AgentState.Current.Name == "HideCursor")
             {
-                if (this.AgentState.Current.Name == "HideCursor")
-                {
-                    Thread.Sleep(50);
-                    continue;
-                }
-                
-                Console.Write("> ");
-                var input = Console.ReadLine();
-                var msg = new Message()
-                {
-                    Sender = this.Name,
-                    Recipient = nameof(ConsoleOutput),
-                    Information = input,
-                };
-                this.AgentState.Next();
-                this.HostLocator.Send(msg);
+                Thread.Sleep(50);
+                return;
             }
-            this.ConsoleInputThreadRunning = false;
+            
+            Console.Write("> ");
+            var input = Console.ReadLine();
+            var msg = new Message()
+            {
+                Sender = this.Name,
+                Recipient = nameof(ConsoleOutput),
+                Information = input,
+            };
+            this.AgentState.Next();
+            this.HostLocator.Send(msg);
         }
     }
     
