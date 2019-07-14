@@ -87,7 +87,7 @@ namespace Caesura.PerformanceMonitor.Monitor
                 result.Threads.Add(mt);
             }
             // remove all threads that have exited
-            this.ThreadTimes.RemoveAll(x => threads.Any(y => x.ThreadId != y.Id));
+            this.ThreadTimes.RemoveAll(x => threads.All(y => x.ThreadId != y.Id));
             
             this.LastMonitorTime = DateTime.UtcNow;
             this.PreviousTime = currentTime;
