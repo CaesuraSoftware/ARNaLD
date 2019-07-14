@@ -38,5 +38,12 @@ namespace Caesura.PerformanceMonitor.Monitor
         {
             throw new NotImplementedException();
         }
+        
+        public void Dispose()
+        {
+            this.CpuCounter?.Dispose();
+            this.RamCounter?.Dispose();
+            this.ThreadCounter?.Dispose();
+        }
     }
 }
