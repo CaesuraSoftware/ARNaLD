@@ -52,6 +52,14 @@ namespace Caesura.PerformanceMonitor.Display
             this.Running = false;
         }
         
+        public void Wait()
+        {
+            while (this.Running)
+            {
+                Thread.Sleep(50);
+            }
+        }
+        
         public void Run()
         {
             Console.CursorVisible  = false;

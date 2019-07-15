@@ -171,6 +171,16 @@ namespace Caesura.PerformanceMonitor
             var keyboard    = new Display.KeyboardHandler();
             var handler     = new Commands.CommandHandler();
             
+            if (AutoShutdown)
+            {
+                monitor.OnTargetExit += () =>
+                {
+                    view.Stop();
+                    view.Wait();
+                    view.ClearScreen();
+                    MainLoop = false;
+                };
+            }
             view.AddView(new Display.ViewField()
             {
                 Name = "View1",
@@ -185,16 +195,17 @@ namespace Caesura.PerformanceMonitor
             view.SetInput(cmdModeMsg);
             
             view.Start();
-            
-            var loop = true;
-            while (loop)
+            while (MainLoop)
             {
-                var input   = Console.ReadKey(true);
-                var result  = keyboard.Process(input);
+                var input  = Console.ReadKey(true);
+                var result = keyboard.Process(input);
                 
                 /**/ if (result == RequestProgramState.Exit)
                 {
-                    loop = false;
+                    view.Stop();
+                    view.Wait();
+                    view.ClearScreen();
+                    MainLoop = false;
                 }
                 else if (result == RequestProgramState.TextInput)
                 {
@@ -216,10 +227,14 @@ namespace Caesura.PerformanceMonitor
                     var nr = handler.Run(display, view);
                     if (nr == RequestProgramState.Exit)
                     {
-                        loop = false;
+                        MainLoop = false;
                     }
                 }
             }
+            
+            Console.ReadLine();
         }
+        
+        static Boolean MainLoop = true;
     }
 }

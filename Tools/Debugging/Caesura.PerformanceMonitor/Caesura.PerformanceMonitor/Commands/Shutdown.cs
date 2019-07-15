@@ -26,6 +26,9 @@ namespace Caesura.PerformanceMonitor.Commands
         
         public override RequestProgramState Run(View view)
         {
+            view.Stop();
+            view.Wait();
+            view.ClearScreen();
             return RequestProgramState.Exit;
         }
     }
