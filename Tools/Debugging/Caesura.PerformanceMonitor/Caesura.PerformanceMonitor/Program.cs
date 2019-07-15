@@ -171,16 +171,28 @@ namespace Caesura.PerformanceMonitor
                 }
             }
             
-            var monitor = new Monitor.Windows(ProcessId);
-            var view = new Display.View(UpdateInterval, monitor);
+            var monitor     = new Monitor.Windows(ProcessId);
+            var view        = new Display.View(UpdateInterval, monitor);
+            var keyboard    = new Display.KeyboardHandler();
             view.Start();
             
             while (true)
             {
-                var input = Console.ReadKey();
-                if (input.Key == ConsoleKey.Q)
+                var input   = Console.ReadKey(true);
+                var result  = keyboard.Process(input);
+                
+                /**/ if (result == Display.RequestProgramState.Exit)
                 {
                     break;
+                }
+                else if (result == Display.RequestProgramState.TextInput)
+                {
+                    view.AddInput(keyboard.LastKey);
+                }
+                else if (result == Display.RequestProgramState.CommandInput)
+                {
+                    keyboard.ClearBuffer();
+                    view.ClearInputBuffer();
                 }
             }
         }

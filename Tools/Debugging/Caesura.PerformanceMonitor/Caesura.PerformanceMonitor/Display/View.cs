@@ -5,6 +5,7 @@ namespace Caesura.PerformanceMonitor.Display
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading;
     using Monitor;
     
@@ -16,18 +17,20 @@ namespace Caesura.PerformanceMonitor.Display
         private IMonitor Monitor { get; set; }
         private MonitorResult CurrentStatus { get; set; }
         private DateTime RefreshStartTime { get; set; }
+        private StringBuilder InputBuilder { get; set; }
         
         public View()
         {
-            this.RenderThread = new Thread(this.Run);
-            this.RenderThread.IsBackground = true;
-            this.RefreshStartTime = DateTime.UtcNow;
+            this.RenderThread               = new Thread(this.Run);
+            this.RenderThread.IsBackground  = true;
+            this.RefreshStartTime           = DateTime.UtcNow;
+            this.InputBuilder               = new StringBuilder();
         }
         
         public View(Int32 refreshRate, IMonitor monitorHandle) : this()
         {
-            this.RefreshRate = refreshRate;
-            this.Monitor = monitorHandle;
+            this.RefreshRate                = refreshRate;
+            this.Monitor                    = monitorHandle;
         }
         
         public void Start()
@@ -55,9 +58,33 @@ namespace Caesura.PerformanceMonitor.Display
                 {
                     this.CurrentStatus = this.Monitor.GetStatus();
                     this.RefreshStartTime = DateTime.UtcNow;
+                    this.ClearScreen();
                 }
                 this.Render(this.CurrentStatus);
             }
+        }
+        
+        public void AddInput(ConsoleKeyInfo key)
+        {
+            if (key.Key == ConsoleKey.Backspace)
+            {
+                if (this.InputBuilder.Length > 0)
+                {
+                    this.InputBuilder.Remove(this.InputBuilder.Length - 1, 1);
+                }
+                return;
+            }
+            this.InputBuilder.Append(key.KeyChar);
+        }
+        
+        public void ClearInputBuffer()
+        {
+            this.InputBuilder.Clear();
+        }
+        
+        public void ClearScreen()
+        {
+            Console.Clear();
         }
         
         public void Render(MonitorResult result)
@@ -75,6 +102,7 @@ namespace Caesura.PerformanceMonitor.Display
                 Console.WriteLine($" Thread ID {thread.ThreadId}: Process %: {thread.ProcessorUsagePercent}");
             }
             Console.WriteLine();
+            Console.WriteLine($"> {this.InputBuilder}_");
         }
     }
 }
