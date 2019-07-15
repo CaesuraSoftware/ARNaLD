@@ -27,9 +27,11 @@ namespace Caesura.PerformanceMonitor.Commands
             {
                 if (command.Verify(input))
                 {
+                    view.TextAreaColor = ConsoleColor.Gray;
                     return command.Run(view);
                 }
             }
+            view.SetInput($"{new String(' ', view.Prompt.Length)}Unrecognized command or bad arguments.", ConsoleColor.Yellow);
             return RequestProgramState.None;
         }
     }

@@ -233,6 +233,8 @@ namespace Caesura.PerformanceMonitor
                 var input  = Console.ReadKey(true);
                 var result = keyboard.Process(input);
                 
+                view.TextAreaColor = ConsoleColor.Gray;
+                
                 /**/ if (result == RequestProgramState.Exit)
                 {
                     view.Stop();

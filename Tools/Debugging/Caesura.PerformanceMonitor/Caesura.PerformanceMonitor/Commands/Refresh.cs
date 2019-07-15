@@ -39,7 +39,7 @@ namespace Caesura.PerformanceMonitor.Commands
                 return RequestProgramState.Continue;
             }
             view.ClearScreen();
-            view.SetInput($"{view.Prompt}Refresh rate set to {rr}");
+            view.SetInput($"{view.Prompt}Refresh rate set to {rr}", ConsoleColor.Cyan);
             view.RefreshRate = rr;
             return RequestProgramState.Continue;
         }

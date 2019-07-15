@@ -15,6 +15,7 @@ namespace Caesura.PerformanceMonitor.Display
         public Boolean Running { get; private set; }
         public String Prompt { get; set; }
         public String TextArea { get; private set; }
+        public ConsoleColor TextAreaColor { get; set; }
         private Thread RenderThread { get; set; }
         private IMonitor Monitor { get; set; }
         private MonitorResult CurrentStatus { get; set; }
@@ -24,6 +25,7 @@ namespace Caesura.PerformanceMonitor.Display
         
         public View()
         {
+            this.TextAreaColor              = ConsoleColor.Gray;
             this.Prompt                     = "> ";
             this.RenderThread               = new Thread(this.Run);
             this.RenderThread.IsBackground  = true;
@@ -81,6 +83,12 @@ namespace Caesura.PerformanceMonitor.Display
         public void SetInput(String input)
         {
             this.TextArea = input;
+        }
+        
+        public void SetInput(String input, ConsoleColor color)
+        {
+            this.TextArea = input;
+            this.TextAreaColor = color;
         }
         
         public void ClearInputBuffer()
