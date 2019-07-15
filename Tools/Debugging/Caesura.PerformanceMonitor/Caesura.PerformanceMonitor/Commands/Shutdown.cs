@@ -5,6 +5,7 @@ namespace Caesura.PerformanceMonitor.Commands
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Display;
     
     public class Shutdown : BaseCommand
     {
@@ -23,7 +24,7 @@ namespace Caesura.PerformanceMonitor.Commands
             return false;
         }
         
-        public override RequestProgramState Run()
+        public override RequestProgramState Run(View view)
         {
             return RequestProgramState.Exit;
         }

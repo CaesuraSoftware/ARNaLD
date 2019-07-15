@@ -13,6 +13,7 @@ namespace Caesura.PerformanceMonitor.Display
     {
         public Int32 RefreshRate { get; set; }
         public Boolean Running { get; private set; }
+        public String Prompt { get; set; }
         public String TextArea { get; private set; }
         private Thread RenderThread { get; set; }
         private IMonitor Monitor { get; set; }
@@ -23,6 +24,7 @@ namespace Caesura.PerformanceMonitor.Display
         
         public View()
         {
+            this.Prompt                     = "> ";
             this.RenderThread               = new Thread(this.Run);
             this.RenderThread.IsBackground  = true;
             this.RefreshStartTime           = DateTime.UtcNow;

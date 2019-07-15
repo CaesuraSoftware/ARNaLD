@@ -177,6 +177,7 @@ namespace Caesura.PerformanceMonitor
                 Run = Display.Views.View2.Run,
             });
             handler.Add(new Commands.Shutdown());
+            handler.Add(new Commands.Echo());
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
@@ -197,11 +198,11 @@ namespace Caesura.PerformanceMonitor
                 else if (result == RequestProgramState.TextInput)
                 {
                     display = keyboard.ProcessText();
-                    view.SetInput($"> {display}");
+                    view.SetInput($"{view.Prompt}{display}");
                 }
                 else if (result == RequestProgramState.EditMode)
                 {
-                    view.SetInput($"> {display}");
+                    view.SetInput($"{view.Prompt}{display}");
                 }
                 else if (result == RequestProgramState.CommandMode)
                 {
@@ -210,8 +211,8 @@ namespace Caesura.PerformanceMonitor
                 else if (result == RequestProgramState.CommandInput)
                 {
                     keyboard.ClearBuffer();
-                    view.SetInput("> ");
-                    var nr = handler.Run(display);
+                    view.SetInput(view.Prompt);
+                    var nr = handler.Run(display, view);
                     if (nr == RequestProgramState.Exit)
                     {
                         loop = false;

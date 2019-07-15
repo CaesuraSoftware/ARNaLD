@@ -5,6 +5,7 @@ namespace Caesura.PerformanceMonitor.Commands
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Display;
     
     public class CommandHandler
     {
@@ -20,13 +21,13 @@ namespace Caesura.PerformanceMonitor.Commands
             this.Commands.Add(command);
         }
         
-        public RequestProgramState Run(String input)
+        public RequestProgramState Run(String input, View view)
         {
             foreach (var command in this.Commands)
             {
                 if (command.Verify(input))
                 {
-                    return command.Run();
+                    return command.Run(view);
                 }
             }
             return RequestProgramState.None;
