@@ -9,11 +9,6 @@ namespace Caesura.PerformanceMonitor
     class Program
     {
         // TODO:
-        //  - seperate monitoring and displaying info
-        //  - make a nice console display, not just printing in a loop
-        //  - check args for: 
-        //    - processid (default: itself, for debugging purposes)
-        //    - update interval (default: 1000ms)
         //    - shutdown after process ends (default: true)
         //  - put a simple static launcher method for this program
         //    in Caesura.Standard.
@@ -174,11 +169,18 @@ namespace Caesura.PerformanceMonitor
             var monitor     = new Monitor.Windows(ProcessId);
             var view        = new Display.View(UpdateInterval, monitor);
             var keyboard    = new Display.KeyboardHandler();
-            view.Start();
+            
+            view.AddView(new Display.ViewField()
+            {
+                Name = "View1",
+                Run = Display.Views.View1.Run,
+            });
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
             view.SetInput(cmdModeMsg);
+            
+            view.Start();
             
             var loop = true;
             while (loop)

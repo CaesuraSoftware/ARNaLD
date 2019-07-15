@@ -13,17 +13,20 @@ namespace Caesura.PerformanceMonitor.Display
     {
         public Int32 RefreshRate { get; set; }
         public Boolean Running { get; private set; }
+        public String TextArea { get; private set; }
         private Thread RenderThread { get; set; }
         private IMonitor Monitor { get; set; }
         private MonitorResult CurrentStatus { get; set; }
         private DateTime RefreshStartTime { get; set; }
-        private String TextArea { get; set; }
+        private List<ViewField> Views { get; set; }
+        private String CurrentView { get; set; }
         
         public View()
         {
             this.RenderThread               = new Thread(this.Run);
             this.RenderThread.IsBackground  = true;
             this.RefreshStartTime           = DateTime.UtcNow;
+            this.Views                      = new List<ViewField>(); // I'd do anything for views
         }
         
         public View(Int32 refreshRate, IMonitor monitorHandle) : this()
@@ -79,32 +82,27 @@ namespace Caesura.PerformanceMonitor.Display
             Console.Clear();
         }
         
+        public void AddView(ViewField view)
+        {
+            this.Views.Add(view);
+            if (this.CurrentView is null)
+            {
+                this.CurrentView = view.Name;
+            }
+        }
+        
+        public void SetView(String name)
+        {
+            this.CurrentView = name;
+        }
+        
         public void Render(MonitorResult result)
         {
-            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId})");
-            Console.WriteLine($"Processor %: {result.ProcessorUsagePercent}");
-            Console.WriteLine($"Memory (MB): {result.MemoryMegabytesWorkingSet} ({result.MemoryBytesWorkingSet / 1024}K)");
-            Console.WriteLine("Threads: ");
-            var height = Console.WindowHeight - (4 + 4);
-            foreach (var thread in result.Threads)
+            var view = this.Views.Find(x => x.Name == this.CurrentView);
+            if (view != null)
             {
-                if (height == 0)
-                {
-                    break;
-                }
-                Console.WriteLine($" Thread ID {thread.ThreadId}: Process %: {thread.ProcessorUsagePercent}");
-                height--;
+                view.Run(this, result);
             }
-            Console.SetCursorPosition(0, Console.WindowHeight - 3);
-            Console.Write(new String('-', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, Console.WindowHeight - 2);
-            Console.Write(new String(' ', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, Console.WindowHeight - 2);
-            Console.Write(this.TextArea);
-            Console.SetCursorPosition(0, Console.WindowHeight - 1);
-            Console.Write(new String('-', Console.WindowWidth - 1));
         }
     }
 }

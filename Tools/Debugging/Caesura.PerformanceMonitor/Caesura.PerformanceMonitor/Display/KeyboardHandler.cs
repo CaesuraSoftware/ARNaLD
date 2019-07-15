@@ -135,6 +135,11 @@ namespace Caesura.PerformanceMonitor.Display
                     this.EditDistance = this.Editor.Length;
                 }
             }
+            else if (key.Key == ConsoleKey.Delete)
+            {
+                this.ClearBuffer();
+                this.HistoryPosition = this.History.Count;
+            }
             else
             {
                 this.Editor.Insert(this.EditDistance, key.KeyChar);
