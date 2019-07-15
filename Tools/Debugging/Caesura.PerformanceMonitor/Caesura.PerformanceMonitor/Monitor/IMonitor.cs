@@ -9,6 +9,7 @@ namespace Caesura.PerformanceMonitor.Monitor
     {
         Int32 ProcessId { get; set; }
         Boolean ProcessIsAlive { get; }
+        event Action OnTargetExit;
         String Name { get; }
         MonitorResult GetStatus();
     }

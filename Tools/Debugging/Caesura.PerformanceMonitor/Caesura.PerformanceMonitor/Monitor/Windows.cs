@@ -10,8 +10,22 @@ namespace Caesura.PerformanceMonitor.Monitor
     
     public class Windows : IMonitor
     {
-        public Int32 ProcessId { get; set; }
+        private Int32 b_ProcessId;
+        public Int32 ProcessId { 
+            get => this.b_ProcessId; 
+            set { 
+                if (value == this.b_ProcessId)
+                {
+                    return;
+                }
+                this.Started        = false;
+                this.OnTargetExit?.Invoke();
+                this.Exited         = false; 
+                this.b_ProcessId    = value;
+            } 
+        }
         public Boolean ProcessIsAlive => !this.TargetProcess.HasExited;
+        public event Action OnTargetExit;
         public String Name => this.TargetProcess.ProcessName;
         private Process TargetProcess { get; set; }
         private Boolean Started { get; set; }
@@ -20,6 +34,7 @@ namespace Caesura.PerformanceMonitor.Monitor
         private DateTime LastMonitorTime { get; set; }
         private DateTime StartTime { get; set; }
         private List<ThreadTimeTracker> ThreadTimes { get; set; }
+        private Boolean Exited { get; set; }
         
         public Windows()
         {
@@ -28,6 +43,7 @@ namespace Caesura.PerformanceMonitor.Monitor
             this.LastMonitorTime    = DateTime.UtcNow;
             this.StartTime          = DateTime.UtcNow;
             this.ThreadTimes        = new List<ThreadTimeTracker>();
+            this.Exited             = false;
         }
         
         public Windows(Int32 pid) : this()
@@ -37,7 +53,39 @@ namespace Caesura.PerformanceMonitor.Monitor
         
         public MonitorResult GetStatus()
         {
+            if (this.Exited)
+            {
+                return null;
+            }
+            
+            try
+            {
+                return this.BackingStatus();
+            }
+            catch (ArgumentException)
+            {
+                if (!this.Exited)
+                {
+                    this.OnTargetExit?.Invoke();
+                }
+                this.Exited = true;
+                return null;
+            }
+        }
+        
+        private MonitorResult BackingStatus()
+        {
             this.TargetProcess              = Process.GetProcessById(this.ProcessId);
+            
+            this.TargetProcess.Exited += (s, e) => 
+            {
+                if (!this.Exited)
+                {
+                    this.Started = false;
+                    this.OnTargetExit?.Invoke();
+                }
+                this.Exited = true;
+            };
             
             if (!this.Started)
             {
