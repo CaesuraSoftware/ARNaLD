@@ -14,7 +14,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
         {
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.SetCursorPosition(0, 0);
-            Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId})");
+            Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId}) Refresh Rate: {self.RefreshRate}");
             Console.WriteLine($"Processor: {result.ProcessorUsagePercent}");
             Console.WriteLine($"Memory: {result.MemoryMegabytesWorkingSet} MB ({result.MemoryBytesWorkingSet / 1024}K)");
             Console.WriteLine("Threads: ");
