@@ -228,6 +228,9 @@ namespace Caesura.PerformanceMonitor
                     var nr = handler.Run(display, view);
                     if (nr == RequestProgramState.Exit)
                     {
+                        view.Stop();
+                        view.Wait();
+                        view.ClearScreen();
                         MainLoop = false;
                         Environment.Exit(0);
                     }
