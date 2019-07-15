@@ -171,45 +171,17 @@ namespace Caesura.PerformanceMonitor
                 }
             }
             
-            // TODO:
-            // call a viewer for the monitor here
-            // TEST CODE, DELETE LATER
+            var monitor = new Monitor.Windows(ProcessId);
+            var view = new Display.View(UpdateInterval, monitor);
+            view.Start();
             
-            sleepInterval = UpdateInterval;
-            monitor = new Monitor.Windows(ProcessId);
-            var t1 = new System.Threading.Thread(() => RunMe()) { IsBackground = true };
-            t1.Start();
             while (true)
             {
-                var input = Console.ReadLine();
-                running = false;
-                break;
-            }
-            
-            Console.ReadLine();
-        }
-        
-        static Boolean running = true;
-        static Monitor.Windows monitor;
-        static Int32 sleepInterval;
-        static void RunMe()
-        {
-            while (running)
-            {
-                System.Threading.Thread.Sleep(sleepInterval);
-                Console.SetCursorPosition(0, 0);
-                var result = monitor.GetStatus();
-                Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId})");
-                Console.WriteLine($"Processor %: {result.ProcessorUsagePercent}");
-                // Console.WriteLine($"Processor Total: {result.ProcessorTotalUsagePercent}");
-                Console.WriteLine($"Memory (MB): {result.MemoryMegabytesWorkingSet} ({result.MemoryBytesWorkingSet / 1024}K)");
-                // Console.WriteLine($"Total Memory (MB): {result.MemoryMegabytesTotal} ({result.MemoryBytesTotal / 1024}K)");
-                Console.WriteLine("Threads: ");
-                foreach (var thread in result.Threads)
+                var input = Console.ReadKey();
+                if (input.Key == ConsoleKey.Q)
                 {
-                    Console.WriteLine($" Thread ID {thread.ThreadId}: Process %: {thread.ProcessorUsagePercent}");
+                    break;
                 }
-                Console.WriteLine();
             }
         }
     }
