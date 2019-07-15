@@ -49,6 +49,8 @@ namespace Caesura.PerformanceMonitor.Display
         
         public void Run()
         {
+            Console.CursorVisible  = false;
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             while (this.Running)
             {
                 Thread.Sleep(50);
@@ -79,7 +81,6 @@ namespace Caesura.PerformanceMonitor.Display
         
         public void Render(MonitorResult result)
         {
-            Console.CursorVisible = false;
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId})");

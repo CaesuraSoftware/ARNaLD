@@ -30,6 +30,7 @@ namespace Caesura.PerformanceMonitor.Display
                 if (info.Key == ConsoleKey.Enter)
                 {
                     this.EditDistance = 0;
+                    this.HistoryPosition = this.History.Count - 1;
                     var hi = this.Editor.ToString();
                     if ((!String.IsNullOrEmpty(hi)) && (!String.IsNullOrWhiteSpace(hi)))
                     {
@@ -38,6 +39,11 @@ namespace Caesura.PerformanceMonitor.Display
                             this.History.Remove(hi);
                         }
                         this.History.Add(hi);
+                        if (this.History.Count > 1000)
+                        {
+                            this.History.RemoveAt(1); // 0 is our empty string
+                        }
+                        this.HistoryPosition = this.History.Count;
                     }
                     return RequestProgramState.CommandInput;
                 }
@@ -109,7 +115,9 @@ namespace Caesura.PerformanceMonitor.Display
                 if (this.History.Count > 0 && this.History.Count > this.HistoryPosition)
                 {
                     this.ClearBuffer();
-                    this.Editor.Append(this.History[this.HistoryPosition]);
+                    var input = this.History[this.HistoryPosition];
+                    this.Editor.Append(input);
+                    this.EditDistance = this.Editor.Length;
                 }
             }
             else if (key.Key == ConsoleKey.DownArrow)
@@ -122,7 +130,9 @@ namespace Caesura.PerformanceMonitor.Display
                 if (this.History.Count > 0 && this.History.Count > this.HistoryPosition)
                 {
                     this.ClearBuffer();
-                    this.Editor.Append(this.History[this.HistoryPosition]);
+                    var input = this.History[this.HistoryPosition];
+                    this.Editor.Append(input);
+                    this.EditDistance = this.Editor.Length;
                 }
             }
             else
