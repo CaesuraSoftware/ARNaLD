@@ -69,7 +69,7 @@ namespace Caesura.PerformanceMonitor.Display
             this.ClearScreen();
             while (this.Running)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(100);
                 var elapsed = (DateTime.UtcNow - this.RefreshStartTime).TotalMilliseconds;
                 if (this.CurrentStatus is null || elapsed > this.RefreshRate)
                 {
