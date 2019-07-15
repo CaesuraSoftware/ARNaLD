@@ -33,7 +33,7 @@ namespace Caesura.PerformanceMonitor.Commands
         
         public override RequestProgramState Run(View view)
         {
-            view.SetInput($"{view.Prompt}\"{this.Input}\" to you too!");
+            view.SetInput($"{new String(' ', view.Prompt.Length)}\"{this.Input}\" to you too!", ConsoleColor.Cyan);
             return RequestProgramState.Continue;
         }
     }

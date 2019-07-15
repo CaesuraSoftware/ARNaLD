@@ -39,7 +39,7 @@ namespace Caesura.PerformanceMonitor.Commands
                 view.SetInput($"{new String(' ', view.Prompt.Length)}Page not found.", ConsoleColor.Yellow);
                 return RequestProgramState.Continue;
             }
-            view.SetInput($"{view.Prompt}Viewing page: {vf.Name}. To go back, use 'view main'.", ConsoleColor.Cyan);
+            view.SetInput($"{new String(' ', view.Prompt.Length)}Viewing page: {vf.Name}. To go back, use 'view main'.", ConsoleColor.Cyan);
             view.SetView(vf.Name);
             return RequestProgramState.Continue;
         }

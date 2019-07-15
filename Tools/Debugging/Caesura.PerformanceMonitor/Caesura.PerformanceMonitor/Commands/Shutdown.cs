@@ -27,7 +27,7 @@ namespace Caesura.PerformanceMonitor.Commands
         
         public override RequestProgramState Run(View view)
         {
-            view.SetInput($"{new String(' ', view.Prompt.Length)}bai bai! :D");
+            view.SetInput($"{new String(' ', view.Prompt.Length)}bai bai! :D", ConsoleColor.Cyan);
             Thread.Sleep(1500);
             return RequestProgramState.Exit;
         }

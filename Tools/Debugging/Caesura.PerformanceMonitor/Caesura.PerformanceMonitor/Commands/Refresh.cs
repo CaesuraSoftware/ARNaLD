@@ -35,11 +35,11 @@ namespace Caesura.PerformanceMonitor.Commands
             var success = Int32.TryParse(this.Input, out var rr);
             if (!success || rr < 0)
             {
-                view.SetInput($"{view.Prompt}\"{this.Input}\" is not a valid refresh rate.");
+                view.SetInput($"{new String(' ', view.Prompt.Length)}\"{this.Input}\" is not a valid refresh rate.", ConsoleColor.Yellow);
                 return RequestProgramState.Continue;
             }
             view.ClearScreen();
-            view.SetInput($"{view.Prompt}Refresh rate set to {rr}", ConsoleColor.Cyan);
+            view.SetInput($"{new String(' ', view.Prompt.Length)}Refresh rate set to {rr}", ConsoleColor.Cyan);
             view.RefreshRate = rr;
             return RequestProgramState.Continue;
         }
