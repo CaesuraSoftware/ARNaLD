@@ -10,7 +10,16 @@ namespace Caesura.PerformanceMonitor.Display.Views
     
     public class View2
     {
+        private Int32 b_ThreadPage;
+        public Int32 ThreadPage { get => this.b_ThreadPage; set => this.b_ThreadPage = value < 1 ? 1 : value; }
+        public Int32 MaxThreadsPerPage { get; set; }
         private MonitorResult LastResult { get; set; }
+        
+        public View2()
+        {
+            this.b_ThreadPage = 1;
+            this.MaxThreadsPerPage = 30;
+        }
         
         public void MainView(View self, MonitorResult result)
         {
@@ -32,9 +41,6 @@ namespace Caesura.PerformanceMonitor.Display.Views
             Console.CursorVisible  = false;
             Console.SetCursorPosition(0, 0);
             
-            // TODO: thread info should be scrollable with up/down keys
-            // (need to change the keyboard handler to handle that)
-            
             // --- TITLE BAR --- //
             
             var prebar = "--- ";
@@ -49,7 +55,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
             
             // --- SPLIT SCREEN CPU+RAM / THREADS --- //
             
-            var threadPos = 0;
+            var threadPos = this.MaxThreadsPerPage * (this.ThreadPage - 1);
             for (var i = 0; i < (Console.WindowHeight - 4); i++)
             {
                 // CPU + RAM VIEW:
@@ -119,40 +125,48 @@ namespace Caesura.PerformanceMonitor.Display.Views
                 Console.Write("| ");
                 
                 // THREAD VIEW:
-                for (var j = 0; j < 2; j++)
+                if (i == 0)
                 {
-                    if (threadPos < result.Threads.Count)
+                    var pagenum = (result.ThreadCount / this.MaxThreadsPerPage) + 1;
+                    Console.Write($"Page {this.ThreadPage} of {pagenum} (▲/◄ = Back ▼/► = Forward)");
+                }
+                else
+                {
+                    for (var j = 0; j < 2; j++)
                     {
-                        var t = result.Threads.ElementAt(threadPos);
-                        var ti = $"Thread {t.ThreadId.ToString().PadRight(6)} % {t.ProcessorUsagePercent.PadRight(6)}";
-                        if (!this.LastResult.Threads.Exists(x => x.ThreadId == t.ThreadId))
+                        if (threadPos < result.Threads.Count)
                         {
-                            Console.BackgroundColor = ConsoleColor.DarkCyan;
+                            var t = result.Threads.ElementAt(threadPos);
+                            var ti = $"Thread {t.ThreadId.ToString().PadRight(6)} % {t.ProcessorUsagePercent.PadRight(6)}";
+                            if (!this.LastResult.Threads.Exists(x => x.ThreadId == t.ThreadId))
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                            }
+                            else
+                            {
+                                var nt = this.LastResult.Threads.Find(x => x.ThreadId == t.ThreadId);
+                                /**/ if (Math.Abs(t.ProcessorUsage - nt.ProcessorUsage) < 0.001)
+                                {
+                                    // Equal, do nothing.
+                                }
+                                else if (t.ProcessorUsage > nt.ProcessorUsage)
+                                {
+                                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                                }
+                                else if (t.ProcessorUsage < nt.ProcessorUsage)
+                                {
+                                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                                }
+                            }
+                            Console.Write(ti);
+                            Console.ResetColor();
+                            Console.Write(new String(' ', 3));
+                            threadPos++;
                         }
                         else
                         {
-                            var nt = this.LastResult.Threads.Find(x => x.ThreadId == t.ThreadId);
-                            /**/ if (Math.Abs(t.ProcessorUsage - nt.ProcessorUsage) < 0.001)
-                            {
-                                // Equal, do nothing.
-                            }
-                            else if (t.ProcessorUsage > nt.ProcessorUsage)
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                            }
-                            else if (t.ProcessorUsage < nt.ProcessorUsage)
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                            }
+                            Console.Write(new String(' ', 26));
                         }
-                        Console.Write(ti);
-                        Console.ResetColor();
-                        Console.Write(new String(' ', 3));
-                        threadPos++;
-                    }
-                    else
-                    {
-                        Console.Write(new String(' ', 26));
                     }
                 }
                 Console.WriteLine();

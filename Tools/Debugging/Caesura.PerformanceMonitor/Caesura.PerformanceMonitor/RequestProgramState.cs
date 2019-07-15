@@ -15,5 +15,7 @@ namespace Caesura.PerformanceMonitor
         CommandMode     = 1 << 3,
         CommandInput    = 1 << 4,
         EditMode        = 1 << 5,
+        PageBack        = 1 << 6,
+        PageForward     = 1 << 7,
     }
 }

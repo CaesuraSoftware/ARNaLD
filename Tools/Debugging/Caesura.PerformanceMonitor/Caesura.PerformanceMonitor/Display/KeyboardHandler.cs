@@ -68,6 +68,16 @@ namespace Caesura.PerformanceMonitor.Display
                     this.TextInputMode = true;
                     return RequestProgramState.EditMode;
                 }
+                if (info.Key == ConsoleKey.UpArrow
+                ||  info.Key == ConsoleKey.LeftArrow)
+                {
+                    return RequestProgramState.PageBack;
+                }
+                if (info.Key == ConsoleKey.DownArrow
+                ||  info.Key == ConsoleKey.RightArrow)
+                {
+                    return RequestProgramState.PageForward;
+                }
             }
             
             return RequestProgramState.None;

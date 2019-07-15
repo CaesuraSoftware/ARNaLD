@@ -242,6 +242,15 @@ namespace Caesura.PerformanceMonitor
                     view.ClearScreen();
                     MainLoop = false;
                     Environment.Exit(0);
+                
+                }
+                else if (result == RequestProgramState.PageBack)
+                {
+                    customview.ThreadPage--;
+                }
+                else if (result == RequestProgramState.PageForward)
+                {
+                    customview.ThreadPage++;
                 }
                 else if (result == RequestProgramState.TextInput)
                 {
