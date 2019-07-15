@@ -64,7 +64,6 @@ namespace Caesura.PerformanceMonitor.Display
         
         public void Run()
         {
-            Console.CursorVisible  = false;
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             this.ClearScreen();
             while (this.Running)

@@ -21,7 +21,15 @@ namespace Caesura.PerformanceMonitor.Display.Views
                 this.LastResult = result;
             }
             Console.Title = $"Caesura Performance Monitor";
-            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+            try
+            {
+                Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // No-op
+            }
+            Console.CursorVisible  = false;
             Console.SetCursorPosition(0, 0);
             
             // TODO: thread info should be scrollable with up/down keys
@@ -92,13 +100,21 @@ namespace Caesura.PerformanceMonitor.Display.Views
                                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                             }
                         } break;
+                    case 5:
+                        {
+                            indicator = new String('-', (((Console.WindowWidth - 5) / 2)));
+                        } break;
                     default:
                         indicator = String.Empty;
                         break;
                 }
                 indicator = " " + indicator;
                 Console.Write(indicator);
-                Console.Write(new String(' ', (((Console.WindowWidth - 4) / 2)) - indicator.Length));
+                var size = ((Console.WindowWidth - 4) / 2) - indicator.Length;
+                if (size >= 0)
+                {
+                    Console.Write(new String(' ', size));
+                }
                 Console.ResetColor();
                 Console.Write("| ");
                 
