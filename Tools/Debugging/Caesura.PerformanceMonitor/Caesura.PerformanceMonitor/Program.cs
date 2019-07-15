@@ -8,11 +8,6 @@ namespace Caesura.PerformanceMonitor
     
     class Program
     {
-        // TODO:
-        //    - shutdown after process ends (default: true)
-        //  - put a simple static launcher method for this program
-        //    in Caesura.Standard.
-        //  - Linux version probing /proc/{pid}
         static void Main(String[] args)
         {
             try
@@ -180,7 +175,7 @@ namespace Caesura.PerformanceMonitor
                 }
             }
             
-            var monitor     = new Monitor.Windows(ProcessId);
+            var monitor     = new Monitor.Resources(ProcessId);
             var view        = new Display.View(UpdateInterval, monitor);
             var keyboard    = new Display.KeyboardHandler();
             var handler     = new Commands.CommandHandler();

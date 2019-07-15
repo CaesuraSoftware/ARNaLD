@@ -7,7 +7,7 @@ namespace Caesura.PerformanceMonitor.Monitor
     using System.Linq;
     using System.Diagnostics;
     
-    public class Windows : IMonitor
+    public class Resources : IMonitor
     {
         private Int32 b_ProcessId;
         public Int32 ProcessId { 
@@ -35,7 +35,7 @@ namespace Caesura.PerformanceMonitor.Monitor
         private List<ThreadTimeTracker> ThreadTimes { get; set; }
         private Boolean Exited { get; set; }
         
-        public Windows()
+        public Resources()
         {
             this.Started            = false;
             this.PreviousTime       = new TimeSpan(0);
@@ -45,7 +45,7 @@ namespace Caesura.PerformanceMonitor.Monitor
             this.Exited             = false;
         }
         
-        public Windows(Int32 pid) : this()
+        public Resources(Int32 pid) : this()
         {
             this.ProcessId = pid;
         }
