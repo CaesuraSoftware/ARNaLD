@@ -51,6 +51,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
             
             // --- SPLIT SCREEN CPU+RAM / THREADS --- //
             
+            this.MaxThreadsPerPage = Console.WindowHeight - 8;
             var threadPos = this.MaxThreadsPerPage * (this.ThreadPage - 1);
             for (var i = 0; i < (Console.WindowHeight - 4); i++)
             {
@@ -61,6 +62,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
                     case 0:
                         {
                             indicator = $"Process ID: {result.ProcessId}";
+                            indicator = " " + indicator;
                         } break;
                     case 1:
                         {
@@ -73,6 +75,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                             }
+                            indicator = " " + indicator;
                         } break;
                     case 2:
                         {
@@ -89,6 +92,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                             }
+                            indicator = " " + indicator;
                         } break;
                     case 3:
                         {
@@ -101,6 +105,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                             }
+                            indicator = " " + indicator;
                         } break;
                     case 5:
                         {
@@ -110,7 +115,6 @@ namespace Caesura.PerformanceMonitor.Display.Views
                         indicator = String.Empty;
                         break;
                 }
-                indicator = " " + indicator;
                 Console.Write(indicator);
                 var size = ((Console.WindowWidth - 4) / 2) - indicator.Length;
                 if (size >= 0)
@@ -121,12 +125,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
                 Console.Write("| ");
                 
                 // THREAD VIEW:
-                if (i == 0)
-                {
-                    var pagenum = (result.ThreadCount / this.MaxThreadsPerPage) + 1;
-                    Console.Write($"Page {this.ThreadPage} of {pagenum} (▲/◄ = Back ▼/► = Forward)");
-                }
-                else
+                /**/ if (i < Console.WindowHeight - 11)
                 {
                     for (var j = 0; j < 2; j++)
                     {
@@ -163,6 +162,17 @@ namespace Caesura.PerformanceMonitor.Display.Views
                         {
                             Console.Write(new String(' ', 26));
                         }
+                    }
+                }
+                else if (i == Console.WindowHeight - 11)
+                {
+                    var pagenum = (result.ThreadCount / this.MaxThreadsPerPage) + 1;
+                    var pageguide = $"--- Page {this.ThreadPage} of {pagenum} (▲/◄ = Back ▼/► = Forward) ";
+                    var cutoff = ((Console.WindowWidth - 4) / 2) - pageguide.Length;
+                    if (cutoff >= 0)
+                    {
+                        Console.Write(pageguide);
+                        Console.Write(new String('-', cutoff));
                     }
                 }
                 Console.WriteLine();
