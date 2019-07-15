@@ -169,12 +169,14 @@ namespace Caesura.PerformanceMonitor
             var monitor     = new Monitor.Windows(ProcessId);
             var view        = new Display.View(UpdateInterval, monitor);
             var keyboard    = new Display.KeyboardHandler();
+            var handler     = new Commands.CommandHandler();
             
             view.AddView(new Display.ViewField()
             {
                 Name = "View1",
-                Run = Display.Views.View1.Run,
+                Run = Display.Views.View2.Run,
             });
+            handler.Add(new Commands.Shutdown());
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
@@ -188,28 +190,32 @@ namespace Caesura.PerformanceMonitor
                 var input   = Console.ReadKey(true);
                 var result  = keyboard.Process(input);
                 
-                /**/ if (result == Display.RequestProgramState.Exit)
+                /**/ if (result == RequestProgramState.Exit)
                 {
                     loop = false;
-                    break;
                 }
-                else if (result == Display.RequestProgramState.TextInput)
+                else if (result == RequestProgramState.TextInput)
                 {
                     display = keyboard.ProcessText();
                     view.SetInput($"> {display}");
                 }
-                else if (result == Display.RequestProgramState.EditMode)
+                else if (result == RequestProgramState.EditMode)
                 {
                     view.SetInput($"> {display}");
                 }
-                else if (result == Display.RequestProgramState.CommandMode)
+                else if (result == RequestProgramState.CommandMode)
                 {
                     view.SetInput(cmdModeMsg);
                 }
-                else if (result == Display.RequestProgramState.CommandInput)
+                else if (result == RequestProgramState.CommandInput)
                 {
                     keyboard.ClearBuffer();
                     view.SetInput("> ");
+                    var nr = handler.Run(display);
+                    if (nr == RequestProgramState.Exit)
+                    {
+                        loop = false;
+                    }
                 }
             }
         }

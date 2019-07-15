@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Caesura.PerformanceMonitor.Display
+namespace Caesura.PerformanceMonitor
 {
     using System.Collections.Generic;
     using System.Linq;
