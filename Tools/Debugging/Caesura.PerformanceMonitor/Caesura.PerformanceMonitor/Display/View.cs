@@ -17,14 +17,13 @@ namespace Caesura.PerformanceMonitor.Display
         private IMonitor Monitor { get; set; }
         private MonitorResult CurrentStatus { get; set; }
         private DateTime RefreshStartTime { get; set; }
-        private StringBuilder InputBuilder { get; set; }
+        private String TextArea { get; set; }
         
         public View()
         {
             this.RenderThread               = new Thread(this.Run);
             this.RenderThread.IsBackground  = true;
             this.RefreshStartTime           = DateTime.UtcNow;
-            this.InputBuilder               = new StringBuilder();
         }
         
         public View(Int32 refreshRate, IMonitor monitorHandle) : this()
@@ -58,28 +57,19 @@ namespace Caesura.PerformanceMonitor.Display
                 {
                     this.CurrentStatus = this.Monitor.GetStatus();
                     this.RefreshStartTime = DateTime.UtcNow;
-                    this.ClearScreen();
                 }
                 this.Render(this.CurrentStatus);
             }
         }
         
-        public void AddInput(ConsoleKeyInfo key)
+        public void SetInput(String input)
         {
-            if (key.Key == ConsoleKey.Backspace)
-            {
-                if (this.InputBuilder.Length > 0)
-                {
-                    this.InputBuilder.Remove(this.InputBuilder.Length - 1, 1);
-                }
-                return;
-            }
-            this.InputBuilder.Append(key.KeyChar);
+            this.TextArea = input;
         }
         
         public void ClearInputBuffer()
         {
-            this.InputBuilder.Clear();
+            this.TextArea = String.Empty;
         }
         
         public void ClearScreen()
@@ -90,19 +80,30 @@ namespace Caesura.PerformanceMonitor.Display
         public void Render(MonitorResult result)
         {
             Console.CursorVisible = false;
+            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId})");
             Console.WriteLine($"Processor %: {result.ProcessorUsagePercent}");
-            // Console.WriteLine($"Processor Total: {result.ProcessorTotalUsagePercent}");
             Console.WriteLine($"Memory (MB): {result.MemoryMegabytesWorkingSet} ({result.MemoryBytesWorkingSet / 1024}K)");
-            // Console.WriteLine($"Total Memory (MB): {result.MemoryMegabytesTotal} ({result.MemoryBytesTotal / 1024}K)");
             Console.WriteLine("Threads: ");
+            var height = Console.WindowHeight - (4 + 4);
             foreach (var thread in result.Threads)
             {
+                if (height == 0)
+                {
+                    break;
+                }
                 Console.WriteLine($" Thread ID {thread.ThreadId}: Process %: {thread.ProcessorUsagePercent}");
+                height--;
             }
-            Console.WriteLine();
-            Console.WriteLine($"> {this.InputBuilder}_");
+            Console.SetCursorPosition(0, Console.WindowHeight - 3);
+            Console.Write(new String('-', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, Console.WindowHeight - 2);
+            Console.Write(new String(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, Console.WindowHeight - 2);
+            Console.Write(this.TextArea);
+            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+            Console.Write(new String('-', Console.WindowWidth - 1));
         }
     }
 }

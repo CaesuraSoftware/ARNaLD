@@ -14,5 +14,6 @@ namespace Caesura.PerformanceMonitor.Display
         TextInput       = 1 << 2,
         CommandMode     = 1 << 3,
         CommandInput    = 1 << 4,
+        EditMode        = 1 << 5,
     }
 }

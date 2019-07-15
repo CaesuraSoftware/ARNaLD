@@ -176,23 +176,38 @@ namespace Caesura.PerformanceMonitor
             var keyboard    = new Display.KeyboardHandler();
             view.Start();
             
-            while (true)
+            var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
+            var display = String.Empty;
+            view.SetInput(cmdModeMsg);
+            
+            var loop = true;
+            while (loop)
             {
                 var input   = Console.ReadKey(true);
                 var result  = keyboard.Process(input);
                 
                 /**/ if (result == Display.RequestProgramState.Exit)
                 {
+                    loop = false;
                     break;
                 }
                 else if (result == Display.RequestProgramState.TextInput)
                 {
-                    view.AddInput(keyboard.LastKey);
+                    display = keyboard.ProcessText();
+                    view.SetInput($"> {display}");
+                }
+                else if (result == Display.RequestProgramState.EditMode)
+                {
+                    view.SetInput($"> {display}");
+                }
+                else if (result == Display.RequestProgramState.CommandMode)
+                {
+                    view.SetInput(cmdModeMsg);
                 }
                 else if (result == Display.RequestProgramState.CommandInput)
                 {
                     keyboard.ClearBuffer();
-                    view.ClearInputBuffer();
+                    view.SetInput("> ");
                 }
             }
         }
