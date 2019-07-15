@@ -8,9 +8,9 @@ namespace Caesura.PerformanceMonitor.Display.Views
     using Display;
     using Monitor;
     
-    public static class View2
+    public class View2
     {
-        public static void Run(View self, MonitorResult result)
+        public void MainView(View self, MonitorResult result)
         {
             Console.Title = $"Caesura Performance Monitor";
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
@@ -37,6 +37,11 @@ namespace Caesura.PerformanceMonitor.Display.Views
             Console.Write(self.TextArea);
             Console.SetCursorPosition(0, Console.WindowHeight - 1);
             Console.Write(new String('-', Console.WindowWidth - 1));
+        }
+        
+        public void HelpView(View self, MonitorResult result)
+        {
+            
         }
     }
 }

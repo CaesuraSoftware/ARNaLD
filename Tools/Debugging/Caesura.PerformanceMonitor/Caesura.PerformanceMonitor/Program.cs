@@ -1,4 +1,17 @@
 ﻿
+//
+// Simple Performance Monitor Console Application
+// Copyright (C) Caesura Software Solutions 2019
+// Released under the Caesura Software Solutions Public License version 1.
+// See LICENSE.TXT in the root directory for licensing information.
+//
+// DESCRIPTION:
+// A simple performance monitor console application that tracks the
+// performance of a single application, primarily used for debugging
+// purposes. Extremely simple, written in a day. More of a simple script
+// than the over-engineered stuff I usually make.
+// 
+
 using System;
 
 namespace Caesura.PerformanceMonitor
@@ -194,10 +207,16 @@ namespace Caesura.PerformanceMonitor
                     MainLoop = false;
                 };
             }
+            var customview = new Display.Views.View2();
             view.AddView(new Display.ViewField()
             {
-                Name = "View1",
-                Run = Display.Views.View2.Run,
+                Name = "Main",
+                Run = customview.MainView,
+            });
+            view.AddView(new Display.ViewField()
+            {
+                Name = "Help",
+                Run = customview.HelpView,
             });
             handler.Add(new Commands.Shutdown());
             handler.Add(new Commands.Echo());
