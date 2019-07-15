@@ -12,6 +12,7 @@ namespace Caesura.PerformanceMonitor.Display.Views
     {
         public static void Run(View self, MonitorResult result)
         {
+            Console.Title = $"Caesura Performance Monitor";
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"Process: {result.WindowTitle} ({result.Name}) ({result.ProcessId}) Refresh Rate: {self.RefreshRate}");

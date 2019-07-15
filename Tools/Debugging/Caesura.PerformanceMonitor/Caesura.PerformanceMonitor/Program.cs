@@ -8,6 +8,10 @@ namespace Caesura.PerformanceMonitor
     
     class Program
     {
+        // TODO:
+        // - Make this wait for the process to come online so we can
+        //   actually integrate this into vscode's json build system
+        //   by putting this in it's pre-start phase.
         static void Main(String[] args)
         {
             try
