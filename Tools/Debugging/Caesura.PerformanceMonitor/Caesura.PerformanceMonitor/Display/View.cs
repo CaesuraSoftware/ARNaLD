@@ -64,6 +64,7 @@ namespace Caesura.PerformanceMonitor.Display
         {
             Console.CursorVisible  = false;
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+            this.ClearScreen();
             while (this.Running)
             {
                 Thread.Sleep(50);
@@ -109,7 +110,7 @@ namespace Caesura.PerformanceMonitor.Display
         public void Render(MonitorResult result)
         {
             var view = this.Views.Find(x => x.Name == this.CurrentView);
-            if (view != null)
+            if (view != null && result != null)
             {
                 view.Run(this, result);
             }

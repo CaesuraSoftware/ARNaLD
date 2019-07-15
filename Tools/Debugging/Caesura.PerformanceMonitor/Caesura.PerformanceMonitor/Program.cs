@@ -15,6 +15,20 @@ namespace Caesura.PerformanceMonitor
         //  - Linux version probing /proc/{pid}
         static void Main(String[] args)
         {
+            try
+            {
+                Start(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                Console.ReadLine();
+                throw;
+            }
+        }
+        
+        static void Start(String[] args)
+        {
             Int32 ProcessId      = 0;
             Int32 UpdateInterval = 1000;
             Boolean AutoShutdown = true;
@@ -189,6 +203,7 @@ namespace Caesura.PerformanceMonitor
             handler.Add(new Commands.Shutdown());
             handler.Add(new Commands.Echo());
             handler.Add(new Commands.Refresh());
+            handler.Add(new Commands.Clear());
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
@@ -236,8 +251,6 @@ namespace Caesura.PerformanceMonitor
                     }
                 }
             }
-            
-            Console.ReadLine();
         }
         
         static Boolean MainLoop = true;

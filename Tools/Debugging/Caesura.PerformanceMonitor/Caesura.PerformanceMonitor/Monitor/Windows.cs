@@ -70,6 +70,15 @@ namespace Caesura.PerformanceMonitor.Monitor
                 this.Exited = true;
                 return null;
             }
+            catch (InvalidOperationException)
+            {
+                if (!this.Exited)
+                {
+                    this.OnTargetExit?.Invoke();
+                }
+                this.Exited = true;
+                return null;
+            }
         }
         
         private MonitorResult BackingStatus()
