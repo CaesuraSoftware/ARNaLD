@@ -109,8 +109,14 @@ namespace Caesura.PerformanceMonitor.Display
             }
         }
         
+        public ViewField GetView(String name)
+        {
+            return this.Views.Find(x => String.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+        }
+        
         public void SetView(String name)
         {
+            this.ClearScreen();
             this.CurrentView = name;
         }
         

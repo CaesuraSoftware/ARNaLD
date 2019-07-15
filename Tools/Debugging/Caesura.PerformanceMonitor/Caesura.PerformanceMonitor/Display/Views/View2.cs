@@ -21,10 +21,8 @@ namespace Caesura.PerformanceMonitor.Display.Views
             this.MaxThreadsPerPage = 30;
         }
         
-        public void MainView(View self, MonitorResult result)
+        public void Init(View self, MonitorResult result)
         {
-            // --- INIT SCREEN --- //
-            
             if (this.LastResult is null)
             {
                 this.LastResult = result;
@@ -36,6 +34,25 @@ namespace Caesura.PerformanceMonitor.Display.Views
             }
             Console.CursorVisible  = false;
             Console.SetCursorPosition(0, 0);
+        }
+        
+        public void CmdArea(View self, MonitorResult result)
+        {
+            Console.SetCursorPosition(0, Console.WindowHeight - 3);
+            Console.Write(new String('-', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, Console.WindowHeight - 2);
+            Console.Write(new String(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, Console.WindowHeight - 2);
+            Console.ForegroundColor = self.TextAreaColor;
+            Console.Write(self.TextArea);
+            Console.ResetColor();
+            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+            Console.Write(new String('-', Console.WindowWidth - 1));
+        }
+        
+        public void MainView(View self, MonitorResult result)
+        {
+            this.Init(self, result);
             
             // --- TITLE BAR --- //
             
@@ -178,25 +195,18 @@ namespace Caesura.PerformanceMonitor.Display.Views
                 Console.WriteLine();
             }
             
-            // --- COMMAND INPUT/OUTPUT FIELD --- //
-            
-            Console.SetCursorPosition(0, Console.WindowHeight - 3);
-            Console.Write(new String('-', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, Console.WindowHeight - 2);
-            Console.Write(new String(' ', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, Console.WindowHeight - 2);
-            Console.ForegroundColor = self.TextAreaColor;
-            Console.Write(self.TextArea);
-            Console.ResetColor();
-            Console.SetCursorPosition(0, Console.WindowHeight - 1);
-            Console.Write(new String('-', Console.WindowWidth - 1));
+            this.CmdArea(self, result);
             
             this.LastResult = result;
         }
         
         public void HelpView(View self, MonitorResult result)
         {
+            this.Init(self, result);
             
+            Console.WriteLine("Hello! :D");
+            
+            this.CmdArea(self, result);
         }
     }
 }

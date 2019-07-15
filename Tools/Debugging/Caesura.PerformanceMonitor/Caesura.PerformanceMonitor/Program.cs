@@ -222,6 +222,7 @@ namespace Caesura.PerformanceMonitor
             handler.Add(new Commands.Echo());
             handler.Add(new Commands.Refresh());
             handler.Add(new Commands.Clear());
+            handler.Add(new Commands.ViewCmd());
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
