@@ -16,6 +16,12 @@ namespace Caesura.PerformanceMonitor.Commands
         
         public override Boolean Verify(String input)
         {
+            if (String.Equals(input, "Help", StringComparison.OrdinalIgnoreCase))
+            {
+                this.Input = "Help";
+                return true;
+            }
+            
             var strs = input.Split(' ');
             if (strs.Length < 2)
             {
