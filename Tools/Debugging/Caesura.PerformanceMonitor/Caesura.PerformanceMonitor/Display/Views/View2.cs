@@ -30,13 +30,9 @@ namespace Caesura.PerformanceMonitor.Display.Views
                 this.LastResult = result;
             }
             Console.Title = $"Caesura Performance Monitor";
-            try
+            if (Console.WindowWidth >= Console.BufferWidth && Console.WindowHeight >= Console.BufferHeight)
             {
                 Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                // No-op
             }
             Console.CursorVisible  = false;
             Console.SetCursorPosition(0, 0);
