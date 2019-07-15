@@ -29,6 +29,7 @@ namespace Caesura.PerformanceMonitor.Commands
             view.Stop();
             view.Wait();
             view.ClearScreen();
+            Environment.Exit(0);
             return RequestProgramState.Exit;
         }
     }

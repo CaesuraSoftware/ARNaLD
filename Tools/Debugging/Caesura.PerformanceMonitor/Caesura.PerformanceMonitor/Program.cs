@@ -206,6 +206,7 @@ namespace Caesura.PerformanceMonitor
                     view.Wait();
                     view.ClearScreen();
                     MainLoop = false;
+                    Environment.Exit(0);
                 }
                 else if (result == RequestProgramState.TextInput)
                 {
@@ -228,6 +229,7 @@ namespace Caesura.PerformanceMonitor
                     if (nr == RequestProgramState.Exit)
                     {
                         MainLoop = false;
+                        Environment.Exit(0);
                     }
                 }
             }
