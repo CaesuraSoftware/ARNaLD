@@ -97,6 +97,7 @@ namespace Caesura.PerformanceMonitor.Display
         
         public void ClearScreen()
         {
+            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.Clear();
         }
         
