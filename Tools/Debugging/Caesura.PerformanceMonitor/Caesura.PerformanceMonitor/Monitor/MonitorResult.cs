@@ -12,6 +12,7 @@ namespace Caesura.PerformanceMonitor.Monitor
         public String Name { get; set; }
         public String WindowTitle { get; set; }
         public Double ProcessorUsage { get; set; }
+        public Double ProcessorUsageNormalized => this.ProcessorUsage * 100;
         public String ProcessorUsagePercent => String.Format("{0:0.0}", this.ProcessorUsage * 100);
         public Double ProcessorTotalUsage { get; set; }
         public String ProcessorTotalUsagePercent => String.Format("{0:0.0}", this.ProcessorTotalUsage * 100);
@@ -34,6 +35,7 @@ namespace Caesura.PerformanceMonitor.Monitor
             public Int32 BasePriority { get; set; }
             public Int32 CurrentPriority { get; set; }
             public Double ProcessorUsage { get; set; }
+            public Double ProcessorUsageNormalized => this.ProcessorUsage * 100;
             public String ProcessorUsagePercent => String.Format("{0:0.0}", this.ProcessorUsage * 100);
         }
     }

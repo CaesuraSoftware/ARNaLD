@@ -10,6 +10,7 @@ namespace Caesura.PerformanceMonitor.Monitor
     
     public class Windows : IMonitor
     {
+        public Int32 ProcessId { get; set; }
         public Boolean ProcessIsAlive => !this.TargetProcess.HasExited;
         public String Name => this.TargetProcess.ProcessName;
         private Process TargetProcess { get; set; }
@@ -31,15 +32,13 @@ namespace Caesura.PerformanceMonitor.Monitor
         
         public Windows(Int32 pid) : this()
         {
-            this.TargetProcess = Process.GetProcessById(pid);
-            if (this.TargetProcess is null)
-            {
-                throw new ArgumentException($"Process by the ID of {pid} not found.");
-            }
+            this.ProcessId = pid;
         }
         
         public MonitorResult GetStatus()
         {
+            this.TargetProcess              = Process.GetProcessById(this.ProcessId);
+            
             if (!this.Started)
             {
                 this.InitialTime            = this.TargetProcess.TotalProcessorTime;

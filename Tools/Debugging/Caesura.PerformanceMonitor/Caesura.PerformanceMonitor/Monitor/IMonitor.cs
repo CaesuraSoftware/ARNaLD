@@ -7,6 +7,7 @@ namespace Caesura.PerformanceMonitor.Monitor
     
     public interface IMonitor : IDisposable
     {
+        Int32 ProcessId { get; set; }
         Boolean ProcessIsAlive { get; }
         String Name { get; }
         MonitorResult GetStatus();
