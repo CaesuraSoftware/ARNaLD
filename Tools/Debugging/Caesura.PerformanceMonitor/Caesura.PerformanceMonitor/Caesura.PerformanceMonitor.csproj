@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <LangVersion>latest</LangVersion>
     
-    <Version>0.0.0.1</Version>
+    <Version>1.0.0.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <Product>Caesura Performance Monitor Utility</Product>
     <Description>$(Product)</Description>
