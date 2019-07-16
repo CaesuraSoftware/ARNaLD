@@ -45,7 +45,17 @@ namespace Caesura.Arnald.Tests.Manual
                 CreateNoWindow          = true,
             };
             process.StartInfo = si;
-            process.Start();
+            try
+            {
+                process.Start();
+            }
+            catch
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Could not start monitor process! Make sure you've compiled it first!");
+                Console.ResetColor();
+            }
             return process;
         }
     }
