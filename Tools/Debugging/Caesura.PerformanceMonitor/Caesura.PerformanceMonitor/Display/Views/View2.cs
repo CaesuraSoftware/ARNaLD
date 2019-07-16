@@ -311,6 +311,19 @@ It is against the Caesura dogma to use our documentation tools to write document
                 Console.Write(line);
                 Console.WriteLine(new String(' ', Console.WindowWidth - line.Length - 1));
             }
+            
+            if (this.HelpPage.Count > Console.WindowHeight - 6)
+            {
+                // FIXME: figure out scrolling
+                var cy = Console.CursorLeft;
+                var cx = Console.CursorTop;
+                var progress = ((this.HelpIndex * this.HelpPage.Count) / 100);
+                progress = progress <= 1 ? 1 : (progress > (Console.WindowWidth - 6) ? Console.WindowWidth - 6 : progress);
+                Console.SetCursorPosition(0, progress);
+                Console.Write("█");
+                Console.SetCursorPosition(cy, cx);
+            }
+            
             var lastline = $"--- Viewing HELP --- Navigation: ▲/◄ = Page Up ▼/► = Page Down ";
             Console.Write(lastline);
             Console.WriteLine(new String('-', Console.WindowWidth - lastline.Length - 1));
