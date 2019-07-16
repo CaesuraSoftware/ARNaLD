@@ -4,10 +4,6 @@
     <ProjectReference Include="..\..\..\Caesura.Arnald.Core\Caesura.Arnald.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ClearScript" Version="5.5.6" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
