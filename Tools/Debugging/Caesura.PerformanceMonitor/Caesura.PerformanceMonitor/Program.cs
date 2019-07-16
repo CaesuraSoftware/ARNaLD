@@ -41,6 +41,8 @@ namespace Caesura.PerformanceMonitor
         
         static void Start(String[] args)
         {
+            // --- ARGUMENT HANDLING --- //
+            
             Int32 ProcessId      = 0;
             Int32 UpdateInterval = 1000;
             Boolean AutoShutdown = true;
@@ -192,6 +194,8 @@ namespace Caesura.PerformanceMonitor
                 }
             }
             
+            // --- MAIN PROGRAM --- //
+            
             var monitor     = new Monitor.Resources(ProcessId);
             var view        = new Display.View(UpdateInterval, monitor);
             var keyboard    = new Display.KeyboardHandler();
@@ -219,11 +223,11 @@ namespace Caesura.PerformanceMonitor
                 Run = customview.HelpView,
                 OnChange = customview.OnChange,
             });
-            handler.Add(new Commands.Shutdown());
-            handler.Add(new Commands.Echo());
-            handler.Add(new Commands.Refresh());
-            handler.Add(new Commands.Clear());
-            handler.Add(new Commands.ViewCmd());
+            handler.Add(new Commands.Shutdown() );
+            handler.Add(new Commands.Echo()     );
+            handler.Add(new Commands.Refresh()  );
+            handler.Add(new Commands.Clear()    );
+            handler.Add(new Commands.ViewCmd()  );
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
