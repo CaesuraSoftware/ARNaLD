@@ -119,6 +119,10 @@ namespace Caesura.PerformanceMonitor.Display
         {
             this.ClearScreen();
             this.CurrentView = name;
+            foreach (var view in this.Views)
+            {
+                view.OnChange?.Invoke(this);
+            }
         }
         
         public void Render(MonitorResult result)

@@ -217,6 +217,7 @@ namespace Caesura.PerformanceMonitor
             {
                 Name = "Help",
                 Run = customview.HelpView,
+                OnChange = customview.OnChange,
             });
             handler.Add(new Commands.Shutdown());
             handler.Add(new Commands.Echo());
@@ -248,10 +249,12 @@ namespace Caesura.PerformanceMonitor
                 else if (result == RequestProgramState.PageBack)
                 {
                     customview.ThreadPage--;
+                    customview.HelpIndex--;
                 }
                 else if (result == RequestProgramState.PageForward)
                 {
                     customview.ThreadPage++;
+                    customview.HelpIndex++;
                 }
                 else if (result == RequestProgramState.TextInput)
                 {

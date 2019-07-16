@@ -11,5 +11,6 @@ namespace Caesura.PerformanceMonitor.Display
     {
         public String Name { get; set; }
         public Action<View, MonitorResult> Run { get; set; }
+        public Action<View> OnChange { get; set; }
     }
 }
