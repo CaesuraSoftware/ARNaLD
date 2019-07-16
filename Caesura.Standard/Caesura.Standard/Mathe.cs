@@ -8,6 +8,26 @@ namespace Caesura.Standard
     
     public static class Mathe
     {
+        public static Boolean FloatEqual(this Single a, Single b, Single range)
+        {
+            return Math.Abs(a - b) < range;
+        }
+        
+        public static Boolean FloatEqual(this Single a, Single b)
+        {
+            return FloatEqual(a, b, 0.001f);
+        }
+        
+        public static Boolean FloatEqual(this Double a, Double b, Double range)
+        {
+            return Math.Abs(a - b) < range;
+        }
+        
+        public static Boolean FloatEqual(this Double a, Double b)
+        {
+            return FloatEqual(a, b, 0.001);
+        }
+        
         public static Int32 ConvertRange(Int32 value, Int32 originalStart, Int32 originalEnd, Int32 newStart, Int32 newEnd)
         {
             var scale = (Double)(newEnd - newStart) / (originalEnd - originalStart);
