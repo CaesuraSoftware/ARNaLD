@@ -44,6 +44,8 @@ Aliquam erat volutpat. Proin scelerisque at nisl a congue. Nulla vestibulum sapi
 Aliquam maximus lectus ac quam faucibus, et vestibulum ante porttitor. Maecenas massa libero, posuere ac fermentum sed, malesuada a nisi. Praesent nec ligula imperdiet eros finibus luctus. Nunc laoreet nulla vitae maximus tristique. Aliquam at condimentum ex. Vivamus porttitor metus eget neque efficitur aliquet. Donec accumsan nisi sit amet ipsum posuere, eu interdum ex maximus. Ut hendrerit ut leo non consequat. Sed ornare aliquam mollis. Vestibulum viverra enim vitae rhoncus iaculis. Sed ultricies mattis magna eu volutpat. Phasellus eleifend erat at enim semper, eu malesuada turpis consequat. Donec hendrerit tellus quis magna dictum blandit. Nunc quis lorem varius, bibendum leo aliquet, sollicitudin turpis.
 
 Duis lobortis, ex at blandit mollis, turpis quam tristique urna, eget tincidunt sapien nisl ut quam. Nullam felis lacus, pretium sed blandit eget, mollis tempor neque. Donec pulvinar lorem at ex pulvinar, quis ornare ante congue. Phasellus luctus euismod ligula, sed ultrices dui. Aliquam ac augue lectus. Cras semper, velit eu pulvinar congue, lorem nunc maximus leo, sit amet gravida urna eros sit amet risus. Quisque ut velit malesuada, maximus eros eu, venenatis augue. Curabitur auctor ultrices erat, eget placerat justo posuere sit amet. Ut scelerisque tincidunt auctor. Etiam nec aliquam lacus. Aenean pharetra ultricies dui non consectetur. Sed leo risus, condimentum eget finibus ut, congue at mauris. Mauris eget tristique elit. In laoreet nisi tempor arcu convallis faucibus.
+
+It is against the Caesura dogma to use our documentation tools to write documentation.
 ";
         }
         
@@ -280,6 +282,10 @@ Duis lobortis, ex at blandit mollis, turpis quam tristique urna, eget tincidunt 
                 if (this.HelpPage.Count > 0 && this.HelpPage.ElementAt(this.HelpPage.Count - 1) == newline)
                 {
                     this.HelpPage.Add(newline.TrimStart());
+                }
+                if (this.HelpPage.Count > 0 && this.HelpPage.ElementAt(0) == String.Empty)
+                {
+                    this.HelpPage.RemoveAt(0);
                 }
                 this.HelpWidth = Console.WindowWidth;
                 this.MaxHelpIndex = this.HelpPage.Count - 1;
