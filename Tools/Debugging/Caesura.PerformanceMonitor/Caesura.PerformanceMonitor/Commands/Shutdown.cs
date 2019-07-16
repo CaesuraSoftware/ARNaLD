@@ -18,7 +18,11 @@ namespace Caesura.PerformanceMonitor.Commands
         public override Boolean Verify(String input)
         {
             if (String.Equals(input, "Shutdown", StringComparison.OrdinalIgnoreCase)
-            ||  String.Equals(input, "Quit"    , StringComparison.OrdinalIgnoreCase))
+            ||  String.Equals(input, "Leave"   , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(input, "Quit"    , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(input, "End"     , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(input, "Die"     , StringComparison.OrdinalIgnoreCase)
+            ||  String.Equals(input, "."       , StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
