@@ -51,7 +51,7 @@ namespace Caesura.Arnald.Tests.Manual
             }
             catch
             {
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Could not start monitor process! Make sure you've compiled it first!");
                 Console.ResetColor();

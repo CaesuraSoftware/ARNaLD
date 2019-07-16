@@ -11,7 +11,12 @@ namespace Caesura.PerformanceMonitor.Display.Views
     public class View2
     {
         private Int32 b_ThreadPage;
-        public Int32 ThreadPage { get => this.b_ThreadPage; set => this.b_ThreadPage = value < 1 ? 1 : value; }
+        private Int32 b_maxThreadPage;
+        public Int32 ThreadPage 
+        { 
+            get => this.b_ThreadPage; 
+            set => this.b_ThreadPage = value < 1 ? 1 : (value > this.b_maxThreadPage ? this.b_maxThreadPage : value); 
+        }
         private Int32 b_HelpIndex;
         public Int32 HelpIndex 
         { 
@@ -90,6 +95,7 @@ No one can help you now.
             
             this.MaxThreadsPerPage = Console.WindowHeight - 8;
             var threadPos = this.MaxThreadsPerPage * (this.ThreadPage - 1);
+            this.b_maxThreadPage = (result.ThreadCount / this.MaxThreadsPerPage) + 1;
             for (var i = 0; i < (Console.WindowHeight - 4); i++)
             {
                 // CPU + RAM VIEW:
@@ -203,8 +209,7 @@ No one can help you now.
                 }
                 else if (i == Console.WindowHeight - 11)
                 {
-                    var pagenum = (result.ThreadCount / this.MaxThreadsPerPage) + 1;
-                    var pageguide = $"--- Page {this.ThreadPage} of {pagenum} (▲/◄ = Back ▼/► = Forward) ";
+                    var pageguide = $"--- Page {this.ThreadPage} of {this.b_maxThreadPage} (▲/◄ = Back ▼/► = Forward) ";
                     var cutoff = ((Console.WindowWidth - 4) / 2) - pageguide.Length;
                     if (cutoff >= 0)
                     {
