@@ -41,6 +41,11 @@ namespace Caesura.PerformanceMonitor.Commands
                 this.Input = "Sorry for what? Our daddy taught us not to be ashamed of our dicks.";
                 return true;
             }
+            else if (String.Equals(input, "Mitty", StringComparison.OrdinalIgnoreCase))
+            {
+                this.Input = "My... Treasure...";
+                return true;
+            }
             return false;
         }
         
