@@ -51,6 +51,7 @@ It is against the Caesura dogma to use our documentation tools to write document
         
         public void OnChange(View self)
         {
+            this.ThreadPage = 0;
             this.HelpIndex = 0;
         }
         
