@@ -10,6 +10,7 @@ namespace Caesura.Arnald.Tests.Manual
     {
         public static void Main(String[] args)
         {
+            Console.Title = "Caesura.ARNaLD Manual Test Platform";
             var p = StartMonitor();
             Test(args);
             p.Kill();
@@ -26,7 +27,6 @@ namespace Caesura.Arnald.Tests.Manual
         
         public static Process StartMonitor()
         {
-            
             var pid         = Process.GetCurrentProcess().Id;
             var path        = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             var directory   = Path.GetDirectoryName(path).Replace("file:\\", "");
