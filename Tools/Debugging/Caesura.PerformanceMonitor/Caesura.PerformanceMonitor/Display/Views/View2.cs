@@ -40,7 +40,118 @@ namespace Caesura.PerformanceMonitor.Display.Views
             this.MaxHelpIndex = 0;
             
             this.HelpString = @"
-No one can help you now.
+help (command)
+From Wikipedia, the free encyclopedia
+
+In computing, help is a command in various command line shells such as COMMAND.COM, cmd.exe, Bash, 4DOS/4NT, Windows PowerShell, Singularity shell, Python, MATLAB[1] and GNU Octave.[2] It provides online information about available commands and the shell environment.[3]
+
+Implementations
+The command is available in operating systems such as DOS, IBM OS/2, Microsoft Windows, ReactOS, THEOS/OASIS,[4] Zilog Z80-RIO,[5] OS-9[6] OpenVOS,[7] HP MPE/iX,[8] Motorola VERSAdos,[9] KolibriOS[10] and also in the DEC RT-11,[11] TOPS-10[12] and TOPS-20[13] operating systems. Furthermore it is available in the open source MS-DOS emulator DOSBox and in the EFI shell.[14]
+
+On Unix, the command is part of the Source Code Control System and prints help information for the SCCS commands.
+
+DEC OS/8
+The DEC OS/8 CCL help command prints information on specified OS/8 programs.[15]
+
+DOS
+MS-DOS
+The help command is available in MS-DOS 5.x and later versions of the software. The help command with a 'command' parameter would give help on a specific command. If no arguments are provided, the command lists the contents of DOSHELP.HLP.
+
+In MS-DOS 6.x this command exists as FASTHELP.
+
+The MS-DOS 6.xx help command uses QBasic to view a quickhelp HELP.HLP file, which contains more extensive information on the commands, with some hyperlinking etc. The MS-DOS 6.22 help system is included on Windows 9x CD-ROM versions as well.
+
+PC DOS
+In PC DOS 5 and 6 help is the same form as MS-DOS 5 help command.
+
+PC DOS 7.xx help uses view.exe to open OS/2 style INF files (cmdref.inf, dosrexx.inf and doserror.inf), opening these to the appropriate pages.
+
+DR-DOS
+In DR-DOS, help is a batch file that launches DR-DOS' internal help program, dosbook.
+
+FreeDOS
+The FreeDOS version was developed by Joe Cosentino.[16]
+
+4DOS/4NT
+The 4DOS/4NT help command uses a text user interface to display the online help.
+
+Microsoft Windows cmd.exe
+Used without parameters, help lists and briefly describes every system command. Windows NT-based versions use MS-DOS 5 style help. Versions before Windows Vista also have a Windows help file (NTCMDS.HLP or NTCMDS.INF) in a similar style to MS-DOS 6.
+
+PowerShell
+In PowerShell, help is a short form (implemented as a PowerShell function) for access to the Get-Help Cmdlet.
+
+Windows PowerShell includes an extensive, console-based help system, reminiscent of man pages in Unix. The help topics include help for cmdlets, providers, and concepts in PowerShell.
+
+GNU Bash
+In Bash, the builtin command help'[17] lists all Bash builtin commands if used without arguments. Otherwise, it prints a brief summary of a command. Its syntax is:
+
+help [-dms] [pattern]
+Syntax
+The command-syntax is:
+
+help [command]
+Arguments:
+
+command This command-line argument specifies the name of the command about which information is to be displayed.
+Examples
+DOSBox
+Z:\>help
+If you want a list of all supported commands type help /all .
+A short list of the most often used commands:
+<DIR     > Directory View.
+<CD      > Display/changes the current directory.
+<CLS     > Clear screen.
+<COPY    > Copy files.
+...
+Python
+>>> help
+Type help() for interactive help, or help(object) for help about object.
+>>> help()
+
+Welcome to Python 2.5!  This is the online help utility.
+
+If this is your first time using Python, you should definitely check out
+the tutorial on the Internet at https://www.python.org/doc/tut/.
+
+Enter the name of any module, keyword, or topic to get help on writing
+Python programs and using Python modules.  To quit this help utility and
+return to the interpreter, just type 'quit'.
+...
+GNU Octave
+octave-3.0.0.exe:1> help
+
+Help is available for the topics listed below.
+Additional help for built-in functions and operators is
+available in the on-line version of the manual.  Use the command
+`doc <topic>' to search the manual index.
+...
+See also
+	Wikibooks has a book on the topic of: Guide to Windows Commands
+Online help
+List of DOS commands
+References
+ https://www.mathworks.com/help/matlab/ref/help.html
+ https://octave.sourceforge.io/octave/function/help.html
+ Microsoft TechNet Help article
+ THEOS/OASIS User′s Handbook
+ Z80-RIO OPERATING SYSTEM USER'S MANUAL
+ Paul S. Dayan (1992). The OS-9 Guru - 1 : The Facts. Galactic Industrial Limited. ISBN 0-9519228-0-7.
+ http://stratadoc.stratus.com/vos/19.1.0/r098-19/wwhelp/wwhimpl/common/html/r098-19.pdf
+ MPE/iX Command Reference Manual
+ M68000 Family VERSAdos System Facilities Reference Manual
+ http://wiki.kolibrios.org/wiki/Shell
+http://paleoferrosaurus.com/beta/documents/rt11help.html#HELP
+ TOPS-10 Operating System Commands Manual (pdf). Digital Equipment Corporation. August 1980. Retrieved 2019-02-17.
+ 'TOPS-20 Command manual' (PDF).
+ 'EFI Shells and Scripting'. Intel. Retrieved 2013-09-25.
+ 'Concise Command Language' (CCL).'OS/8 Handbook' (PDF). April 1974. Retrieved 28 November 2017.
+ http://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/repos/pkg-html/help.html
+ 'Bash Reference Manual'. www.gnu.org. Retrieved 2016-05-09.
+Further reading
+Wolverton, Van (1990). MS-DOS Commands: Microsoft Quick Reference, 4th Revised edition. Microsoft Press. ISBN 978-1556152894.
+Kathy Ivens; Brian Proffit (1993). OS/2 Inside & Out. Osborne McGraw-Hill. ISBN 9780078818714.
+Frisch, Æleen (2001). Windows 2000 Commands Pocket Reference. O'Reilly. ISBN 978-0-596-00148-3.
 ";
         }
         
