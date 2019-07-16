@@ -18,6 +18,19 @@
             "stopAtEntry": false
         },
         {
+            "name": "Performance Monitor",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildmonitor",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Tools/Debugging/Caesura.PerformanceMonitor/Caesura.PerformanceMonitor/bin/Debug/netcoreapp2.2/Caesura.PerformanceMonitor.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Tools/Debugging/Caesura.PerformanceMonitor/Caesura.PerformanceMonitor",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",

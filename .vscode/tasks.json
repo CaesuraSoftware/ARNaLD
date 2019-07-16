@@ -22,6 +22,16 @@
             "problemMatcher": "$tsc"
         },
         {
+            "label": "buildmonitor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Tools/Debugging/Caesura.PerformanceMonitor/Caesura.PerformanceMonitor/Caesura.PerformanceMonitor.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
             "label": "publish",
             "command": "dotnet",
             "type": "process",
