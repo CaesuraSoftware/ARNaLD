@@ -232,7 +232,7 @@ namespace Caesura.PerformanceMonitor
             
             var cmdModeMsg = " [COMMAND MODE; PRESS 'I' FOR TEXT INPUT MODE. PRESS 'ESC' FOR COMMAND MODE AGAIN.]";
             var display = String.Empty;
-            view.SetInput(cmdModeMsg);
+            view.SetInput(cmdModeMsg, ConsoleColor.DarkCyan);
             
             view.Start();
             while (MainLoop)
@@ -272,7 +272,7 @@ namespace Caesura.PerformanceMonitor
                 }
                 else if (result == RequestProgramState.CommandMode)
                 {
-                    view.SetInput(cmdModeMsg);
+                    view.SetInput(cmdModeMsg, ConsoleColor.DarkCyan);
                 }
                 else if (result == RequestProgramState.CommandInput)
                 {

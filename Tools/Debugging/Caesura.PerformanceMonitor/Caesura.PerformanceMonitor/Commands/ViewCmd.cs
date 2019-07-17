@@ -21,6 +21,11 @@ namespace Caesura.PerformanceMonitor.Commands
                 this.Input = "Help";
                 return true;
             }
+            if (String.Equals(input, "Back", StringComparison.OrdinalIgnoreCase))
+            {
+                this.Input = "Main";
+                return true;
+            }
             
             var strs = input.Split(' ');
             if (strs.Length < 2)
