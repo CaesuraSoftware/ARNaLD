@@ -23,7 +23,9 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
-                { TypeIndicator.Int8, new MelInt8() },
+                { TypeIndicator.Int8    , new MelInt8()     },
+                { TypeIndicator.Int16   , new MelInt16()    },
+                { TypeIndicator.Int32   , new MelInt32()    },
             };
             this.Contexts     = new List<Context>();
             this.MainContext  = new Context(this);

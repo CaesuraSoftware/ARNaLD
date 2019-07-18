@@ -13,7 +13,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
     
     public interface IMelType
     {
-        String Name { get; }
-        Boolean Convert(Int32 size, Byte[] item);
+        Boolean Convert(Int32 size, Byte[] bytes);
+        IMelType Copy();
     }
 }
