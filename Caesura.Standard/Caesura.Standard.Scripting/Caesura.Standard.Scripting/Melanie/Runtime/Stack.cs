@@ -9,12 +9,12 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     
     public class Stack
     {
-        public List<BaseType> MainStack { get; set; }
+        public List<IMelType> MainStack { get; set; }
         public List<String> CallStack { get; set; }
         
         public Stack()
         {
-            this.MainStack = new List<BaseType>();
+            this.MainStack = new List<IMelType>();
             this.CallStack = new List<String>();
         }
         

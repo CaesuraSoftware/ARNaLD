@@ -9,7 +9,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
     public abstract class BaseInstruction
     {
         protected Interpreter Environment { get; set; }
-        public abstract OpCode Code { get; }
+        public abstract OpCode Code { get; protected set; }
         
         public BaseInstruction()
         {
