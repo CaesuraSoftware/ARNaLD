@@ -10,6 +10,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
     public enum TypeIndicator : Byte
     {
         None    = 0x00,
+        Pointer = 0x03,
         Int8    = 0x10,
         Int16   = 0x11,
         Int32   = 0x12,

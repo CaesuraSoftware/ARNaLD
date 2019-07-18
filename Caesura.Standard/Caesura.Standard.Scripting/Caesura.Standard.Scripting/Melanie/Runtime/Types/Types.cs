@@ -6,7 +6,111 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
     using System.Collections.Generic;
     using System.Linq;
     
+    public class MelFunc : IMelType
+    {
+        // TODO: not even sure what I'm planning on doing
+        // with this yet. I actually want MelObject to
+        // contain a callback and act as a function and
+        // pretty much work like how JavaScript works where
+        // functions and objects are the same thing.
+        
+        public MelFunc()
+        {
+            
+        }
+        
+        public Boolean Convert(Int32 size, Byte[] bytes)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public IMelType Copy()
+        {
+            throw new NotImplementedException();
+        }
+    }
     
+    public class MelObject : IMelType
+    {
+        public Dictionary<String, IMelType> Fields { get; set; }
+        
+        public MelObject()
+        {
+            this.Fields = new Dictionary<String, IMelType>();
+        }
+        
+        public MelObject(MelObject obj) : this()
+        {
+            foreach (var f in obj.Fields)
+            {
+                this.Fields.Add(f.Key, f.Value.Copy());
+            }
+        }
+        
+        public MelObject(Dictionary<String, IMelType> fields) : this()
+        {
+            foreach (var f in fields)
+            {
+                this.Fields.Add(f.Key, f.Value.Copy());
+            }
+        }
+        
+        public Boolean Convert(Int32 size, Byte[] bytes)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public IMelType Copy()
+        {
+            return new MelObject(this.Fields);
+        }
+    }
+    
+    public class MelPointer : IMelType<Int64>
+    {
+        public Int64 InternalRepresentation { get; set; }
+        public MelObject Resource { get; set; }
+        
+        public MelPointer()
+        {
+            
+        }
+        
+        public MelPointer(Int64 num)
+        {
+            this.InternalRepresentation = num;
+        }
+        
+        public MelPointer(Int64 num, MelObject obj) : this(num)
+        {
+            this.Resource = obj;
+        }
+        
+        public Boolean Convert(Int32 size, Byte[] bytes)
+        {
+            if (size == 8 && bytes.Length == 8)
+            {
+                Int64 i64 = (
+                    (bytes[7] << 56) +
+                    (bytes[6] << 48) +
+                    (bytes[5] << 40) +
+                    (bytes[4] << 32) +
+                    (bytes[3] << 24) + 
+                    (bytes[2] << 16) + 
+                    (bytes[1] <<  8) + 
+                     bytes[0]
+                );
+                this.InternalRepresentation = i64;
+                return true;
+            }
+            return false;
+        }
+        
+        public IMelType Copy()
+        {
+            return new MelInt64(this.InternalRepresentation);
+        }
+    }
     
     public class MelBoolean : IMelType<Boolean>
     {
