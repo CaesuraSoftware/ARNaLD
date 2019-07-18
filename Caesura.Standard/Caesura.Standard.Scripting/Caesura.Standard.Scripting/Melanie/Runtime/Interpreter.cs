@@ -26,6 +26,10 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { TypeIndicator.Int8    , new MelInt8()     },
                 { TypeIndicator.Int16   , new MelInt16()    },
                 { TypeIndicator.Int32   , new MelInt32()    },
+                { TypeIndicator.Int64   , new MelInt64()    },
+                { TypeIndicator.Single  , new MelSingle()   },
+                { TypeIndicator.Double  , new MelDouble()   },
+                { TypeIndicator.Boolean , new MelBoolean()  },
             };
             this.Contexts     = new List<Context>();
             this.MainContext  = new Context(this);
