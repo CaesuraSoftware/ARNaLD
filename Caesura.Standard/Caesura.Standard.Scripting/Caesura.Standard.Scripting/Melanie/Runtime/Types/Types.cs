@@ -16,14 +16,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
             this.InternalRepresentation = num;
         }
         
-        public Boolean IsType(String item)
+        public Boolean IsType(Byte[] item)
         {
-            return Byte.TryParse(item, out _);
+            throw new NotImplementedException();
         }
         
-        public void Convert(String item)
+        public void Convert(Byte[] item)
         {
-            this.InternalRepresentation = Byte.Parse(item);
+            
         }
     }
 }
