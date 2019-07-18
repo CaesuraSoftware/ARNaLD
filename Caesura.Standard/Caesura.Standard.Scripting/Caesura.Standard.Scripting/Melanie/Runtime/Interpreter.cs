@@ -5,10 +5,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Instructions;
+    using Types;
     
     public class Interpreter
     {
         public Dictionary<OpCode, BaseInstruction> Instructions { get; set; }
+        public List<Context> Contexts { get; set; }
+        public Context MainContext { get; set; }
         
         public Interpreter()
         {
@@ -22,6 +26,10 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public void Execute(OpCode code)
         {
+            if (code == OpCode.NoOp)
+            {
+                return;
+            }
             if (!this.Instructions.ContainsKey(code))
             {
                 throw new UnrecognizedOpcodeException(code);
