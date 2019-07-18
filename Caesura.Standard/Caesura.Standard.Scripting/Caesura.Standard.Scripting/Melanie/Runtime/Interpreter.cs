@@ -11,12 +11,22 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     public class Interpreter
     {
         public Dictionary<OpCode, BaseInstruction> Instructions { get; set; }
+        public Dictionary<TypeIndicator, IMelType> Types { get; set; }
         public List<Context> Contexts { get; set; }
         public Context MainContext { get; set; }
         
         public Interpreter()
         {
-            
+            this.Instructions = new Dictionary<OpCode, BaseInstruction>()
+            {
+                
+            };
+            this.Types        = new Dictionary<TypeIndicator, IMelType>()
+            {
+                { TypeIndicator.Int8, new MelInt8() },
+            };
+            this.Contexts     = new List<Context>();
+            this.MainContext  = new Context(this);
         }
         
         public Interpreter(RuntimeConfiguration rtc) : this()

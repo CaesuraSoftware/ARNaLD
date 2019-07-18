@@ -10,5 +10,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     {
         public Stack Stack { get; set; }
         
+        public Context()
+        {
+            
+        }
+        
+        public Context(Interpreter handle) : this()
+        {
+            
+        }
     }
 }
