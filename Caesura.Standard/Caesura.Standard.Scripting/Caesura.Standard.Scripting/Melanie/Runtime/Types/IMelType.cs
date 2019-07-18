@@ -14,7 +14,6 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
     public interface IMelType
     {
         String Name { get; }
-        Boolean IsType(Byte[] item);
-        void Convert(Byte[] item);
+        Boolean Convert(Byte[] item);
     }
 }

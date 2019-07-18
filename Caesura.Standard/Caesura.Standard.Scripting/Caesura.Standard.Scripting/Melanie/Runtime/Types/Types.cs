@@ -16,14 +16,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
             this.InternalRepresentation = num;
         }
         
-        public Boolean IsType(Byte[] item)
+        public Boolean Convert(Byte[] item)
         {
+            // TODO: need to figure out how we want to pass
+            // data to this. I'm thinking the first byte will be
+            // the indicator, the next four will be the size of
+            // the data, and the sixth will be where the data
+            // starts (so in this case we skip right to six)
             throw new NotImplementedException();
-        }
-        
-        public void Convert(Byte[] item)
-        {
-            
         }
     }
 }
