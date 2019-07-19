@@ -18,7 +18,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         public override void Execute(Context context)
         {
             var arg = context.PopArgument();
-            context.Push(arg);
+            context.Push(arg.Value);
         }
     }
     
@@ -39,7 +39,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             }
             
             var arg = context.Pop();
-            context.PushArgument(arg);
+            context.PushArgument(arg.Value);
         }
     }
     
@@ -62,7 +62,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             
             var x = context.PopArgument();
             var y = context.PopArgument();
-            var result = NumberHelper.Add(x, y);
+            var result = NumberHelper.Add(x.Value, y.Value);
             
             context.Push(result);
             push.Execute(context);

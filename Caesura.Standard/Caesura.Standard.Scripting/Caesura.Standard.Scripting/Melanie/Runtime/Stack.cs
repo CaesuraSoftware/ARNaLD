@@ -27,24 +27,29 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.MainStack.Add(item);
         }
         
-        public IMelType Pop()
-        {
-            var index = this.MainStack.Count - 1;
-            var item = this.MainStack.ElementAt(index);
-            this.MainStack.RemoveAt(index);
-            return item;
-        }
-        
-        public IMelType Peek()
+        public Maybe<IMelType> Pop()
         {
             if (this.Count == 0)
             {
-                return null;
+                throw new ElementNotFoundException();
             }
             
             var index = this.MainStack.Count - 1;
             var item = this.MainStack.ElementAt(index);
-            return item;
+            this.MainStack.RemoveAt(index);
+            return Maybe<IMelType>.Some(item);
+        }
+        
+        public Maybe<IMelType> Peek()
+        {
+            if (this.Count == 0)
+            {
+                return Maybe.None;
+            }
+            
+            var index = this.MainStack.Count - 1;
+            var item = this.MainStack.ElementAt(index);
+            return Maybe<IMelType>.Some(item);
         }
         
         public void Clear()
@@ -56,15 +61,15 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             var item1 = this.Pop();
             var item2 = this.Pop();
-            this.Push(item1);
-            this.Push(item2);
+            this.Push(item1.Value);
+            this.Push(item2.Value);
         }
         
         public void Dup()
         {
             var item = this.Pop();
-            this.Push(item);
-            this.Push(item);
+            this.Push(item.Value);
+            this.Push(item.Value);
         }
     }
 }

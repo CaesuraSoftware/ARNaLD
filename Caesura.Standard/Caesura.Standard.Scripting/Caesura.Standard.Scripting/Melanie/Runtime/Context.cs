@@ -29,7 +29,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.Arguments.Push(item);
         }
         
-        public IMelType PopArgument()
+        public Maybe<IMelType> PopArgument()
         {
             return this.Arguments.Pop();
         }
@@ -39,7 +39,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.Stack.Push(item);
         }
         
-        public IMelType Pop()
+        public Maybe<IMelType> Pop()
         {
             return this.Stack.Pop();
         }
