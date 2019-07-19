@@ -17,19 +17,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
-            if (context.Arguments.Count == 1)
-            {
-                var arg = context.Arguments.ElementAt(0);
-                context.Arguments.Clear();
-                context.Stack.Push(arg);
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    $"PUSH instruction takes exactly one argument. " + 
-                    $"Arguments given: {context.Arguments.Count}"
-                );
-            }
+            var arg = context.PopArgument();
+            context.Push(arg);
         }
     }
     
@@ -49,10 +38,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 throw new InvalidOperationException("Stack is empty");
             }
             
-            var arg = context.Stack.MainStack.Last();
-            var argdex = context.Stack.MainStack.LastIndexOf(arg);
-            context.Stack.MainStack.RemoveAt(argdex);
-            context.Arguments.Add(arg);
+            var arg = context.Pop();
+            context.PushArgument(arg);
         }
     }
     
@@ -73,16 +60,11 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             pop.Execute(context);
             pop.Execute(context);
             
-            var index = context.Arguments.Count;
-            var x = context.Arguments.ElementAt(index - 2);
-            var y = context.Arguments.ElementAt(index - 1);
-            
+            var x = context.PopArgument();
+            var y = context.PopArgument();
             var result = NumberHelper.Add(x, y);
             
-            context.Arguments.RemoveAt(context.Arguments.LastIndexOf(x));
-            context.Arguments.RemoveAt(context.Arguments.LastIndexOf(y));
-            
-            context.Arguments.Add(result);
+            context.Push(result);
             push.Execute(context);
         }
     }
