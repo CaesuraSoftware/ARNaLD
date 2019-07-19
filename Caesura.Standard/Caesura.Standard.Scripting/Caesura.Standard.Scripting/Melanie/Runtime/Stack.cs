@@ -18,6 +18,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.CallStack = new List<String>();
         }
         
+        public void Push(IMelType item)
+        {
+            throw new NotImplementedException();
+        }
         
+        public IMelType Pop()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

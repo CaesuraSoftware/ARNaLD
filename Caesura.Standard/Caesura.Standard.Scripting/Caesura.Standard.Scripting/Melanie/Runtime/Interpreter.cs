@@ -19,7 +19,9 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             this.Instructions = new Dictionary<OpCode, BaseInstruction>()
             {
-                
+                { OpCode.Push   , new Ins_Push(this) },
+                { OpCode.Pop    , new Ins_Pop(this) },
+                { OpCode.Add    , new Ins_Add(this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
@@ -31,6 +33,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { TypeIndicator.Double  , new MelDouble  () },
                 { TypeIndicator.Boolean , new MelBoolean () },
                 { TypeIndicator.Object  , new MelObject  () },
+                { TypeIndicator.String  , new MelObject  () },
+                { TypeIndicator.Array   , new MelObject  () },
                 { TypeIndicator.Pointer , new MelPointer () },
                 { TypeIndicator.Func    , new MelFunc    () },
             };
@@ -43,7 +47,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             
         }
         
-        public void Execute(OpCode code)
+        public void ParseInstruction(Context context, OpCode code)
         {
             if (code == OpCode.NoOp)
             {
@@ -54,7 +58,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 throw new UnrecognizedOpcodeException(code);
             }
             var inst = this.Instructions[code];
-            inst.Execute();
+            inst.Execute(context);
         }
     }
 }

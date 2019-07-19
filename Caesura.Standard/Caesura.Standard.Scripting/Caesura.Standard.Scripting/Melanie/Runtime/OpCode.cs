@@ -4,7 +4,6 @@ using System;
 namespace Caesura.Standard.Scripting.Melanie.Runtime
 {
     /// <summary>  </summary>
-    [Flags]
     public enum OpCode : Byte
     {
         // --- META --- //
