@@ -9,6 +9,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
     
     public static class NumberHelper
     {
+        // TODO: number conversion functions, including implicit conversion down.
+        
         public static IMelType Add(IMelType x, IMelType y)
         {
             /**/ if (x is MelInt8  xi8  && y is MelInt8  yi8 )

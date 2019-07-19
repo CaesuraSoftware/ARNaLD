@@ -22,5 +22,10 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         }
         
         public abstract void Execute(Context context);
+        
+        protected BaseInstruction GetInstruction(OpCode code)
+        {
+            return this.Environment.Instructions[code];
+        }
     }
 }

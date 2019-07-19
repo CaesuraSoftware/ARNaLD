@@ -54,8 +54,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
-            var pop = this.Environment.Instructions[OpCode.Pop];
-            var push = this.Environment.Instructions[OpCode.Push];
+            var pop  = this.GetInstruction(OpCode.Pop );
+            var push = this.GetInstruction(OpCode.Push);
             
             pop.Execute(context);
             pop.Execute(context);

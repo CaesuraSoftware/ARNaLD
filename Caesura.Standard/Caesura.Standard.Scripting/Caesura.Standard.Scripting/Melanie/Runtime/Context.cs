@@ -9,36 +9,29 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     
     public class Context
     {
+        public Interpreter Environment { get; set; }
         public Stack Stack { get; set; }
-        public List<IMelType> Arguments { get; set; }
+        public Stack Arguments { get; set; }
         
         public Context()
         {
             this.Stack = new Stack();
-            this.Arguments = new List<IMelType>();
+            this.Arguments = new Stack(3);
         }
         
         public Context(Interpreter handle) : this()
         {
-            
+            this.Environment = handle;
         }
         
         public void PushArgument(IMelType item)
         {
-            this.Arguments.Add(item);
+            this.Arguments.Push(item);
         }
         
         public IMelType PopArgument()
         {
-            if (this.Arguments.Count == 0)
-            {
-                throw new InvalidOperationException("Arguments are empty");
-            }
-            
-            var index = this.Arguments.Count - 1;
-            var item = this.Arguments.ElementAt(index);
-            this.Arguments.RemoveAt(index);
-            return item;
+            return this.Arguments.Pop();
         }
         
         public void Push(IMelType item)
