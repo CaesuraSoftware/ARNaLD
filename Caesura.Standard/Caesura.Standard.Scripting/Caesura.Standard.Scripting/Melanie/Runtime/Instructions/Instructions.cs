@@ -54,18 +54,44 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
-            var pop  = this.GetInstruction(OpCode.Pop );
-            var push = this.GetInstruction(OpCode.Push);
+            var pop  = this.GetInstruction(OpCode.Pop , context);
+            var push = this.GetInstruction(OpCode.Push, context);
             
-            pop.Execute(context);
-            pop.Execute(context);
+            pop();
+            pop();
             
             var x = context.PopArgument();
             var y = context.PopArgument();
             var result = NumberHelper.Add(x.Value, y.Value);
             
             context.Push(result);
-            push.Execute(context);
+            push();
+        }
+    }
+    
+    public class Ins_Sub : BaseInstruction
+    {
+        public override OpCode Code => OpCode.Sub;
+        
+        public Ins_Sub(Interpreter env) : base(env)
+        {
+            
+        }
+        
+        public override void Execute(Context context)
+        {
+            var pop  = this.GetInstruction(OpCode.Pop , context);
+            var push = this.GetInstruction(OpCode.Push, context);
+            
+            pop();
+            pop();
+            
+            var x = context.PopArgument();
+            var y = context.PopArgument();
+            var result = NumberHelper.Sub(x.Value, y.Value);
+            
+            context.Push(result);
+            push();
         }
     }
 }

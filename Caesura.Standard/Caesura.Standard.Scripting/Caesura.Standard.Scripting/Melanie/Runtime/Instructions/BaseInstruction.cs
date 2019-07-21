@@ -23,9 +23,26 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public abstract void Execute(Context context);
         
+        protected void RunOp(OpCode code, Context context)
+        {
+            var oc = this.Environment.Instructions[code];
+            oc.Execute(context);
+        }
+        
         protected BaseInstruction GetInstruction(OpCode code)
         {
             return this.Environment.Instructions[code];
+        }
+        
+        protected Action<Context> GetInstructionFunc(OpCode code)
+        {
+            return this.Environment.Instructions[code].Execute;
+        }
+        
+        protected Action GetInstruction(OpCode code, Context context)
+        {
+            var oc = this.GetInstruction(code);
+            return () => oc.Execute(context);
         }
     }
 }

@@ -19,9 +19,10 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             this.Instructions = new Dictionary<OpCode, BaseInstruction>()
             {
-                { OpCode.Push   , new Ins_Push(this) },
-                { OpCode.Pop    , new Ins_Pop(this) },
-                { OpCode.Add    , new Ins_Add(this) },
+                { OpCode.Push       , new Ins_Push       (this) },
+                { OpCode.Pop        , new Ins_Pop        (this) },
+                { OpCode.Add        , new Ins_Add        (this) },
+                { OpCode.Sub        , new Ins_Sub        (this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
