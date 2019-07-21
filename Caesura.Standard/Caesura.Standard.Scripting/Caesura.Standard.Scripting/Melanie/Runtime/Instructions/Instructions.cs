@@ -146,4 +146,30 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             push();
         }
     }
+    
+    public class Ins_Rem : BaseInstruction
+    {
+        public override OpCode Code => OpCode.Rem;
+        
+        public Ins_Rem(Interpreter env) : base(env)
+        {
+            
+        }
+        
+        public override void Execute(Context context)
+        {
+            var pop  = this.GetInstruction(OpCode.Pop , context);
+            var push = this.GetInstruction(OpCode.Push, context);
+            
+            pop();
+            pop();
+            
+            var x = context.PopArgument();
+            var y = context.PopArgument();
+            var result = NumberHelper.Rem(x.Value, y.Value);
+            
+            context.PushArgument(result);
+            push();
+        }
+    }
 }
