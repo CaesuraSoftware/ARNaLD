@@ -23,6 +23,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { OpCode.Pop            , new Ins_Pop        (this) },
                 { OpCode.Add            , new Ins_Add        (this) },
                 { OpCode.Sub            , new Ins_Sub        (this) },
+                { OpCode.Div            , new Ins_Div        (this) },
+                { OpCode.Mul            , new Ins_Mul        (this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
