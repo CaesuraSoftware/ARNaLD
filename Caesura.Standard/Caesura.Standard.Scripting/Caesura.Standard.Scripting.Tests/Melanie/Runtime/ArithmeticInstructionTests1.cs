@@ -10,7 +10,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
     using Caesura.Standard.Scripting.Melanie.Runtime.Instructions;
     using Xunit;
     
-    public class ArithmaticInstructionTest1
+    public class ArithmeticInstructionTest1
     {
         [Fact]
         public void AddTest1()
