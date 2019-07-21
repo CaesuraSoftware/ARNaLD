@@ -15,7 +15,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public Context()
         {
-            this.Stack = new Stack();
+            this.Stack     = new Stack();
             this.Arguments = new Stack(3);
         }
         

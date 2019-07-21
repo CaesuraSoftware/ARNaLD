@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Caesura.Standard.Scripting\Caesura.Standard.Scripting.csproj" />
     <ProjectReference Include="..\Caesura.Standard.Scripting.KuroScript\Caesura.Standard.Scripting.KuroScript.csproj" />
+    <ProjectReference Include="..\..\Caesura.Standard\Caesura.Standard.csproj" />
   </ItemGroup>
 
 </Project>

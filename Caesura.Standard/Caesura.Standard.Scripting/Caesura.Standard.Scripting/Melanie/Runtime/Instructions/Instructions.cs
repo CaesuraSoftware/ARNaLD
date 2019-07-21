@@ -64,7 +64,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             var y = context.PopArgument();
             var result = NumberHelper.Add(x.Value, y.Value);
             
-            context.Push(result);
+            context.PushArgument(result);
             push();
         }
     }
@@ -90,7 +90,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             var y = context.PopArgument();
             var result = NumberHelper.Sub(x.Value, y.Value);
             
-            context.Push(result);
+            context.PushArgument(result);
             push();
         }
     }
