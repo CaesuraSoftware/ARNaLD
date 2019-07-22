@@ -24,6 +24,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             {
                 { OpCode.Push           , new Ins_Push       (this) },
                 { OpCode.Pop            , new Ins_Pop        (this) },
+                { OpCode.Swap           , new Ins_Swap       (this) },
                 
                 { OpCode.Add            , new Ins_Add        (this) },
                 { OpCode.Sub            , new Ins_Sub        (this) },
