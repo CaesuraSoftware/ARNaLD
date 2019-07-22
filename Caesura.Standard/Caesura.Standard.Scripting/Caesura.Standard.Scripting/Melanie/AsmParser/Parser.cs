@@ -186,8 +186,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             return nline;
         }
         
-        // TODO: make sure escape characters can only escape an
-        // approved list of characters
         private IEnumerable<IMelType> GetArguments(String line)
         {
             var args = new List<IMelType>(3); // can't have many more args than that
@@ -251,13 +249,36 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     // general escape character handling
                     /**/ if (c == 'n')
                     {
-                        str += '\n';
+                        str += '\n'; // newline
+                    }
+                    else if (c == 'r')
+                    {
+                        str += '\r'; // carriage return
+                    }
+                    else if (c == 'a')
+                    {
+                        str += '\a'; // bell (alert)
+                    }
+                    else if (c == 'b')
+                    {
+                        str += '\b'; // backspace
+                    }
+                    else if (c == 't')
+                    {
+                        str += '\t'; // horizontal line
+                    }
+                    else if (c == 'v')
+                    {
+                        str += '\v'; // vertical tab
+                    }
+                    else if (c =='\'')
+                    {
+                        str += '\''; // single quote
                     }
                     else
                     {
                         throw new InvalidOperationException($"Cannot escape character '{c}'");
                     }
-                    // TODO: more escape codes here
                     escap = false;
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
