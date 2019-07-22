@@ -84,7 +84,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 return Maybe<CallSite<IMelType>>.Some(nopcs);
             }
             
-            var rawLineNoOpCode = this.GetLineAfterOpCode(rawLine);
+            var rawLineNoOpCode = this.GetLineAfterOpCode(rawLine).TrimStart();
             
             if (String.IsNullOrEmpty(rawLineNoOpCode)
             || String.IsNullOrWhiteSpace(rawLineNoOpCode)
@@ -175,6 +175,55 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         }
         
         private IEnumerable<IMelType> GetArguments(String line)
+        {
+            var args = new List<IMelType>(3); // can't have many more args than that
+            
+            var instr = false;
+            var str = String.Empty;
+            var index = 0;
+            foreach (var c in line)
+            {
+                /**/ if (c == '"' && !instr)
+                {
+                    // start of string, begin parsing string
+                    instr = true;
+                    continue;
+                }
+                else if (c == '"' && instr)
+                {
+                    // end of string, parse it.
+                    instr = false;
+                    var str_arg = new MelString(str);
+                    args.Add(str_arg);
+                    str = String.Empty;
+                    continue;
+                }
+                else if (instr)
+                {
+                    str += c;
+                }
+                else if (Char.IsWhiteSpace(c) && instr)
+                {
+                    // whitespace inside a string, continue.
+                    continue;
+                }
+                else if ((Char.IsWhiteSpace(c) && !instr)
+                     || (index == line.Length - 1))
+                {
+                    // end of non-string argument or end of arguments
+                    // if last argument isn't a string.
+                    var num_arg = this.ParseNumberArgument(str);
+                    args.Add(num_arg);
+                    str = String.Empty;
+                    continue;
+                }
+                index++;
+            }
+            
+            return args;
+        }
+        
+        private IMelType ParseNumberArgument(String arg)
         {
             throw new NotImplementedException();
         }
