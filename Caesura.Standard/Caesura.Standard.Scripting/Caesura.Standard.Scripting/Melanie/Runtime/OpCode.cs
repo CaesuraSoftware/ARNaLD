@@ -8,7 +8,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     {
         // --- META --- //
         /// <summary> No Operation </summary>
-        NoOp        = 0x00,
+        Nop         = 0x00,
         
         // --- ARITHMETIC --- //
         /// <summary> Add </summary>
@@ -38,19 +38,19 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         // --- CONTROL FLOW --- //
         /// <summary> Go to a line </summary>
-        Jump        = 0x30,
+        Jmp         = 0x30,
         /// <summary> Branch if greater than </summary>
-        Bgt         = 0x31,
+        Jgt         = 0x31,
         /// <summary> Branch if less than </summary>
-        Blt         = 0x32,
+        Jlt         = 0x32,
         /// <summary> Branch if equal </summary>
-        Beq         = 0x33,
+        Jeq         = 0x33,
         /// <summary> Branch if zero </summary>
-        Bz          = 0x34,
+        Jez         = 0x34,
         /// <summary> Branch if true </summary>
-        Bt          = 0x35,
+        Jet         = 0x35,
         /// <summary> Branch if false </summary>
-        Bf          = 0x36,
+        Jef         = 0x36,
         
         // --- BITWISE OPERATIONS --- //
         /// <summary> Bitwise NOT </summary>

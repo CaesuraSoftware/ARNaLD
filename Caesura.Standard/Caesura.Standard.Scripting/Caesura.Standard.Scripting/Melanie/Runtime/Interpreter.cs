@@ -53,7 +53,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public void ParseInstruction(OpCode code, IEnumerable<IMelType> args, Context context)
         {
-            if (code == OpCode.NoOp)
+            if (code == OpCode.Nop)
             {
                 return;
             }

@@ -12,11 +12,15 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Interpreter Environment { get; set; }
         public Stack Stack { get; set; }
         public Stack Arguments { get; set; }
+        public Dictionary<Int64, CallSite<IMelType>> Listing { get; set; }
+        public Int64 ProgramCounter { get; set; }
         
         public Context()
         {
-            this.Stack     = new Stack();
-            this.Arguments = new Stack(3);
+            this.Stack          = new Stack();
+            this.Arguments      = new Stack(3);
+            this.Listing        = new Dictionary<Int64, CallSite<IMelType>>();
+            this.ProgramCounter = 0;
         }
         
         public Context(Interpreter handle) : this()
@@ -42,6 +46,41 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Maybe<IMelType> Pop()
         {
             return this.Stack.Pop();
+        }
+        
+        public void AddCaller(Int64 index, CallSite<IMelType> cs)
+        {
+            this.Listing.Add(index, cs);
+        }
+        
+        public void AddCaller(CallSite<IMelType> cs)
+        {
+            this.Listing.Add(this.Listing.Count + 1, cs);
+        }
+        
+        public void AddCaller(OpCode code)
+        {
+            var cs = new CallSite<IMelType>(code);
+            this.AddCaller(cs);
+        }
+        
+        public void AddCaller(OpCode code, params IMelType[] args)
+        {
+            var cs = new CallSite<IMelType>(code, args);
+            this.AddCaller(cs);
+        }
+        
+        public void VerifyListing()
+        {
+            var num = 0L;
+            foreach (var item in this.Listing)
+            {
+                if (num > item.Key)
+                {
+                    throw new InvalidOperationException("Listing contains out-of-order line numbers.");
+                }
+                num = item.Key;
+            }
         }
     }
 }
