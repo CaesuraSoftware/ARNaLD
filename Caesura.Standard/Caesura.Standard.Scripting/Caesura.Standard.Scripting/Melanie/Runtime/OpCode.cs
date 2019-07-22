@@ -31,10 +31,12 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         Box         = 0x20,
         /// <summary> Unbox a primitive value </summary>
         Unbox       = 0x21,
-        /// <summary> Create a reference to an intrinsic value </summary>
-        Ref         = 0x22,
-        /// <summary> Get an intrinsic value from a reference </summary>
-        Deref       = 0x23,
+        /// <summary> Allocate a new object </summary>
+        New         = 0x22,
+        /// <summary> Place a value inside an object </summary>
+        Store       = 0x23,
+        /// <summary> Get a value from an object </summary>
+        Fetch       = 0x24,
         
         // --- CONTROL FLOW --- //
         /// <summary> Go to a line </summary>
@@ -87,8 +89,6 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         Lock        = 0x57,
         
         // --- FUNCTION CALLING --- //
-        /// <summary> Allocate a new object </summary>
-        New         = 0x60,
         /// <summary> Call a function or invoke an external function </summary>
         Call        = 0x61,
         /// <summary> Define a function </summary>

@@ -82,6 +82,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
     
     public class MelObject : IMelType
     {
+        public Int32 Id { get; set; }
         public Dictionary<String, Object> Fields { get; set; }
         
         public MelObject()

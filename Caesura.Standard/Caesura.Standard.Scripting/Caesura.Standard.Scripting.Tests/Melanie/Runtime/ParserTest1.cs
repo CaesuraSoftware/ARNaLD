@@ -186,7 +186,6 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         public void FuncTest2()
         {
             var interp = new Interpreter();
-            // interp.MainContext.Listing.Add(9999, new CallSite<IMelType>());
             interp.MainContext.ExternalCallSites.Add(new ExtCallSite()
             {
                 Name = "Console.WriteLine(String)",
@@ -207,5 +206,18 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             
             ");
         }
+        
+        // TODO: object implementation:
+        // NEW 0                ; create new object, not on the stack, with ID 0
+        // PUSH "Age"           ; field name
+        // PUSH 10              ; field value
+        // STORE 0              ; pop two arguments (key/value) and put them in this object
+        // ;...
+        // FETCH 0 "Age"        ; push the value of "Age" (10) on the stack (still contained in Object 0)
+        // PUSH 1
+        // ADD                  ; Add 1 to age (11)
+        // PUSH "Age"           ; field name
+        // SWAP                 ; swap key/value
+        // STORE 0              ; store 11 in "Age", overwriting 10
     }
 }
