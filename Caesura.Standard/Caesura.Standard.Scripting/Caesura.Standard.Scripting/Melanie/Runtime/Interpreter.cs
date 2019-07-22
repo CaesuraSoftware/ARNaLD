@@ -7,6 +7,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     using System.Linq;
     using Instructions;
     using Types;
+    using AsmParser;
     
     public class Interpreter
     {
@@ -14,6 +15,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Dictionary<TypeIndicator, IMelType> Types { get; set; }
         public List<Context> Contexts { get; set; }
         public Context MainContext { get; set; }
+        public Parser Parser { get; set; }
         
         public Interpreter()
         {
@@ -44,11 +46,40 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             };
             this.Contexts     = new List<Context>();
             this.MainContext  = new Context(this);
+            this.Parser       = new Parser(this.MainContext);
         }
         
         public Interpreter(RuntimeConfiguration rtc) : this()
         {
             
+        }
+        
+        public void Parse(String lines)
+        {
+            this.Parser.ContextParse(lines);
+        }
+        
+        public void Run(String lines)
+        {
+            this.Parse(lines);
+            this.Run();
+        }
+        
+        public void Run()
+        {
+            foreach (var item in this.MainContext.Listing)
+            {
+                var key = item.Key;
+                var instruction = item.Value;
+                if (instruction.Arguments.Count > 0)
+                {
+                    this.ParseInstruction(instruction.Code, instruction.Arguments);
+                }
+                else
+                {
+                    this.ParseInstruction(instruction.Code);
+                }
+            }
         }
         
         public void ParseInstruction(OpCode code, IEnumerable<IMelType> args, Context context)

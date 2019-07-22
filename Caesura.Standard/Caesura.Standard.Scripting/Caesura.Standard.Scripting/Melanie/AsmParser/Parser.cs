@@ -23,6 +23,15 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             this.ContextHandle = context;
         }
         
+        public void ContextParse(String lines)
+        {
+            var nlines = this.Parse(lines);
+            foreach (var line in nlines)
+            {
+                this.ContextHandle.AddCaller(line);
+            }
+        }
+        
         public IEnumerable<CallSite<IMelType>> Parse(String lines)
         {
             var nlines = lines.Split('\n');
@@ -142,6 +151,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         
         private OpCode GetOpCode(String line)
         {
+            line = line.TrimStart();
             var rawop = String.Empty;
             foreach (var c in line)
             {
@@ -151,7 +161,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 }
                 rawop += c;
             }
-            var success = Enum.TryParse<OpCode>(rawop, out var code);
+            var success = Enum.TryParse<OpCode>(rawop, true, out var code);
             if (!success)
             {
                 throw new UnrecognizedOpcodeException($"Unrecognized operation \"{rawop}\".");
@@ -178,11 +188,22 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         {
             var args = new List<IMelType>(3); // can't have many more args than that
             
+            var hitArgs = false;
             var instr = false;
             var str = String.Empty;
             var index = 0;
             foreach (var c in line)
             {
+                /**/ if (!hitArgs)
+                {
+                    // wait until we go past the instruction and hit the arguments
+                    if (c == ' ')
+                    {
+                        hitArgs = true;
+                    }
+                    continue;
+                }
+                
                 /**/ if (c == '"' && !instr)
                 {
                     // start of string, begin parsing string
