@@ -34,7 +34,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             interp.Run(@"
             001: PUSH 1_000
             002: PUSH 2_000
-            003: JMP 5
+            003: JMP 6
             004: PUSH 43
             005:
             006: ADD

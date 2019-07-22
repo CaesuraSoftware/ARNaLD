@@ -23,12 +23,12 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             /**/ if (argv is MelInt64 argm64)
             {
                 var argi64 = argm64.InternalRepresentation;
-                context.ProgramCounter = argi64;
+                context.ProgramCounter = argi64 - 1;
             }
             else if (argv is MelInt32 argm32)
             {
                 var argi32 = argm32.InternalRepresentation;
-                context.ProgramCounter = argi32;
+                context.ProgramCounter = argi32 - 1;
             }
         }
     }
