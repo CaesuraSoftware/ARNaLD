@@ -14,12 +14,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Stack Arguments { get; set; }
         public Dictionary<Int64, CallSite<IMelType>> Listing { get; set; }
         public Int64 ProgramCounter { get; set; }
+        public List<Int64> CallStack { get; set; }
         
         public Context()
         {
             this.Stack          = new Stack();
             this.Arguments      = new Stack(3);
             this.Listing        = new Dictionary<Int64, CallSite<IMelType>>();
+            this.CallStack      = new List<Int64>();
             this.ProgramCounter = 0;
         }
         
@@ -53,6 +55,24 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 }
                 this.ProgramCounter++;
             }
+        }
+        
+        public void Call(Int64 line)
+        {
+            this.CallStack.Add(this.ProgramCounter);
+            this.ProgramCounter = line - 1; // minus 1, don't skip the line this jumps to
+        }
+        
+        public void ReturnFromCall()
+        {
+            if (this.CallStack.Count == 0)
+            {
+                this.ProgramCounter = this.Listing.Last().Key; // if nothing to return to, exit
+                return;
+            }
+            var line = this.CallStack.Last();
+            this.CallStack.RemoveAt(this.CallStack.Count - 1);
+            this.ProgramCounter = line;
         }
         
         public void PushArgument(IMelType item)

@@ -31,6 +31,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { OpCode.Rem            , new Ins_Rem        (this) },
                 
                 { OpCode.Jmp            , new Ins_Jmp        (this) },
+                { OpCode.Call           , new Ins_Call       (this) },
+                { OpCode.Ret            , new Ins_Ret        (this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {

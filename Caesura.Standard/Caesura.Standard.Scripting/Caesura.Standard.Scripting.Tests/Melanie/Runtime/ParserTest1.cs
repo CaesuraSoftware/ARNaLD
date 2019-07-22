@@ -138,5 +138,34 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
                 ");
             });
         }
+        
+        [Fact]
+        public void FuncTest1()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            001: JMP 70 ; Start of program
+            
+            ; Mul(x,y)
+            020: MUL
+            030: RET
+            
+            ; Sub(x,y)
+            040: SUB
+            050: RET
+            
+            ; Main
+            070: PUSH 3
+            080: PUSH 20
+            090: CALL 20 ; Mul
+            100: PUSH 10
+            110: CALL 40 ; Sub
+            120: RET
+            
+            ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelInt32;
+            Assert.True(r.InternalRepresentation == 50);
+        }
     }
 }
