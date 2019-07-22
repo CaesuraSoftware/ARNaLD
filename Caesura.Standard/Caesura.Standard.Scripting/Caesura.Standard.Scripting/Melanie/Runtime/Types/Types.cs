@@ -30,37 +30,101 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
         }
     }
     
+    public class MelString : MelObject, IMelType<String>
+    {
+        private String _melStringRep = "__MelString";
+        public String InternalRepresentation
+        { 
+            get
+            {
+                if (this.Fields.ContainsKey(this._melStringRep))
+                {
+                    var rawmel = this.Fields[this._melStringRep];
+                    var melstr = rawmel as String;
+                    return melstr;
+                }
+                return null;
+            }
+            set
+            {
+                if (this.Fields.ContainsKey(this._melStringRep))
+                {
+                    this.Fields.Remove(this._melStringRep);
+                }
+                this.Fields.Add(this._melStringRep, value);
+            }
+        }
+        
+        public MelString()
+        {
+            
+        }
+        
+        public MelString(String str)
+        {
+            this.InternalRepresentation = str;
+        }
+        
+        public override Boolean Convert(Int32 size, Byte[] bytes)
+        {
+            // TODO:
+            throw new NotImplementedException();
+        }
+        
+        public override IMelType Copy()
+        {
+            var mtb = base.Copy();
+            var mt = mtb as MelString;
+            mt.InternalRepresentation = this.InternalRepresentation;
+            return mt;
+        }
+    }
+    
     public class MelObject : IMelType
     {
-        public Dictionary<String, IMelType> Fields { get; set; }
+        public Dictionary<String, Object> Fields { get; set; }
         
         public MelObject()
         {
-            this.Fields = new Dictionary<String, IMelType>();
+            this.Fields = new Dictionary<String, Object>();
         }
         
         public MelObject(MelObject obj) : this()
         {
             foreach (var f in obj.Fields)
             {
-                this.Fields.Add(f.Key, f.Value.Copy());
+                if (f.Value is IMelType mt)
+                {
+                    this.Fields.Add(f.Key, mt.Copy());
+                }
+                else
+                {
+                    this.Fields.Add(f.Key, f.Value);
+                }
             }
         }
         
-        public MelObject(Dictionary<String, IMelType> fields) : this()
+        public MelObject(Dictionary<String, Object> fields) : this()
         {
             foreach (var f in fields)
             {
-                this.Fields.Add(f.Key, f.Value.Copy());
+                if (f.Value is IMelType mt)
+                {
+                    this.Fields.Add(f.Key, mt.Copy());
+                }
+                else
+                {
+                    this.Fields.Add(f.Key, f.Value);
+                }
             }
         }
         
-        public Boolean Convert(Int32 size, Byte[] bytes)
+        public virtual Boolean Convert(Int32 size, Byte[] bytes)
         {
             throw new NotImplementedException();
         }
         
-        public IMelType Copy()
+        public virtual IMelType Copy()
         {
             return new MelObject(this.Fields);
         }

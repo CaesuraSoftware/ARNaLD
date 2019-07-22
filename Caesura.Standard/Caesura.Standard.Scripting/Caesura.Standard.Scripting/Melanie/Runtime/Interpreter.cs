@@ -37,8 +37,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { TypeIndicator.Double  , new MelDouble      ()     },
                 { TypeIndicator.Boolean , new MelBoolean     ()     },
                 { TypeIndicator.Object  , new MelObject      ()     },
-                { TypeIndicator.String  , new MelObject      ()     },
                 { TypeIndicator.Array   , new MelObject      ()     },
+                { TypeIndicator.String  , new MelString      ()     },
                 { TypeIndicator.Pointer , new MelPointer     ()     },
                 { TypeIndicator.Func    , new MelFunc        ()     },
             };
