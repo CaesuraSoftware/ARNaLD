@@ -246,6 +246,20 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                         str = String.Empty;
                     }
                 }
+                else if (escap && instr)
+                {
+                    // general escape character handling
+                    /**/ if (c == 'n')
+                    {
+                        str += '\n';
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"Cannot escape character '{c}'");
+                    }
+                    // TODO: more escape codes here
+                    escap = false;
+                }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (c == ';' && !instr)
                      || (index == line.Length - 1))
