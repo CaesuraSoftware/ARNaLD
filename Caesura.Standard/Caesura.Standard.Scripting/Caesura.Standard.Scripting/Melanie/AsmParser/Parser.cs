@@ -280,28 +280,35 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             {
                 case '~':
                     // TODO: binary
-                    break;
+                    throw new NotImplementedException("~");
                 case 'H':
                     // TODO: hex (convert to int32/64)
-                    break;
+                    throw new NotImplementedException("H");
                 case 'B':
                     // TODO: Int8
-                    break;
+                    throw new NotImplementedException("B");
                 case 'S':
                     // TODO: Int16
-                    break;
+                    throw new NotImplementedException("S");
                 case 'I':
-                    // TODO: Int32
+                    {
+                        var i32s = Int32.TryParse(numstr, out var i32);
+                        if (i32s)
+                        {
+                            ret = new MelInt32(i32);
+                            success = true;
+                        }
+                    }
                     break;
                 case 'L':
                     // TODO: Int64
-                    break;
+                    throw new NotImplementedException("L");
                 case 'F':
                     // TODO: Single
-                    break;
+                    throw new NotImplementedException("F");
                 case 'D':
                     // TODO: Double
-                    break;
+                    throw new NotImplementedException("D");
                 default:
                     throw new InvalidOperationException($"Unrecognized number signifier \"{indicator}\"");
             }
