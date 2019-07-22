@@ -201,8 +201,20 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 {
                     // end of non-string argument or end of arguments
                     // if last argument isn't a string.
-                    var num_arg = this.ParseNumberArgument(str);
-                    args.Add(num_arg);
+                    IMelType arg = default;
+                    if (str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
+                    {
+                        arg = this.ParseNumberArgument(str);
+                    }
+                    else
+                    {
+                        arg = this.ParseSymbolArgument(str);
+                    }
+                    
+                    if (!(arg is null))
+                    {
+                        args.Add(arg);
+                    }
                     str = String.Empty;
                 }
                 else
@@ -218,6 +230,81 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         
         private IMelType ParseNumberArgument(String arg)
         {
+            var numstr = String.Empty;
+            var hasDot = false;
+            var indicator = 'I';
+            foreach (var c in arg)
+            {
+                /**/ if (Int32.TryParse(c.ToString(), out var num))
+                {
+                    numstr += c;
+                }
+                else if (c == '_')
+                {
+                    // allow underscores in numbers
+                    continue;
+                }
+                else if (c == '.')
+                {
+                    if (!hasDot)
+                    {
+                        numstr += c;
+                        hasDot = true;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Number has two dots");
+                    }
+                }
+                else
+                {
+                    // end of number, check indicator
+                    indicator = Char.ToUpper(c);
+                    break;
+                }
+            }
+            
+            var success = false;
+            IMelType ret = default;
+            switch (indicator)
+            {
+                case 'H':
+                    // TODO: hex (convert to int32/64)
+                    break;
+                case 'B':
+                    // TODO: Int8
+                    break;
+                case 'S':
+                    // TODO: Int16
+                    break;
+                case 'I':
+                    // TODO: Int32
+                    break;
+                case 'L':
+                    // TODO: Int64
+                    break;
+                case 'F':
+                    // TODO: Single
+                    break;
+                case 'D':
+                    // TODO: Double
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unrecognized number signifier \"{indicator}\"");
+            }
+            
+            if (success)
+            {
+                return ret;
+            }
+            
+            throw new InvalidOperationException($"Unknown error parsing number \"{arg}\"");
+        }
+        
+        private IMelType ParseSymbolArgument(String arg)
+        {
+            // TODO: not sure what a symbol could do in the
+            // instruction set yet, possibly nothing.
             throw new NotImplementedException();
         }
     }
