@@ -36,12 +36,15 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             _0020: PUSH 43 ;; 43
             __0030: ADD;test
             0045: PUSH 1_000;test
-            __0050: SUB
+            __0050: SUB ;test;;
             ");
             var rm = interp.MainContext.Stack.Peek();
             var r = rm.Value as MelInt32;
             Assert.True(r.InternalRepresentation == 43);
         }
+        
+        // TODO: have all of these throw more specific instructions
+        // with line numbers for debugging.
         
         [Fact]
         public void OrderTest1()
@@ -55,6 +58,39 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
                 006: ADD
                 004: PUSH 1_000
                 005: SUB
+                ");
+            });
+        }
+        
+        [Fact]
+        public void OrderTest2()
+        {
+            var interp = new Interpreter();
+            Assert.Throws(typeof(ArgumentException), () =>
+            {
+                interp.Run(@"
+                001: PUSH 1_000
+                002: PUSH 43
+                003: ADD
+                003: PUSH 1_000
+                005: SUB
+                ");
+            });
+        }
+        
+        [Fact]
+        public void BadInstructionTest1()
+        {
+            var interp = new Interpreter();
+            Assert.Throws(typeof(InvalidOperationException), () =>
+            {
+                interp.Run(@"
+                001: PUSH 1_000
+                002: PUSH 43
+                003: ADD
+                004: PUSH 1_000
+                005: SUB
+                006: SUB
                 ");
             });
         }
