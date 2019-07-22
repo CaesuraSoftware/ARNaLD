@@ -187,7 +187,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 {
                     // start of string, begin parsing string
                     instr = true;
-                    continue;
                 }
                 else if (c == '"' && instr)
                 {
@@ -196,16 +195,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     var str_arg = new MelString(str);
                     args.Add(str_arg);
                     str = String.Empty;
-                    continue;
-                }
-                else if (instr)
-                {
-                    str += c;
-                }
-                else if (Char.IsWhiteSpace(c) && instr)
-                {
-                    // whitespace inside a string, continue.
-                    continue;
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (index == line.Length - 1))
@@ -215,7 +204,11 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     var num_arg = this.ParseNumberArgument(str);
                     args.Add(num_arg);
                     str = String.Empty;
-                    continue;
+                }
+                else
+                {
+                    // part of the argument, continue adding
+                    str += c;
                 }
                 index++;
             }
