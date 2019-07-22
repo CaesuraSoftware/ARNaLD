@@ -28,6 +28,33 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.Environment = handle;
         }
         
+        public void Run()
+        {
+            var last = this.Listing.Last();
+            while (true)
+            {
+                if (this.Listing.ContainsKey(this.ProgramCounter))
+                {
+                    var cs = this.Listing[this.ProgramCounter];
+                    var instruction = cs.Code;
+                    if (cs.Arguments.Count > 0)
+                    {
+                        this.Environment.ParseInstruction(cs.Code, cs.Arguments);
+                    }
+                    else
+                    {
+                        this.Environment.ParseInstruction(cs.Code);
+                    }
+                }
+                
+                if (this.ProgramCounter >= last.Key)
+                {
+                    break;
+                }
+                this.ProgramCounter++;
+            }
+        }
+        
         public void PushArgument(IMelType item)
         {
             this.Arguments.Push(item);

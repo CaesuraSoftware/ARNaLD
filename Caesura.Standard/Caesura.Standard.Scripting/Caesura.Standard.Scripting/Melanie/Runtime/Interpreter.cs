@@ -70,29 +70,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public void Run()
         {
-            var last = this.MainContext.Listing.Last();
-            while (true)
-            {
-                if (this.MainContext.Listing.ContainsKey(this.MainContext.ProgramCounter))
-                {
-                    var cs = this.MainContext.Listing[this.MainContext.ProgramCounter];
-                    var instruction = cs.Code;
-                    if (cs.Arguments.Count > 0)
-                    {
-                        this.ParseInstruction(cs.Code, cs.Arguments);
-                    }
-                    else
-                    {
-                        this.ParseInstruction(cs.Code);
-                    }
-                }
-                
-                if (this.MainContext.ProgramCounter >= last.Key)
-                {
-                    break;
-                }
-                this.MainContext.ProgramCounter++;
-            }
+            this.MainContext.Run();
         }
         
         public void ParseInstruction(OpCode code, IEnumerable<IMelType> args, Context context)
