@@ -61,10 +61,49 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             }
             if (!line.Contains(':'))
             {
-                throw new ArgumentException("Line does not contain a colon");
+                throw new ArgumentException("Line does not contain a line number indicator (colon)");
             }
             
+            var lineNumber = this.GetLineNumber(line);
+            var rawLine = this.GetLineAfterNumber(line);
+            
+            
+            
             throw new NotImplementedException();
+        }
+        
+        private Int64 GetLineNumber(String line)
+        {
+            var linenums = String.Empty;
+            var linenum = 0L;
+            foreach (var c in line)
+            {
+                /**/ if (Int32.TryParse(c.ToString(), out var num))
+                {
+                    linenums += c;
+                }
+                else if (c == ':')
+                {
+                    break;
+                }
+                else
+                {
+                    throw new ArgumentException("Line did not start with a valid line number.");
+                }
+            }
+            var success = Int64.TryParse(linenums, out linenum);
+            if (!success)
+            {
+                throw new ArgumentException("Line did not start with a valid line number.");
+            }
+            return linenum;
+        }
+        
+        private String GetLineAfterNumber(String line)
+        {
+            var index = line.IndexOf(':');
+            var nline = line.Substring(index + 1);
+            return nline;
         }
     }
 }
