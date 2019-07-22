@@ -43,9 +43,6 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             Assert.True(r.InternalRepresentation == 43);
         }
         
-        // TODO: have all of these throw more specific instructions
-        // with line numbers for debugging.
-        
         [Fact]
         public void OrderTest1()
         {
