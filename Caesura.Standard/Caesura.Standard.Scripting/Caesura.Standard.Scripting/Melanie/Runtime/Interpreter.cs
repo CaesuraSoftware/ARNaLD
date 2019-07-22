@@ -13,6 +13,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     {
         public Dictionary<OpCode, BaseInstruction> Instructions { get; set; }
         public Dictionary<TypeIndicator, IMelType> Types { get; set; }
+        public Dictionary<Int32, MelObject> Objects { get; set; }
         public List<Context> Contexts { get; set; }
         public Context MainContext { get; set; }
         public Parser Parser { get; set; }
@@ -33,6 +34,11 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { OpCode.Jmp            , new Ins_Jmp        (this) },
                 { OpCode.Call           , new Ins_Call       (this) },
                 { OpCode.Ret            , new Ins_Ret        (this) },
+                
+                { OpCode.New            , new Ins_New        (this) },
+                { OpCode.Fetch          , new Ins_Fetch      (this) },
+                { OpCode.Store          , new Ins_Store      (this) },
+                { OpCode.Delete         , new Ins_Delete     (this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
@@ -49,6 +55,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { TypeIndicator.Pointer , new MelPointer     ()     },
                 { TypeIndicator.Func    , new MelFunc        ()     },
             };
+            this.Objects      = new Dictionary<Int32, MelObject>();
             this.Contexts     = new List<Context>();
             this.MainContext  = new Context(this);
             this.Parser       = new Parser(this.MainContext);

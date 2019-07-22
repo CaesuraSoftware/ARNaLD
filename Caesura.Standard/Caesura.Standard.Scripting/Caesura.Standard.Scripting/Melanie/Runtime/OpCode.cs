@@ -37,6 +37,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         Store       = 0x23,
         /// <summary> Get a value from an object </summary>
         Fetch       = 0x24,
+        /// <summary> Delete an object </summary>
+        Delete      = 0x25,
         
         // --- CONTROL FLOW --- //
         /// <summary> Go to a line </summary>
