@@ -213,7 +213,8 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         // PUSH 10              ; field value
         // STORE 0              ; pop two arguments (key/value) and put them in this object
         // ;...
-        // FETCH 0 "Age"        ; push the value of "Age" (10) on the stack (still contained in Object 0)
+        // PUSH "Age"           ; Push field name
+        // FETCH 0              ; push ID 0's field's value on to the stack (preserving the original field)
         // PUSH 1
         // ADD                  ; Add 1 to age (11)
         // PUSH "Age"           ; field name
