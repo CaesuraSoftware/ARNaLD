@@ -67,6 +67,34 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             var lineNumber = this.GetLineNumber(line);
             var rawLine = this.GetLineAfterNumber(line);
             
+            if (String.IsNullOrEmpty(rawLine) || String.IsNullOrWhiteSpace(rawLine))
+            {
+                // line contained a line number but no opcode, treat it as a no-op.
+                var nopcs = new CallSite<IMelType>(OpCode.Nop);
+                return Maybe<CallSite<IMelType>>.Some(nopcs);
+            }
+            
+            var opCode = this.GetOpCode(rawLine);
+            
+            if (opCode == OpCode.Nop)
+            {
+                // no-op does not need arguments, so ignore this rest of the text
+                // and just return a no-op.
+                var nopcs = new CallSite<IMelType>(OpCode.Nop);
+                return Maybe<CallSite<IMelType>>.Some(nopcs);
+            }
+            
+            var rawLineNoOpCode = this.GetLineAfterOpCode(rawLine);
+            
+            if (String.IsNullOrEmpty(rawLineNoOpCode)
+            || String.IsNullOrWhiteSpace(rawLineNoOpCode)
+            || rawLineNoOpCode.Trim().StartsWith(";"))
+            {
+                // line has no arguments, return the opcode.
+                var opcs = new CallSite<IMelType>(opCode);
+                return Maybe<CallSite<IMelType>>.Some(opcs);
+            }
+            
             
             
             throw new NotImplementedException();
@@ -107,6 +135,40 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         {
             var index = line.IndexOf(':');
             var nline = line.Substring(index + 1);
+            return nline;
+        }
+        
+        private OpCode GetOpCode(String line)
+        {
+            var rawop = String.Empty;
+            foreach (var c in line)
+            {
+                if (Char.IsWhiteSpace(c) || c == ';')
+                {
+                    break;
+                }
+                rawop += c;
+            }
+            var success = Enum.TryParse<OpCode>(rawop, out var code);
+            if (!success)
+            {
+                throw new UnrecognizedOpcodeException($"Unrecognized operation \"{rawop}\".");
+            }
+            return code;
+        }
+        
+        private String GetLineAfterOpCode(String line)
+        {
+            var rawop = String.Empty;
+            foreach (var c in line)
+            {
+                if (Char.IsWhiteSpace(c) || c == ';')
+                {
+                    break;
+                }
+                rawop += c;
+            }
+            var nline = line.Substring(rawop.Length + 1);
             return nline;
         }
     }
