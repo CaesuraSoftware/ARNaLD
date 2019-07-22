@@ -28,6 +28,18 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         }
         
         [Fact]
+        public void StrTest1()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            001: PUSH ""Hello, \\ \"" world!""
+            ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelString;
+            Assert.True(r.InternalRepresentation == "Hello, \\ \" world!");
+        }
+        
+        [Fact]
         public void JumpTest1()
         {
             var interp = new Interpreter();

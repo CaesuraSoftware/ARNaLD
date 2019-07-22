@@ -186,12 +186,15 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             return nline;
         }
         
+        // TODO: make sure escape characters can only escape an
+        // approved list of characters
         private IEnumerable<IMelType> GetArguments(String line)
         {
             var args = new List<IMelType>(3); // can't have many more args than that
             
             var hitArgs = false;
             var instr = false;
+            var escap = false;
             var str = String.Empty;
             var index = 0;
             foreach (var c in line)
@@ -203,6 +206,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     {
                         hitArgs = true;
                     }
+                    index++;
                     continue;
                 }
                 
@@ -211,13 +215,36 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     // start of string, begin parsing string
                     instr = true;
                 }
+                else if (c =='\\' && instr)
+                {
+                    if (escap)
+                    {
+                        // we're escaping a backslash, so add it
+                        escap = false;
+                        str += c;
+                    }
+                    else
+                    {
+                        // switch to escape mode
+                        escap = true;
+                    }
+                }
                 else if (c == '"' && instr)
                 {
-                    // end of string, parse it.
-                    instr = false;
-                    var str_arg = new MelString(str);
-                    args.Add(str_arg);
-                    str = String.Empty;
+                    if (escap)
+                    {
+                        // we're escaping the current character, so just continue to add it.
+                        escap = false;
+                        str += c;
+                    }
+                    else
+                    {
+                        // end of string, parse it.
+                        instr = false;
+                        var str_arg = new MelString(str);
+                        args.Add(str_arg);
+                        str = String.Empty;
+                    }
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (c == ';' && !instr)
