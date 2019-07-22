@@ -220,6 +220,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     str = String.Empty;
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
+                     || (c == ';' && !instr)
                      || (index == line.Length - 1))
                 {
                     // end of non-string argument or end of arguments
@@ -228,10 +229,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     if (str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
                     {
                         arg = this.ParseNumberArgument(str);
-                    }
-                    else
-                    {
-                        arg = this.ParseSymbolArgument(str);
                     }
                     
                     if (!(arg is null))

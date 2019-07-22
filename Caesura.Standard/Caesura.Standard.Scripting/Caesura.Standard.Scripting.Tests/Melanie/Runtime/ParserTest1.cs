@@ -32,10 +32,10 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         {
             var interp = new Interpreter();
             interp.Run(@"
-            _0010: PUSH 1_000
-            _0020: PUSH 43
-            __0030: ADD
-            0045: PUSH 1_000
+            _0010: PUSH 1_000 ; 1000
+            _0020: PUSH 43 ;; 43
+            __0030: ADD;test
+            0045: PUSH 1_000;test
             __0050: SUB
             ");
             var rm = interp.MainContext.Stack.Peek();
