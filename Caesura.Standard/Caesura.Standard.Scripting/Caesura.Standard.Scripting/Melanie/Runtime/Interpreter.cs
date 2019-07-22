@@ -23,11 +23,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             {
                 { OpCode.Push           , new Ins_Push       (this) },
                 { OpCode.Pop            , new Ins_Pop        (this) },
+                
                 { OpCode.Add            , new Ins_Add        (this) },
                 { OpCode.Sub            , new Ins_Sub        (this) },
                 { OpCode.Div            , new Ins_Div        (this) },
                 { OpCode.Mul            , new Ins_Mul        (this) },
                 { OpCode.Rem            , new Ins_Rem        (this) },
+                
+                { OpCode.Jmp            , new Ins_Jmp        (this) },
             };
             this.Types        = new Dictionary<TypeIndicator, IMelType>()
             {
@@ -67,18 +70,28 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public void Run()
         {
-            foreach (var item in this.MainContext.Listing)
+            var last = this.MainContext.Listing.Last();
+            while (true)
             {
-                var key = item.Key;
-                var instruction = item.Value;
-                if (instruction.Arguments.Count > 0)
+                if (this.MainContext.Listing.ContainsKey(this.MainContext.ProgramCounter))
                 {
-                    this.ParseInstruction(instruction.Code, instruction.Arguments);
+                    var cs = this.MainContext.Listing[this.MainContext.ProgramCounter];
+                    var instruction = cs.Code;
+                    if (cs.Arguments.Count > 0)
+                    {
+                        this.ParseInstruction(cs.Code, cs.Arguments);
+                    }
+                    else
+                    {
+                        this.ParseInstruction(cs.Code);
+                    }
                 }
-                else
+                
+                if (this.MainContext.ProgramCounter >= last.Key)
                 {
-                    this.ParseInstruction(instruction.Code);
+                    break;
                 }
+                this.MainContext.ProgramCounter++;
             }
         }
         
