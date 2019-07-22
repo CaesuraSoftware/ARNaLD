@@ -86,6 +86,10 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 {
                     break;
                 }
+                else if (Char.IsWhiteSpace(c))
+                {
+                    continue;
+                }
                 else
                 {
                     throw new ArgumentException("Line did not start with a valid line number.");
