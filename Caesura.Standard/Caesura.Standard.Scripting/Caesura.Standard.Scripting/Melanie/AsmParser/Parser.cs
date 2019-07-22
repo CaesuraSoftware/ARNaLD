@@ -281,6 +281,13 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     }
                     escap = false;
                 }
+                else if (c == '*' && !instr)
+                {
+                    // argument is to pop a value from the stack
+                    var drarg = new MelString("*");
+                    args.Add(drarg);
+                    str = String.Empty;
+                }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (c == ';' && !instr)
                      || (index == line.Length - 1))
