@@ -305,6 +305,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                         args.Add(arg);
                     }
                     str = String.Empty;
+                    break;
                 }
                 else
                 {

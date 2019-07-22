@@ -57,14 +57,32 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         }
         
         [Fact]
-        public void AddTest2()
+        public void JumpTest2()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            001: PUSH 1_000
+            002: PUSH 2_000
+            003: PUSH 6
+            004: JMP *
+            005: PUSH 43
+            006:
+            007: ADD
+            ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelInt32;
+            Assert.True(r.InternalRepresentation == 3_000);
+        }
+        
+        [Fact]
+        public void SyntaxTest1()
         {
             var interp = new Interpreter();
             interp.Run(@"
             _0010: PUSH 1_000 ; 1000
             _0020: PUSH 43 ;; 43
             __0030: ADD;test
-            0045: PUSH 1_000;test
+            0045: PUSH 1_000;*test
             __0050: SUB ;test;;
             ");
             var rm = interp.MainContext.Stack.Peek();
