@@ -114,7 +114,8 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 {
                     break;
                 }
-                else if (Char.IsWhiteSpace(c))
+                else if (Char.IsWhiteSpace(c)
+                     ||  c == '_')
                 {
                     continue;
                 }
