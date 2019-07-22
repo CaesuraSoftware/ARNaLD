@@ -285,30 +285,47 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     // TODO: hex (convert to int32/64)
                     throw new NotImplementedException("H");
                 case 'B':
-                    // TODO: Int8
-                    throw new NotImplementedException("B");
-                case 'S':
-                    // TODO: Int16
-                    throw new NotImplementedException("S");
-                case 'I':
+                    if (Byte.TryParse(numstr, out var b))
                     {
-                        var i32s = Int32.TryParse(numstr, out var i32);
-                        if (i32s)
-                        {
-                            ret = new MelInt32(i32);
-                            success = true;
-                        }
+                        ret = new MelInt8(b);
+                        success = true;
+                    }
+                    break;
+                case 'S':
+                    if (Int16.TryParse(numstr, out var i16))
+                    {
+                        ret = new MelInt16(i16);
+                        success = true;
+                    }
+                    break;
+                case 'I':
+                    if (Int32.TryParse(numstr, out var i32))
+                    {
+                        ret = new MelInt32(i32);
+                        success = true;
                     }
                     break;
                 case 'L':
-                    // TODO: Int64
-                    throw new NotImplementedException("L");
+                    if (Int64.TryParse(numstr, out var i64))
+                    {
+                        ret = new MelInt64(i64);
+                        success = true;
+                    }
+                    break;
                 case 'F':
-                    // TODO: Single
-                    throw new NotImplementedException("F");
+                    if (Single.TryParse(numstr, out var s))
+                    {
+                        ret = new MelSingle(s);
+                        success = true;
+                    }
+                    break;
                 case 'D':
-                    // TODO: Double
-                    throw new NotImplementedException("D");
+                    if (Double.TryParse(numstr, out var d))
+                    {
+                        ret = new MelDouble(d);
+                        success = true;
+                    }
+                    break;
                 default:
                     throw new InvalidOperationException($"Unrecognized number signifier \"{indicator}\"");
             }
