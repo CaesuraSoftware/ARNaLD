@@ -207,18 +207,47 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             ");
         }
         
-        // TODO: object implementation:
-        // NEW 0                ; create new object, not on the stack, with ID 0
-        // PUSH "Age"           ; field name
-        // PUSH 10              ; field value
-        // STORE 0              ; pop two arguments (key/value) and put them in this object
-        // ;...
-        // PUSH "Age"           ; Push field name
-        // FETCH 0              ; push ID 0's field's value on to the stack (preserving the original field)
-        // PUSH 1
-        // ADD                  ; Add 1 to age (11)
-        // PUSH "Age"           ; field name
-        // SWAP                 ; swap key/value
-        // STORE 0              ; store 11 in "Age", overwriting 10
+        [Fact]
+        public void ObjectTest1()
+        {
+            var interp = new Interpreter();
+            interp.MainContext.ExternalCallSites.Add(new ExtCallSite()
+            {
+                Name = "Console.WriteLine(String/Int32)",
+                Caller = (context) => 
+                {
+                    var pop = context.Environment.Instructions[OpCode.Pop];
+                    pop.Execute(context);
+                    var marg = context.PopArgument();
+                    /**/ if (marg.Value is MelString ms)
+                    {
+                        this.WriteLine(ms.InternalRepresentation);
+                    }
+                    else if (marg.Value is MelInt32 m32)
+                    {
+                        this.WriteLine(m32.InternalRepresentation.ToString());
+                    }
+                },
+            });
+            interp.Run(@"
+            
+            010: NEW 0
+            020: PUSH ""Age""
+            030: PUSH 10
+            040: STORE 0
+            050: PUSH ""Age""
+            060: FETCH 0
+            070: PUSH 1
+            080: ADD
+            090: PUSH ""Age""
+            100: SWAP
+            110: STORE 0
+            120: PUSH ""Age""
+            130: FETCH 0
+            140: CALL [Console.WriteLine(String/Int32)]
+            150: DELETE 0
+            
+            ");
+        }
     }
 }

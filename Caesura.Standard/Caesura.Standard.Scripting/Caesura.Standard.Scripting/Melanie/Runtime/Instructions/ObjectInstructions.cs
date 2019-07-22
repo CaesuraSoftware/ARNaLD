@@ -74,7 +74,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Invalid argument for FETCH");
+                    throw new InvalidOperationException($"Invalid argument for FETCH: Needs an Object ID");
                 }
             }
             else if (arg is MelInt32 m32)
@@ -92,15 +92,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                         if (obj.Fields.ContainsKey(name))
                         {
                             var push = this.GetInstruction(OpCode.Push, context);
-                            var item = obj.Fields[name] as IMelType;
-                            if (!(item is null))
+                            if (obj.Fields[name] is IMelType item)
                             {
                                 context.PushArgument(item);
                                 push();
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Invalid argument for FETCH");
+                                throw new InvalidOperationException($"Invalid argument for FETCH: Item is foreign type");
                             }
                         }
                         else
@@ -110,7 +109,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Invalid argument for FETCH");
+                        throw new InvalidOperationException($"Invalid argument for FETCH: Too few arguments");
                     }
                 }
                 else
@@ -120,7 +119,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             }
             else
             {
-                throw new InvalidOperationException($"Invalid argument for FETCH");
+                throw new InvalidOperationException($"Invalid argument for FETCH: Invalid type for Object ID");
             }
         }
     }
@@ -148,7 +147,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Invalid argument for STORE");
+                    throw new InvalidOperationException($"Invalid argument for STORE: Needs an Object ID");
                 }
             }
             else if (arg is MelInt32 m32)
@@ -169,11 +168,11 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                         {
                             obj.Fields.Remove(name);
                         }
-                        obj.Fields.Add(name, mval);
+                        obj.Fields.Add(name, mval.Value);
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Invalid argument for STORE");
+                        throw new InvalidOperationException($"Invalid argument for STORE: Too few arguments");
                     }
                 }
                 else
@@ -183,7 +182,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             }
             else
             {
-                throw new InvalidOperationException($"Invalid argument for STORE");
+                throw new InvalidOperationException($"Invalid argument for STORE: Invalid type for Object ID");
             }
         }
     }
@@ -211,7 +210,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Invalid argument for DELETE");
+                    throw new InvalidOperationException($"Invalid argument for DELETE: Needs an Object ID");
                 }
             }
             else if (arg is MelInt32 m32)
@@ -228,7 +227,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             }
             else
             {
-                throw new InvalidOperationException($"Invalid argument for DELETE");
+                throw new InvalidOperationException($"Invalid argument for DELETE: Invalid type for Object ID");
             }
         }
     }
