@@ -95,9 +95,10 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 return Maybe<CallSite<IMelType>>.Some(opcs);
             }
             
-            
-            
-            throw new NotImplementedException();
+            var args = this.GetArguments(rawLineNoOpCode);
+            var aopcs = new CallSite<IMelType>(opCode);
+            aopcs.Arguments = args.ToList();
+            return Maybe<CallSite<IMelType>>.Some(aopcs);
         }
         
         private Int64 GetLineNumber(String line)
@@ -171,6 +172,11 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             }
             var nline = line.Substring(rawop.Length + 1);
             return nline;
+        }
+        
+        private IEnumerable<IMelType> GetArguments(String line)
+        {
+            throw new NotImplementedException();
         }
     }
 }
