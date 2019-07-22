@@ -32,11 +32,11 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         {
             var interp = new Interpreter();
             interp.Run(@"
-            001: PUSH 1_000
-            002: PUSH 43
-            003: ADD
-            004: PUSH 1_000
-            005: SUB
+            _0010: PUSH 1_000
+            _0020: PUSH 43
+            __0030: ADD
+            0045: PUSH 1_000
+            __0050: SUB
             ");
             var rm = interp.MainContext.Stack.Peek();
             var r = rm.Value as MelInt32;
