@@ -232,7 +232,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
         {
             var numstr = String.Empty;
             var hasDot = false;
-            var indicator = 'I';
+            var indicator = 'I'; // default to a 32-bit integer
             foreach (var c in arg)
             {
                 /**/ if (Int32.TryParse(c.ToString(), out var num))
@@ -249,6 +249,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     if (!hasDot)
                     {
                         numstr += c;
+                        indicator = 'F'; // implicitly make this number a Single if no explicit indicator
                         hasDot = true;
                     }
                     else
@@ -264,10 +265,22 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 }
             }
             
+            if (numstr.EndsWith("."))
+            {
+                throw new InvalidOperationException("Number cannot end in a dot");
+            }
+            if (numstr.Contains(".") && !(indicator == 'F' || indicator == 'D'))
+            {
+                throw new InvalidOperationException("Number must be a Single or Double if containing a dot");
+            }
+            
             var success = false;
             IMelType ret = default;
             switch (indicator)
             {
+                case '~':
+                    // TODO: binary
+                    break;
                 case 'H':
                     // TODO: hex (convert to int32/64)
                     break;
