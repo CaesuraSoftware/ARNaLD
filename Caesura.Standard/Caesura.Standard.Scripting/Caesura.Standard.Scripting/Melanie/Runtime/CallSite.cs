@@ -9,6 +9,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     
     public class CallSite<T> where T : IMelType
     {
+        public Int64 LineNumber { get; set; }
         public OpCode Code { get; set; }
         private List<T> _arguments;
         public List<T> Arguments 

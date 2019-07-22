@@ -28,8 +28,9 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             var nlines = this.Parse(lines);
             foreach (var line in nlines)
             {
-                this.ContextHandle.AddCaller(line);
+                this.ContextHandle.AddCaller(line.LineNumber, line);
             }
+            this.ContextHandle.VerifyListing();
         }
         
         public IEnumerable<CallSite<IMelType>> Parse(String lines)
@@ -52,9 +53,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             }
             return css;
         }
-        
-        // TODO: need to redo this, need to account for strings and
-        // strings containing operators (like colon for the line number syntax)
         
         public Maybe<CallSite<IMelType>> ParseLine(String line)
         {
@@ -80,6 +78,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             {
                 // line contained a line number but no opcode, treat it as a no-op.
                 var nopcs = new CallSite<IMelType>(OpCode.Nop);
+                nopcs.LineNumber = lineNumber;
                 return Maybe<CallSite<IMelType>>.Some(nopcs);
             }
             
@@ -90,6 +89,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 // no-op does not need arguments, so ignore this rest of the text
                 // and just return a no-op.
                 var nopcs = new CallSite<IMelType>(OpCode.Nop);
+                nopcs.LineNumber = lineNumber;
                 return Maybe<CallSite<IMelType>>.Some(nopcs);
             }
             
@@ -101,11 +101,13 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             {
                 // line has no arguments, return the opcode.
                 var opcs = new CallSite<IMelType>(opCode);
+                opcs.LineNumber = lineNumber;
                 return Maybe<CallSite<IMelType>>.Some(opcs);
             }
             
             var args = this.GetArguments(rawLineNoOpCode);
             var aopcs = new CallSite<IMelType>(opCode);
+            aopcs.LineNumber = lineNumber;
             aopcs.Arguments = args.ToList();
             return Maybe<CallSite<IMelType>>.Some(aopcs);
         }
