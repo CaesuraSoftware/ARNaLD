@@ -29,6 +29,11 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     pop();
                     this.Execute(context); // recurse
                 }
+                else if (argms.StartsWith("[") && argms.EndsWith("]"))
+                {
+                    var extarg = argms.Trim('[', ']', ' ');
+                    context.ExternalCall(extarg);
+                }
                 else
                 {
                     throw new InvalidOperationException("Invalid CALL argument");

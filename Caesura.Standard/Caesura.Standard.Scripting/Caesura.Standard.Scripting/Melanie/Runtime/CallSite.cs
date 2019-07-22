@@ -7,6 +7,22 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     using System.Linq;
     using Types;
     
+    public class ExtCallSite : CallSite<IMelType>
+    {
+        public String Name { get; set; }
+        public Action<Context> Caller { get; set; }
+        
+        public ExtCallSite() : base(OpCode.Call)
+        {
+            
+        }
+        
+        public void Execute(Context context)
+        {
+            this.Caller.Invoke(context);
+        }
+    }
+    
     public class CallSite<T> where T : IMelType
     {
         public Int64 LineNumber { get; set; }

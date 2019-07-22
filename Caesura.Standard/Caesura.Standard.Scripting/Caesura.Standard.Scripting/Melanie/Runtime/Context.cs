@@ -12,17 +12,19 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Interpreter Environment { get; set; }
         public Stack Stack { get; set; }
         public Stack Arguments { get; set; }
+        public List<ExtCallSite> ExternalCallSites { get; set; }
         public Dictionary<Int64, CallSite<IMelType>> Listing { get; set; }
         public Int64 ProgramCounter { get; set; }
         public List<Int64> CallStack { get; set; }
         
         public Context()
         {
-            this.Stack          = new Stack();
-            this.Arguments      = new Stack(3);
-            this.Listing        = new Dictionary<Int64, CallSite<IMelType>>();
-            this.CallStack      = new List<Int64>();
-            this.ProgramCounter = 0;
+            this.Stack              = new Stack();
+            this.Arguments          = new Stack(3);
+            this.ExternalCallSites  = new List<ExtCallSite>();
+            this.Listing            = new Dictionary<Int64, CallSite<IMelType>>();
+            this.CallStack          = new List<Int64>();
+            this.ProgramCounter     = 0;
         }
         
         public Context(Interpreter handle) : this()
@@ -55,6 +57,16 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 }
                 this.ProgramCounter++;
             }
+        }
+        
+        public void ExternalCall(String name)
+        {
+            var extcall = this.ExternalCallSites.Find(x => String.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (extcall is null)
+            {
+                throw new ElementNotFoundException($"External function \"{name}\" not found");
+            }
+            extcall.Execute(this);
         }
         
         public void Call(Int64 line)

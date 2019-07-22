@@ -288,6 +288,20 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     args.Add(drarg);
                     str = String.Empty;
                 }
+                else if (c == '[' && !instr)
+                {
+                    str += c;
+                    instr = true;
+                }
+                else if (c == ']' && instr && str.StartsWith("["))
+                {
+                    // external function call
+                    str += c;
+                    var drarg = new MelString(str);
+                    args.Add(drarg);
+                    instr = false;
+                    str = String.Empty;
+                }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (c == ';' && !instr)
                      || (index == line.Length - 1))

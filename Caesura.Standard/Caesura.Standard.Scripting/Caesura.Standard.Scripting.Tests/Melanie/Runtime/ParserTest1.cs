@@ -10,9 +10,23 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
     using Caesura.Standard.Scripting.Melanie.Runtime.Types;
     using Caesura.Standard.Scripting.Melanie.Runtime.Instructions;
     using Xunit;
+    using Xunit.Abstractions;
     
     public class ParserTest1
     {
+        protected ITestOutputHelper TestOutput { get; }
+        
+        public ParserTest1(ITestOutputHelper output)
+        {
+            this.TestOutput = output;
+        }
+        
+        public void WriteLine(String str)
+        {
+            Console.WriteLine(str);
+            this.TestOutput?.WriteLine(str);
+        }
+        
         [Fact]
         public void AddTest1()
         {
@@ -166,6 +180,32 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             var rm = interp.MainContext.Stack.Peek();
             var r = rm.Value as MelInt32;
             Assert.True(r.InternalRepresentation == 50);
+        }
+        
+        [Fact]
+        public void FuncTest2()
+        {
+            var interp = new Interpreter();
+            // interp.MainContext.Listing.Add(9999, new CallSite<IMelType>());
+            interp.MainContext.ExternalCallSites.Add(new ExtCallSite()
+            {
+                Name = "Console.WriteLine(String)",
+                Caller = (context) => 
+                {
+                    var pop = context.Environment.Instructions[OpCode.Pop];
+                    pop.Execute(context);
+                    var marg = context.PopArgument();
+                    var arg = marg.Value as MelString;
+                    this.WriteLine(arg.InternalRepresentation);
+                },
+            });
+            interp.Run(@"
+            
+            010: PUSH ""Hello, world! From Melanie!""
+            020: CALL [Console.WriteLine(String)]
+            030: RET
+            
+            ");
         }
     }
 }
