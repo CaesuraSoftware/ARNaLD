@@ -124,7 +124,55 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 throw new InvalidOperationException("Stack is empty");
             }
             
-            context.Stack.Dup();
+            if (context.Arguments.Count > 0)
+            {
+                var marg = context.Arguments.Pop().Value;
+                /**/ if (marg is MelString ms)
+                {
+                    if (ms.InternalRepresentation == "*")
+                    {
+                        // pop value from the stack and run again
+                        var pop = this.GetInstruction(OpCode.Pop, context);
+                        pop();
+                        this.Execute(context);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Invalid argument for DUP");
+                    }
+                }
+                else if (marg is MelInt32 m32)
+                {
+                    var num = m32.InternalRepresentation;
+                    /**/ if (num == 0 || num == 1) // normal dup
+                    {
+                        context.Stack.Dup();
+                    }
+                    else if (num < 0)
+                    {
+                        throw new InvalidOperationException($"DUP argument ({num}) cannot be negative");
+                    }
+                    else
+                    {
+                        for (var i = 0; i < num; i++)
+                        {
+                            context.Stack.Dup();
+                        }
+                    }
+                }
+                else if (marg is MelInt64 m64)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid argument for DUP");
+                }
+            }
+            else
+            {
+                context.Stack.Dup();
+            }
         }
     }
 }

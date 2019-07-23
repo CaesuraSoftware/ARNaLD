@@ -325,11 +325,8 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             ;; Main
             1000:
             1010: PUSH 1
-            1011: DUP
-            1012: DUP
-            1013: DUP
-            1014: DUP
-            1015: DUP           ; Duplicate the object's ID for the other methods
+            1011: PUSH 5
+            1012: DUP *         ; Duplicate the object's ID for the other methods
             1020: CALL 0200     ; Construct new object
             1030: CALL 0300     ; Age up 1
             1040: CALL 0500     ; Print age
