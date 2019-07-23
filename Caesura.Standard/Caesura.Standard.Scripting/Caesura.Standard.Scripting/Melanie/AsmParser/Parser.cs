@@ -303,13 +303,19 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     str = String.Empty;
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
-                     || (c == ';' && !instr)
+                     || (c == ';' && !instr) // comment
+                     || (c == '-' && !instr) // negative number
                      || (index == line.Length - 1))
                 {
                     // end of non-string argument or end of arguments
                     // if last argument isn't a string.
                     IMelType arg = default;
-                    if (str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
+                    if (c == '-')
+                    {
+                        str += c;
+                    }
+                    
+                    if (str.Length > 0 && (Int32.TryParse(str[0].ToString(), out _) || Int32.TryParse(str[1].ToString(), out _)))
                     {
                         arg = this.ParseNumberArgument(str);
                     }
@@ -339,7 +345,12 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             var indicator = 'I'; // default to a 32-bit integer
             foreach (var c in arg)
             {
-                /**/ if (Int32.TryParse(c.ToString(), out var num))
+                /**/ if (String.IsNullOrEmpty(numstr) && c == '-')
+                {
+                    // negative value
+                    numstr += c;
+                }
+                else if (Int32.TryParse(c.ToString(), out var num))
                 {
                     numstr += c;
                 }

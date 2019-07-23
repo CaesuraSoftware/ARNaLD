@@ -41,6 +41,21 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             Assert.True(r.InternalRepresentation == 1_043);
         }
         
+        // FIXME: negative numbers don't work
+        [Fact]
+        public void AddTest2()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            001: PUSH 1_050
+            002: PUSH -40
+            003: ADD
+            ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelInt32;
+            Assert.True(r.InternalRepresentation == 1_010);
+        }
+        
         [Fact]
         public void StrTest1()
         {
@@ -246,6 +261,82 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             130: FETCH 0
             140: CALL [Console.WriteLine(String/Int32)]
             150: DELETE 0
+            
+            ");
+        }
+        
+        [Fact]
+        public void ObjectTest2()
+        {
+            var interp = new Interpreter();
+            interp.MainContext.ExternalCallSites.Add(new ExtCallSite()
+            {
+                Name = "Console.WriteLine(String/Int32)",
+                Caller = (context) => 
+                {
+                    var pop = context.Environment.Instructions[OpCode.Pop];
+                    pop.Execute(context);
+                    var marg = context.PopArgument();
+                    /**/ if (marg.Value is MelString ms)
+                    {
+                        this.WriteLine(ms.InternalRepresentation);
+                    }
+                    else if (marg.Value is MelInt32 m32)
+                    {
+                        this.WriteLine(m32.InternalRepresentation.ToString());
+                    }
+                },
+            });
+            interp.Run(@"
+            
+            0001: JMP 1000      ; Go to main
+            
+            ;; Object Constructor
+            0200: DUP           ; Duplicate object ID
+            0210: NEW *         ; Create a new object with ID
+            0220: PUSH ""Age""  ; Push Age
+            0230: SWAP          ; Swap so Age is above ID
+            0240: PUSH 10       
+            0250: SWAP          ; Swap so 10 is above ID
+            0260: STORE *       ; Take ID (object), key (Age), and value (10)
+            0270: RET
+            
+            ;; Age-Up
+            0300: DUP           ; Duplicate Object ID
+            0310: PUSH ""Age""
+            0320: SWAP          ; Swap Age and Object ID
+            0330: FETCH *       ; Get value of Age
+            0340: PUSH 1
+            0350: ADD           : Age + 1
+            0360: SWAP          ; ID is below Age's value
+            0370: PUSH ""Age""
+            0380: SWAP          ; ID is below Age (is below Age's value)
+            0390: SWAP 1        ; swap Age and Age's value
+            0400: STORE *
+            0410: RET
+            
+            ;; Print Age
+            0500: PUSH ""Age""
+            0510: SWAP
+            0520: FETCH *
+            0530: CALL [Console.WriteLine(String/Int32)]
+            0540: RET
+            
+            ;; Main
+            1000:
+            1010: PUSH 1
+            1011: DUP
+            1012: DUP
+            1013: DUP
+            1014: DUP
+            1015: DUP           ; Duplicate the object's ID for the other methods
+            1020: CALL 0200     ; Construct new object
+            1030: CALL 0300     ; Age up 1
+            1040: CALL 0500     ; Print age
+            1050: CALL 0300
+            1060: CALL 0300     ; Age up twice
+            1070: CALL 500      ; Print again
+            1080: RET
             
             ");
         }

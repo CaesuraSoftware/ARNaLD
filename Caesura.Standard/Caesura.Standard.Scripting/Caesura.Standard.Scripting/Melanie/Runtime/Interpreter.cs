@@ -25,6 +25,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { OpCode.Push           , new Ins_Push       (this) },
                 { OpCode.Pop            , new Ins_Pop        (this) },
                 { OpCode.Swap           , new Ins_Swap       (this) },
+                { OpCode.Dup            , new Ins_Dup        (this) },
                 
                 { OpCode.Add            , new Ins_Add        (this) },
                 { OpCode.Sub            , new Ins_Sub        (this) },
@@ -82,6 +83,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             this.MainContext.Run();
         }
+        
+        
         
         public void ParseInstruction(OpCode code, IEnumerable<IMelType> args, Context context)
         {

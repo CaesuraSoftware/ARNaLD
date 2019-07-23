@@ -41,13 +41,23 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 {
                     var cs = this.Listing[this.ProgramCounter];
                     var instruction = cs.Code;
-                    if (cs.Arguments.Count > 0)
+                    
+                    try
                     {
-                        this.Environment.ParseInstruction(cs.Code, cs.Arguments);
+                        if (cs.Arguments.Count > 0)
+                        {
+                            this.Environment.ParseInstruction(cs.Code, cs.Arguments);
+                        }
+                        else
+                        {
+                            this.Environment.ParseInstruction(cs.Code);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        this.Environment.ParseInstruction(cs.Code);
+                        // TODO: append line number to proper Melanie exception
+                        var ne = new Exception($"Melanie Line Number {this.ProgramCounter}: {e.Message}", e);
+                        throw ne;
                     }
                 }
                 
