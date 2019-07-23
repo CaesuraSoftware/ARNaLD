@@ -332,7 +332,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             1040: CALL 0500     ; Print age
             1050: CALL 0300
             1060: CALL 0300     ; Age up twice
-            1070: CALL 500      ; Print again
+            1070: CALL 0500     ; Print again
             1080: RET
             
             ");
