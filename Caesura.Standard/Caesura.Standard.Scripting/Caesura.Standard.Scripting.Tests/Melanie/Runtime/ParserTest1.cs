@@ -289,10 +289,8 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             });
             interp.Run(@"
             
-            0001: JMP 1000      ; Go to main
-            
             ;; Object Constructor
-            0200: DEF ""Child.Constructor (Int32)""
+            0200: DEF ""Child..ctor""
             0210: DUP           ; Duplicate object ID
             0220: NEW *         ; Create a new object with ID
             0230: PUSH ""Age""  ; Push Age
@@ -303,7 +301,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0280: RET
             
             ;; Age-Up
-            0300: DEF ""Child.Age (Int32)""
+            0300: DEF ""Child.Age (this)""
             0310: DUP           ; Duplicate Object ID
             0320: PUSH ""Age""
             0330: SWAP          ; Swap Age and Object ID
@@ -318,7 +316,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0420: RET
             
             ;; Print Age
-            0500: DEF ""Child.Print (Int32)""
+            0500: DEF ""Child.Print (this)""
             0510: PUSH ""Age""
             0520: SWAP
             0530: FETCH *
@@ -330,12 +328,12 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             1010: PUSH 1
             1011: PUSH 5
             1012: DUP *         ; Duplicate the object's ID for the other methods
-            1020: CALL ""Child.Constructor (Int32)""
-            1030: CALL ""Child.Age (Int32)""
-            1040: CALL ""Child.Print (Int32)""
-            1050: CALL ""Child.Age (Int32)""
-            1060: CALL ""Child.Age (Int32)""
-            1070: CALL ""Child.Print (Int32)""
+            1020: CALL ""Child..ctor""
+            1030: CALL ""Child.Age   (this)""
+            1040: CALL ""Child.Print (this)""
+            1050: CALL ""Child.Age   (this)""
+            1060: CALL ""Child.Age   (this)""
+            1070: CALL ""Child.Print (this)""
             1080: RET
             
             ");
