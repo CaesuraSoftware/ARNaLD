@@ -348,6 +348,48 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Types
         }
     }
     
+    public class MelUInt64 : IMelType<UInt64>
+    {
+        public UInt64 InternalRepresentation { get; set; }
+        
+        
+        public MelUInt64()
+        {
+            
+        }
+        
+        public MelUInt64(UInt64 num)
+        {
+            this.InternalRepresentation = num;
+        }
+        
+        public Boolean Convert(Int32 size, Byte[] bytes)
+        {
+            if (size == 8 && bytes.Length == 8)
+            {
+                // TODO: properly decode uint64
+                UInt64 i64 = (UInt64)(
+                    (bytes[7] << 56) +
+                    (bytes[6] << 48) +
+                    (bytes[5] << 40) +
+                    (bytes[4] << 32) +
+                    (bytes[3] << 24) + 
+                    (bytes[2] << 16) + 
+                    (bytes[1] <<  8) + 
+                     bytes[0]
+                );
+                this.InternalRepresentation = i64;
+                return true;
+            }
+            return false;
+        }
+        
+        public IMelType Copy()
+        {
+            return new MelUInt64(this.InternalRepresentation);
+        }
+    }
+    
     public class MelSingle : IMelType<Single>
     {
         public Single InternalRepresentation { get; set; }

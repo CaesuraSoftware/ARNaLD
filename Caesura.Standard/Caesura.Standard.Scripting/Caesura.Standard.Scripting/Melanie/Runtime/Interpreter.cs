@@ -21,6 +21,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     // - proper error/expection output with line numbers and stacktrace
     // - header metadata that the compiler can fill in.
     // - better internal exceptions.
+    // - Some kind of global object ID counter so constructors can
+    //   pass the increment of that counter or something.
     // FIXME:
     // - Negative numbers don't work yet in the parser
     
@@ -65,6 +67,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 { TypeIndicator.Int16   , new MelInt16       ()     },
                 { TypeIndicator.Int32   , new MelInt32       ()     },
                 { TypeIndicator.Int64   , new MelInt64       ()     },
+                { TypeIndicator.UInt64  , new MelUInt64      ()     },
                 { TypeIndicator.Single  , new MelSingle      ()     },
                 { TypeIndicator.Double  , new MelDouble      ()     },
                 { TypeIndicator.Boolean , new MelBoolean     ()     },

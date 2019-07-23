@@ -144,7 +144,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 else
                 {
                     CallSite<IMelType> cs = default;
-                    Int64 pc = 0;
+                    var pc = 0UL;
                     var arg1 = argms.Replace(" ", String.Empty);
                     foreach (var item in context.Listing)
                     {
@@ -170,14 +170,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     context.Call(pc);
                 }
             }
-            else if (argv is MelInt64 argm64)
+            else if (argv is MelUInt64 argm64)
             {
                 var argi64 = argm64.InternalRepresentation;
                 context.Call(argi64);
             }
             else if (argv is MelInt32 argm32)
             {
-                var argi32 = argm32.InternalRepresentation;
+                var argi32 = (UInt64)argm32.InternalRepresentation;
                 context.Call(argi32);
             }
         }
@@ -225,14 +225,14 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     throw new InvalidOperationException("Invalid JMP argument");
                 }
             }
-            else if (argv is MelInt64 argm64)
+            else if (argv is MelUInt64 argm64)
             {
                 var argi64 = argm64.InternalRepresentation;
                 context.ProgramCounter = argi64 - 1; // minus 1 so it doesn't skip the instruction it jumps to
             }
             else if (argv is MelInt32 argm32)
             {
-                var argi32 = argm32.InternalRepresentation;
+                var argi32 = (UInt64)argm32.InternalRepresentation;
                 context.ProgramCounter = argi32 - 1;
             }
         }

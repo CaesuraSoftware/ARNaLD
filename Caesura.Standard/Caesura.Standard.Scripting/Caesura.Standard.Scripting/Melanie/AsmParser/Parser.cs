@@ -122,10 +122,10 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             return Maybe<CallSite<IMelType>>.Some(aopcs);
         }
         
-        private Int64 GetLineNumber(String line)
+        private UInt64 GetLineNumber(String line)
         {
             var linenums = String.Empty;
-            var linenum = 0L;
+            var linenum = 0UL;
             foreach (var c in line)
             {
                 /**/ if (Int32.TryParse(c.ToString(), out var num))
@@ -146,7 +146,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     throw new ArgumentException("Line did not start with a valid line number.");
                 }
             }
-            var success = Int64.TryParse(linenums, out linenum);
+            var success = UInt64.TryParse(linenums, out linenum);
             if (!success)
             {
                 throw new ArgumentException("Line did not start with a valid line number.");

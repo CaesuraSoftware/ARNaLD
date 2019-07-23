@@ -27,7 +27,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     {
         public String FunctionName { get; set; }
         public String FunctionDef { get; set; }
-        public Int64 LineNumber { get; set; }
+        public UInt64 LineNumber { get; set; }
         public OpCode Code { get; set; }
         private List<T> _arguments;
         public List<T> Arguments 

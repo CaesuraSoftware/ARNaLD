@@ -13,17 +13,17 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         public Stack Stack { get; set; }
         public Stack Arguments { get; set; }
         public List<ExtCallSite> ExternalCallSites { get; set; }
-        public Dictionary<Int64, CallSite<IMelType>> Listing { get; set; }
-        public Int64 ProgramCounter { get; set; }
-        public List<Int64> CallStack { get; set; }
+        public Dictionary<UInt64, CallSite<IMelType>> Listing { get; set; }
+        public UInt64 ProgramCounter { get; set; }
+        public List<UInt64> CallStack { get; set; }
         
         public Context()
         {
             this.Stack              = new Stack();
             this.Arguments          = new Stack(3);
             this.ExternalCallSites  = new List<ExtCallSite>();
-            this.Listing            = new Dictionary<Int64, CallSite<IMelType>>();
-            this.CallStack          = new List<Int64>();
+            this.Listing            = new Dictionary<UInt64, CallSite<IMelType>>();
+            this.CallStack          = new List<UInt64>();
             this.ProgramCounter     = 0;
         }
         
@@ -79,7 +79,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             extcall.Execute(this);
         }
         
-        public void Call(Int64 line)
+        public void Call(UInt64 line)
         {
             this.CallStack.Add(this.ProgramCounter);
             this.ProgramCounter = line - 1; // minus 1, don't skip the line this jumps to
@@ -117,14 +117,20 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             return this.Stack.Pop();
         }
         
-        public void AddCaller(Int64 index, CallSite<IMelType> cs)
+        public void AddCaller(UInt64 index, CallSite<IMelType> cs)
         {
             this.Listing.Add(index, cs);
         }
         
         public void AddCaller(CallSite<IMelType> cs)
         {
-            this.Listing.Add(this.Listing.Count + 1, cs);
+            var line = 0UL;
+            if (this.Listing.Count > 0)
+            {
+                var last = this.Listing.Last();
+                line = last.Key;
+            }
+            this.Listing.Add(line + 1, cs);
         }
         
         public void AddCaller(OpCode code)
@@ -141,7 +147,9 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public void VerifyListing()
         {
-            var num = 0L;
+            var num = 0UL;
+            // var infunc = false;
+            CallSite<IMelType> lastcall = default;
             foreach (var item in this.Listing)
             {
                 if (num > item.Key)
@@ -149,6 +157,13 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                     throw new InvalidOperationException("Listing contains out-of-order line numbers.");
                 }
                 num = item.Key;
+                
+                if (item.Value.FunctionDef == "Main")
+                {
+                    this.ProgramCounter = item.Key; // main function
+                }
+                
+                lastcall = item.Value;
             }
         }
     }
