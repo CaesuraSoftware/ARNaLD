@@ -330,12 +330,12 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             1010: PUSH 1
             1011: PUSH 5
             1012: DUP *         ; Duplicate the object's ID for the other methods
-            1020: CALL 0200     ; Construct new object
-            1030: CALL 0300     ; Age up 1
-            1040: CALL 0500     ; Print age
-            1050: CALL 0300
-            1060: CALL 0300     ; Age up twice
-            1070: CALL 0500     ; Print again
+            1020: CALL ""Child.Constructor (Int32)""
+            1030: CALL ""Child.Age (Int32)""
+            1040: CALL ""Child.Print (Int32)""
+            1050: CALL ""Child.Age (Int32)""
+            1060: CALL ""Child.Age (Int32)""
+            1070: CALL ""Child.Print (Int32)""
             1080: RET
             
             ");

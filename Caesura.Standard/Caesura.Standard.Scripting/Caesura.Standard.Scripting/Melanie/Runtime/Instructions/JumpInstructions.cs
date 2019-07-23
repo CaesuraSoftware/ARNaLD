@@ -18,6 +18,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
+            // TODO: CACHE RESULTS
+            
             var marg = context.PopArgument();
             /**/ if (marg.NoValue)
             {
@@ -27,13 +29,45 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             {
                 throw new InvalidOperationException("DEF requires a String argument");
             }
+            var line = (marg.Value as MelString).InternalRepresentation;
             
-            var arg = (marg.Value as MelString).InternalRepresentation;
+            // Parse arguments
+            var args = new List<String>();
+            var name = this.GetNameAndArgs(line, args);
+            
+            // Register function name
+            var cs = context.Listing[context.ProgramCounter];
+            if (String.IsNullOrEmpty(cs.FunctionName))
+            {
+                cs.FunctionName = name;
+            }
+            
+            // Verify stack
+            if (context.Stack.Count < args.Count)
+            {
+                throw new RuntimeException("Stack does not have enough arguments for this function call");
+            }
+        }
+        
+        public Boolean FunctionRegistered(String line, Context context)
+        {
+            var name = line.Split(' ', '(')[0].Trim();
+            foreach (var item in context.Listing)
+            {
+                if (item.Value.FunctionName == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public String GetNameAndArgs(String line, List<String> args)
+        {
             var name = String.Empty;
             var working = String.Empty;
             var inargs = false;
-            var args = new List<String>();
-            foreach (var c in arg)
+            foreach (var c in line)
             {
                 /**/ if (c == ' ' && String.IsNullOrEmpty(name))
                 {
@@ -75,6 +109,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
             {
                 name = working.TrimEnd();
             }
+            
+            return name;
         }
     }
     
@@ -107,7 +143,31 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                 }
                 else
                 {
-                    throw new InvalidOperationException("Invalid CALL argument");
+                    CallSite<IMelType> cs = default;
+                    Int64 pc = 0;
+                    var arg1 = argms.Replace(" ", String.Empty);
+                    foreach (var item in context.Listing)
+                    {
+                        if (String.IsNullOrEmpty(item.Value.FunctionDef))
+                        {
+                            continue;
+                        }
+                        
+                        var arg2 = item.Value.FunctionDef.Replace(" ", String.Empty);
+                        if (arg1 == arg2)
+                        {
+                            cs = item.Value;
+                            pc = item.Key;
+                            break;
+                        }
+                    }
+                    
+                    if (cs == default)
+                    {
+                        throw new RuntimeException($"Function definition \"{argms}\" not found");
+                    }
+                    
+                    context.Call(pc);
                 }
             }
             else if (argv is MelInt64 argm64)

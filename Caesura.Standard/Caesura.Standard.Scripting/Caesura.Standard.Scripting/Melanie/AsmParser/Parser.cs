@@ -46,9 +46,14 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
             foreach (var line in lines)
             {
                 var ncs = this.ParseLine(line);
-                if (ncs.HasValue)
+                if (ncs)
                 {
-                    css.Add(ncs.Value);
+                    var cs = ncs.Value;
+                    css.Add(cs);
+                    if (cs.Code == OpCode.Def && cs.Arguments.Count > 0 && cs.Arguments[0] is MelString ms)
+                    {
+                        cs.FunctionDef = ms.InternalRepresentation;
+                    }
                 }
             }
             return css;
