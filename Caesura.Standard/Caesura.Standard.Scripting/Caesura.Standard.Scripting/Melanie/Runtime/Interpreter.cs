@@ -15,12 +15,12 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     //   return value. It will check/verify the stack and also
     //   make sure a matching RET instruction terminates it.
     //   Additionally, have Main work as the main function.
-    // - Augment the CALL instruction to work with FUNC names.
     // - have FUNC reset the line numbers so we can reuse line.
     //   numbers in functions.
     // - debugging states and breakpoints.
     // - proper error/expection output with line numbers and stacktrace
     // - header metadata that the compiler can fill in.
+    // - better internal exceptions.
     // FIXME:
     // - Negative numbers don't work yet in the parser
     

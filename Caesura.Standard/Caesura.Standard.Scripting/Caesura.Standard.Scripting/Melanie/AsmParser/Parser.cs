@@ -49,11 +49,16 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 if (ncs)
                 {
                     var cs = ncs.Value;
-                    css.Add(cs);
                     if (cs.Code == OpCode.Def && cs.Arguments.Count > 0 && cs.Arguments[0] is MelString ms)
                     {
-                        cs.FunctionDef = ms.InternalRepresentation;
+                        var fd = ms.InternalRepresentation;
+                        cs.FunctionDef = fd;
+                        if (css.Exists(x => x.FunctionDef == fd))
+                        {
+                            throw new InvalidOperationException($"Duplicate function definition \"{fd}\"");
+                        }
                     }
+                    css.Add(cs);
                 }
             }
             return css;
