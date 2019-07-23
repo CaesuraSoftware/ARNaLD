@@ -292,38 +292,41 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0001: JMP 1000      ; Go to main
             
             ;; Object Constructor
-            0200: DUP           ; Duplicate object ID
-            0210: NEW *         ; Create a new object with ID
-            0220: PUSH ""Age""  ; Push Age
-            0230: SWAP          ; Swap so Age is above ID
-            0240: PUSH 10       
-            0250: SWAP          ; Swap so 10 is above ID
-            0260: STORE *       ; Take ID (object), key (Age), and value (10)
-            0270: RET
+            0200: DEF ""Child.Constructor (Int32)""
+            0210: DUP           ; Duplicate object ID
+            0220: NEW *         ; Create a new object with ID
+            0230: PUSH ""Age""  ; Push Age
+            0240: SWAP          ; Swap so Age is above ID
+            0250: PUSH 10       
+            0260: SWAP          ; Swap so 10 is above ID
+            0270: STORE *       ; Take ID (object), key (Age), and value (10)
+            0280: RET
             
             ;; Age-Up
-            0300: DUP           ; Duplicate Object ID
-            0310: PUSH ""Age""
-            0320: SWAP          ; Swap Age and Object ID
-            0330: FETCH *       ; Get value of Age
-            0340: PUSH 1
-            0350: ADD           : Age + 1
-            0360: SWAP          ; ID is below Age's value
-            0370: PUSH ""Age""
-            0380: SWAP          ; ID is below Age (is below Age's value)
-            0390: SWAP 1        ; swap Age and Age's value
-            0400: STORE *
-            0410: RET
+            0300: DEF ""Child.Age (Int32)""
+            0310: DUP           ; Duplicate Object ID
+            0320: PUSH ""Age""
+            0330: SWAP          ; Swap Age and Object ID
+            0340: FETCH *       ; Get value of Age
+            0350: PUSH 1
+            0360: ADD           : Age + 1
+            0370: SWAP          ; ID is below Age's value
+            0380: PUSH ""Age""
+            0390: SWAP          ; ID is below Age (is below Age's value)
+            0400: SWAP 1        ; swap Age and Age's value
+            0410: STORE *
+            0420: RET
             
             ;; Print Age
-            0500: PUSH ""Age""
-            0510: SWAP
-            0520: FETCH *
-            0530: CALL [Console.WriteLine(String/Int32)]
-            0540: RET
+            0500: DEF ""Child.Print (Int32)""
+            0510: PUSH ""Age""
+            0520: SWAP
+            0530: FETCH *
+            0540: CALL [Console.WriteLine(String/Int32)]
+            0550: RET
             
             ;; Main
-            1000:
+            1000: DEF ""Main""
             1010: PUSH 1
             1011: PUSH 5
             1012: DUP *         ; Duplicate the object's ID for the other methods

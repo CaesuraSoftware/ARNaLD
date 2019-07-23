@@ -37,21 +37,23 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             this.Instructions = new Dictionary<OpCode, BaseInstruction>()
             {
+                // Stack
                 { OpCode.Push           , new Ins_Push       (this) },
                 { OpCode.Pop            , new Ins_Pop        (this) },
                 { OpCode.Swap           , new Ins_Swap       (this) },
                 { OpCode.Dup            , new Ins_Dup        (this) },
-                
+                // Arithmetic
                 { OpCode.Add            , new Ins_Add        (this) },
                 { OpCode.Sub            , new Ins_Sub        (this) },
                 { OpCode.Div            , new Ins_Div        (this) },
                 { OpCode.Mul            , new Ins_Mul        (this) },
                 { OpCode.Rem            , new Ins_Rem        (this) },
-                
+                // Subroutines and Jumping
+                { OpCode.Def            , new Ins_Def        (this) },
                 { OpCode.Jmp            , new Ins_Jmp        (this) },
                 { OpCode.Call           , new Ins_Call       (this) },
                 { OpCode.Ret            , new Ins_Ret        (this) },
-                
+                // Objects
                 { OpCode.New            , new Ins_New        (this) },
                 { OpCode.Fetch          , new Ins_Fetch      (this) },
                 { OpCode.Store          , new Ins_Store      (this) },

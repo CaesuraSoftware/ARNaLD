@@ -7,6 +7,77 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
     using System.Linq;
     using Types;
     
+    public class Ins_Def : BaseInstruction
+    {
+        public override OpCode Code => OpCode.Def;
+        
+        public Ins_Def(Interpreter env) : base(env)
+        {
+            
+        }
+        
+        public override void Execute(Context context)
+        {
+            var marg = context.PopArgument();
+            /**/ if (marg.NoValue)
+            {
+                throw new InvalidOperationException("DEF requires an argument");
+            }
+            else if (!(marg.Value is MelString))
+            {
+                throw new InvalidOperationException("DEF requires a String argument");
+            }
+            
+            var arg = (marg.Value as MelString).InternalRepresentation;
+            var name = String.Empty;
+            var working = String.Empty;
+            var inargs = false;
+            var args = new List<String>();
+            foreach (var c in arg)
+            {
+                /**/ if (c == ' ' && String.IsNullOrEmpty(name))
+                {
+                    name = working;
+                    working = String.Empty;
+                }
+                else if (c == ' ' && !String.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+                else if (c =='(' && !inargs)
+                {
+                    inargs = true;
+                }
+                else if (c =='(' && inargs)
+                {
+                    throw new InvalidOperationException("Duplicate open parenthesis in function definition");
+                }
+                else if (c == ')' && inargs)
+                {
+                    args.Add(working);
+                    working = String.Empty;
+                }
+                else if (c == ')' && !inargs)
+                {
+                    throw new InvalidOperationException("Unmatched close parenthesis in function definition");
+                }
+                else if (c == ',' && inargs)
+                {
+                    args.Add(working);
+                    working = String.Empty;
+                }
+                else
+                {
+                    working += c;
+                }
+            }
+            if (String.IsNullOrEmpty(name))
+            {
+                name = working.TrimEnd();
+            }
+        }
+    }
+    
     public class Ins_Call : BaseInstruction
     {
         public override OpCode Code => OpCode.Call;

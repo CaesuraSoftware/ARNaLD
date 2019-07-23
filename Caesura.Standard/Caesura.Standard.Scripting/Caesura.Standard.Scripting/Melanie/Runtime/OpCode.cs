@@ -9,6 +9,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         // --- META --- //
         /// <summary> No Operation </summary>
         Nop         = 0x00,
+        Meta        = 0x01,
         
         // --- ARITHMETIC --- //
         /// <summary> Add </summary>
@@ -94,7 +95,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         /// <summary> Call a function or invoke an external function </summary>
         Call        = 0x61,
         /// <summary> Define a function </summary>
-        Func        = 0x62,
+        Def         = 0x62,
         /// <summary> Return from a function </summary>
         Ret         = 0x63,
         /// <summary> Invoke the debugger </summary>
