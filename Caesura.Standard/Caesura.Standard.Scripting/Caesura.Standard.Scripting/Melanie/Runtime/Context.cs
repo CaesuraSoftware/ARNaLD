@@ -89,6 +89,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             if (this.CallStack.Count == 0)
             {
+                // TODO: have this end execution when ending execution is implemented
                 this.ProgramCounter = this.Listing.Last().Key; // if nothing to return to, exit
                 return;
             }
