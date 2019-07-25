@@ -10,6 +10,9 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     using AsmParser;
     
     // TODO:
+    // - give functions a local stack that is indexable.
+    //   working with this global stack using swap instructions
+    //   is pretty much impossible, even for a compiler.
     // - implement exceptions
     // - implement a FUNC instruction to describe arguments and
     //   return value. It will check/verify the stack and also
@@ -24,7 +27,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     // - Some kind of global object ID counter so constructors can
     //   pass the increment of that counter or something.
     // FIXME:
-    // - Negative numbers don't work yet in the parser
+    // - Nothing so far!
     
     public class Interpreter
     {

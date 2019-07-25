@@ -41,7 +41,6 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             Assert.True(r.InternalRepresentation == 1_043);
         }
         
-        // FIXME: negative numbers don't work
         [Fact]
         public void AddTest2()
         {

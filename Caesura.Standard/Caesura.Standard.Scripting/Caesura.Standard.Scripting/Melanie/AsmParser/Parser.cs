@@ -314,21 +314,17 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 }
                 else if ((Char.IsWhiteSpace(c) && !instr)
                      || (c == ';' && !instr) // comment
-                     || (c == '-' && !instr) // negative number
                      || (index == line.Length - 1))
                 {
                     // end of non-string argument or end of arguments
                     // if last argument isn't a string.
                     IMelType arg = default;
-                    if (c == '-')
-                    {
-                        str += c;
-                    }
                     
-                    if (str.Length > 0 && (Int32.TryParse(str[0].ToString(), out _) || Int32.TryParse(str[1].ToString(), out _)))
+                    if ((str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
+                    || ( str.Length > 1 && Int32.TryParse(str[1].ToString(), out _)))
                     {
                         arg = this.ParseNumberArgument(str);
-                    }
+                    } 
                     
                     if (!(arg is null))
                     {
