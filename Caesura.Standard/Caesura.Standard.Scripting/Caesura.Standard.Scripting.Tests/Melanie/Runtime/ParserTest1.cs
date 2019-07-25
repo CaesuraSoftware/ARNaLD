@@ -56,6 +56,21 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         }
         
         [Fact]
+        public void AddTest3()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            001: PUSH 1D
+            002: PUSH 2.50
+            003: ADD
+            ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelDouble;
+            this.WriteLine(r.InternalRepresentation.ToString());
+            Assert.True(r.InternalRepresentation.FloatEqual(3.50));
+        }
+        
+        [Fact]
         public void StrTest1()
         {
             var interp = new Interpreter();

@@ -370,7 +370,7 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     if (!hasDot)
                     {
                         numstr += c;
-                        indicator = 'F'; // implicitly make this number a Single if no explicit indicator
+                        indicator = 'D'; // implicitly make this number a Double if no explicit indicator
                         hasDot = true;
                     }
                     else
