@@ -19,6 +19,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         public ParserTest1(ITestOutputHelper output)
         {
             this.TestOutput = output;
+            this.WriteLine(String.Empty);
         }
         
         public void WriteLine(String str)
@@ -237,6 +238,24 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
         }
         
         [Fact]
+        public void SwapTest1()
+        {
+            var interp = new Interpreter();
+            interp.Run(@"
+            
+            010: PUSH ""Hello""
+            020: PUSH ""World!""
+            030: SWAP
+            040: RET
+            
+            ");
+            
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelString;
+            Assert.True(r.InternalRepresentation == "Hello");
+        }
+        
+        [Fact]
         public void ObjectTest1()
         {
             var interp = new Interpreter();
@@ -311,7 +330,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0240: SWAP          ; Swap so Age is above ID
             0250: PUSH 10       
             0260: SWAP          ; Swap so 10 is above ID
-            0270: STORE *       ; Take ID (object), key (Age), and value (10)
+            0270: STORE         ; Take ID (object), key (Age), and value (10)
             0280: RET
             
             ;; Age-Up
@@ -319,38 +338,62 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0310: DUP           ; Duplicate Object ID
             0320: PUSH ""Age""
             0330: SWAP          ; Swap Age and Object ID
-            0340: FETCH *       ; Get value of Age
+            0340: FETCH         ; Get value of Age
             0350: PUSH 1
             0360: ADD           : Age + 1
             0370: SWAP          ; ID is below Age's value
             0380: PUSH ""Age""
             0390: SWAP          ; ID is below Age (is below Age's value)
             0400: SWAP 1        ; swap Age and Age's value
-            0410: STORE *
+            0410: STORE
             0420: RET
             
             ;; Print Age
             0500: DEF ""Child.Print (this)""
             0510: PUSH ""Age""
             0520: SWAP
-            0530: FETCH *
+            0530: FETCH
             0540: CALL [Console.WriteLine(String/Int32)]
             0550: RET
             
             ;; Main
             1000: DEF ""Main""
             1010: PUSH 1
-            1011: PUSH 5
+            1011: PUSH 6
             1012: DUP *         ; Duplicate the object's ID for the other methods
             1020: CALL ""Child..ctor""
             1030: CALL ""Child.Age   (this)""
             1040: CALL ""Child.Print (this)""
             1050: CALL ""Child.Age   (this)""
             1060: CALL ""Child.Age   (this)""
-            1070: CALL ""Child.Print (this)""
-            1080: RET
+            1080: CALL ""Child.Print (this)""
+            1090: PUSH ""Age""
+            1100: SWAP
+            1110: FETCH         ; Get age on the stack for the external test environment
+            2000: RET
             
             ");
+            var rm = interp.MainContext.Stack.Peek();
+            var r = rm.Value as MelInt32;
+            /*
+            this.WriteLine($"Stack: {interp.MainContext.Stack.Count}");
+            foreach (var item in interp.MainContext.Stack.MainStack)
+            {
+                     if (item is MelInt32 i32)
+                {
+                    this.WriteLine($" - {i32.InternalRepresentation}");
+                }
+                else if (item is MelString ms)
+                {
+                    this.WriteLine($" - {ms.InternalRepresentation}");
+                }
+                else
+                {
+                    this.WriteLine($" - {item}");
+                }
+            }
+            //*/
+            Assert.True(r.InternalRepresentation == 13);
         }
     }
 }
