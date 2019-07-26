@@ -62,8 +62,15 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
-            var arg = context.PopArgument().Value;
-            /**/ if (arg is MelString str)
+            var arg = context.PopArgument();
+            /**/ if (arg.NoValue)
+            {
+                // pop value from the stack and run again
+                var pop = this.GetInstruction(OpCode.Pop, context);
+                pop();
+                this.Execute(context);
+            }
+            else if (arg.HasValue && arg.Value is MelString str)
             {
                 if (str.InternalRepresentation == "*")
                 {
@@ -77,7 +84,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     throw new InvalidOperationException($"Invalid argument for FETCH: Needs an Object ID");
                 }
             }
-            else if (arg is MelInt32 m32)
+            else if (arg.HasValue && arg.Value is MelInt32 m32)
             {
                 var id = m32.InternalRepresentation;
                 if (context.Environment.Objects.ContainsKey(id))
@@ -135,8 +142,15 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
         
         public override void Execute(Context context)
         {
-            var arg = context.PopArgument().Value;
-            /**/ if (arg is MelString str)
+            var arg = context.PopArgument();
+            /**/ if (arg.NoValue)
+            {
+                // pop value from the stack and run again
+                var pop = this.GetInstruction(OpCode.Pop, context);
+                pop();
+                this.Execute(context);
+            }
+            else if (arg.HasValue && arg.Value is MelString str)
             {
                 if (str.InternalRepresentation == "*")
                 {
@@ -150,7 +164,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     throw new InvalidOperationException($"Invalid argument for STORE: Needs an Object ID");
                 }
             }
-            else if (arg is MelInt32 m32)
+            else if (arg.HasValue && arg.Value is MelInt32 m32)
             {
                 var id = m32.InternalRepresentation;
                 if (context.Environment.Objects.ContainsKey(id))

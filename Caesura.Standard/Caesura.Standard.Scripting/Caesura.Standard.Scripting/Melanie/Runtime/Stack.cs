@@ -31,7 +31,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         {
             if (this.Count == 0)
             {
-                throw new ElementNotFoundException();
+                return Maybe.None;
             }
             
             var index = this.MainStack.Count - 1;
