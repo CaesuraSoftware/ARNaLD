@@ -84,12 +84,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime.Instructions
                     }
                     else
                     {
-                        var item1 = context.Stack.MainStack.ElementAt(context.Stack.Count - num - 1);
-                        var item2 = context.Stack.MainStack.ElementAt(context.Stack.Count - num - 2);
-                        var index1 = context.Stack.MainStack.LastIndexOf(item1);
-                        var index2 = context.Stack.MainStack.LastIndexOf(item2);
-                        context.Stack.MainStack[index1] = item2;
-                        context.Stack.MainStack[index2] = item1;
+                        context.Stack.Swap(context.Stack.Count - num - 1);
                     }
                 }
                 else if (marg is MelInt64 m64)

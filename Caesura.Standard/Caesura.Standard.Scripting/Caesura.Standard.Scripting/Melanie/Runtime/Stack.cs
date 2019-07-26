@@ -40,6 +40,17 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             return Maybe<IMelType>.Some(item);
         }
         
+        public Maybe<IMelType> Peek(Int32 index)
+        {
+            if (this.Count == 0 || index >= this.Count)
+            {
+                return Maybe.None;
+            }
+            
+            var item = this.MainStack.ElementAt(index);
+            return Maybe<IMelType>.Some(item);
+        }
+        
         public Maybe<IMelType> Peek()
         {
             if (this.Count == 0)
@@ -65,11 +76,36 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
             this.Push(item2.Value);
         }
         
+        public void Swap(Int32 index1, Int32 index2)
+        {
+            var item1 = this.MainStack[index1];
+            var item2 = this.MainStack[index2];
+            this.MainStack[index2] = item1;
+            this.MainStack[index1] = item2;
+        }
+        
+        public void Swap(Int32 index)
+        {
+            this.Swap(index, index - 1);
+        }
+        
         public void Dup()
         {
             var item = this.Pop();
             this.Push(item.Value);
             this.Push(item.Value);
+        }
+        
+        public void Dup(Int32 times)
+        {
+            if (times <= 0)
+            {
+                throw new ArgumentException();
+            }
+            for (var i = 0; i < times; i++)
+            {
+                this.Dup();
+            }
         }
     }
 }

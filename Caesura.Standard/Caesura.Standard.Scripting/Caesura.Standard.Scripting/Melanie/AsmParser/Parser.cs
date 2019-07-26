@@ -318,6 +318,16 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                 {
                     // end of non-string argument or end of arguments
                     // if last argument isn't a string.
+                    
+                    if ((str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
+                    || ( str.Length > 1 && Int32.TryParse(str[1].ToString(), out _)))
+                    {
+                        var arg = this.ParseNumberArgument(str);
+                        args.Add(arg);
+                    }
+                    str = String.Empty;
+                    
+                    /*
                     IMelType arg = default;
                     
                     if ((str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
@@ -331,6 +341,9 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                         args.Add(arg);
                     }
                     str = String.Empty;
+                    break; 
+                    //*/
+                    
                     break;
                 }
                 else
