@@ -10,6 +10,8 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     using AsmParser;
     
     // TODO:
+    // - THIS instruction that pushes the current object ID on to
+    //   the stack (each function needs a local variable object for this)
     // - make all types inherit from MelObject
     // - give functions a local stack that is indexable.
     //   working with this global stack using swap instructions
