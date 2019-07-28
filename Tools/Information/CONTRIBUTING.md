@@ -19,21 +19,21 @@ Contributing to this project requires complete compliance with the [Caesura Code
 
 Largely, the project follows the [Microsoft Visual C# Coding Conventions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions), with the one exception that core type aliases cannot be used. All instances of `int`, `string`, `object`, etcetera, must instead be `Int32`, `String`, `Object`, etcetera. Use a conversion tool if you disagree with this convention that strongly (we may supply you with a tool to convert to and from the aliased types in the future, as we do sympathize. Until then, a few console commands should suffice). If you attempt to merge a file with these aliases in-tact, the merge will be denied and we will politely remind you of this policy so you can re-submit the patch with the complying types. Thank you for having patience with this policy.
 
- - Absolutely 100% of all non-static fields, properties and methods must be prefixed with `this.`. If `this.` can be used, it must be used.
+ - Absolutely 100% of all non-static fields, properties and methods must be prefixed with `this.`. If `this.` can be used, it must be used. The only exception for this is when using a class or property name in a `nameof` call, where the use of `this.` is optional.
 
- - We prefer interfaces over abstract classes. However, if the inheriting object should contain more than two properties or a callback, and more than one or two classes will implement it, it is advised to use an abstract class instead. If making a generic interface or abstract class, always make an accompanying non-generic variant, for use in collection types.
+ - Create an interface for every class except for configuration POCOs. This interface should have it's own file.
  
  - Private backing fields for properties must be named after their respective property and affixed with "b_", "b" for "backing". Exmaple, the property "MyProperty" is backed by the backing field "b_MyProperty". If a property's accessor implements more than one line of code, implement it as a private method and use the lambda syntax to call it within the property. Example: `MyProperty { get => this.b_MyProperty; set => this.SetMyProperty(value); }`
  
- - Do not use ValueTuples or Tuples for method returns. Either use a full custom class/struct or simply use "out" arguments.
+ - Do not use ValueTuples or Tuples for method return types in public/internal/protected methods, or any other method that can or will be used outside of the class it is defined in. Either use a full custom class/struct or simply use "out" parameters.
+ 
+ - Do not use partial classes.
+ 
+ - Any method returning `Caesura.Standard.Maybe<T>` should not throw an exception, only return `Maybe.None` instead.
  
  - Default Interface members are strictly disallowed.
  
- - `if` statements with an `else`/`else if` clause under them must have an empty comment before them (`/**/ if (...)`) to align them with the rest of the clauses.
- 
- - If a class has more than two arguments, instead make a configuration class to pass to it. The configuration class should be defined in the same file as the class, above the class's definition. The configuration class must be configured with defaults.
- 
- - If a class implements an interface specifically for making that class testable or replacable, implement the interface above the class in it's source file, instead of putting it in it's own source file. Interfaces designed for multiple classes should have their own source file. If a new class is implementing an interface in a class' source file, move that interface into it's own source file.
+ - `if` statements with an `else if` clause under them must have an empty comment before them (`/**/ if (...)`) to align them with the rest of the clauses.
 
  - Use of `goto` is allowed. LINQ and proper refactoring virtually eliminates any need for a `goto`, but that does not mean `goto` does not have it's uses (In fact, we suggest every contributor use at least one `goto` somewhere, if for nothing else than to irritate people).
 
@@ -41,7 +41,7 @@ Largely, the project follows the [Microsoft Visual C# Coding Conventions](https:
 
  - The `using System;` declaration must be on top of the file, outside of the namespace declaration. All additional `using` directives must be directly under the namespace declaration.
 
- - Never embed strings or magic numbers in code in a method. They should always be stored in a property or static constructor.
+ - Try to avoid embedding strings or magic numbers in code in a method. Try to store in a property or static constructor.
 
  - All files must begin and end with a newline.
  
