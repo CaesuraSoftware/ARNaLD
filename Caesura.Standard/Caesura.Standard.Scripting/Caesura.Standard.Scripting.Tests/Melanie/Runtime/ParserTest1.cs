@@ -357,7 +357,7 @@ namespace Caesura.Standard.Scripting.Tests.Melanie.Runtime
             0550: RET
             
             ;; Main
-            1000: DEF ""Main""
+            1000: DEF ""__entryPoint""
             1010: PUSH 1
             1011: PUSH 6
             1012: DUP *         ; Duplicate the object's ID for the other methods

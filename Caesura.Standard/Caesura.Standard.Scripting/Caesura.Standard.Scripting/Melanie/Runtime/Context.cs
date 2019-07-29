@@ -9,6 +9,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
     
     public class Context
     {
+        public String EntryPointName { get; set; }
         public Interpreter Environment { get; set; }
         public Stack Stack { get; set; }
         public Stack Arguments { get; set; }
@@ -19,6 +20,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
         
         public Context()
         {
+            this.EntryPointName     = "__entryPoint";
             this.Stack              = new Stack();
             this.Arguments          = new Stack(3);
             this.ExternalCallSites  = new List<ExtCallSite>();
@@ -159,7 +161,7 @@ namespace Caesura.Standard.Scripting.Melanie.Runtime
                 }
                 num = item.Key;
                 
-                if (item.Value.FunctionDef == "Main")
+                if (item.Value.FunctionDef == this.EntryPointName)
                 {
                     this.ProgramCounter = item.Key; // main function
                 }
