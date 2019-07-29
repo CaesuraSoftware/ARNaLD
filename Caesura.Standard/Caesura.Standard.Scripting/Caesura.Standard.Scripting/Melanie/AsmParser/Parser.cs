@@ -327,23 +327,6 @@ namespace Caesura.Standard.Scripting.Melanie.AsmParser
                     }
                     str = String.Empty;
                     
-                    /*
-                    IMelType arg = default;
-                    
-                    if ((str.Length > 0 && Int32.TryParse(str[0].ToString(), out _))
-                    || ( str.Length > 1 && Int32.TryParse(str[1].ToString(), out _)))
-                    {
-                        arg = this.ParseNumberArgument(str);
-                    } 
-                    
-                    if (!(arg is null))
-                    {
-                        args.Add(arg);
-                    }
-                    str = String.Empty;
-                    break; 
-                    //*/
-                    
                     break;
                 }
                 else
