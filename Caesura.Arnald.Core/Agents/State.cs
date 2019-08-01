@@ -43,6 +43,16 @@ namespace Caesura.Arnald.Core.Agents
             return defaultstate;
         }
         
+        public Boolean NewState(String name, String nextState, Action<StateAtom, IMessage> callback)
+        {
+            var state = new StateAtom(this, name, (StateAtom atom, IMessage message) =>
+            {
+                callback?.Invoke(atom, message);
+                return nextState;
+            });
+            return this.TryAdd(state);
+        }
+        
         public Boolean TryAdd(IStateAtom atom)
         {
             lock (this._stateLock)
@@ -71,6 +81,16 @@ namespace Caesura.Arnald.Core.Agents
         {
             var state = new StateAtom(this, name, callback);
             this.Add(state);
+        }
+        
+        public Boolean Remove(String name)
+        {
+            var sa = this.Find(x => x.Name == name);
+            if (sa is null)
+            {
+                return false;
+            }
+            return this.Remove(sa);
         }
         
         public Boolean Remove(IStateAtom atom)
