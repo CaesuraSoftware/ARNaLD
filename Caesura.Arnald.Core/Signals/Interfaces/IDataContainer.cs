@@ -10,7 +10,7 @@ namespace Caesura.Arnald.Core.Signals
     /// A key/value data store with a String key.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDataContainer<T> : IEnumerable<KeyValuePair<String, T>>, ICopyable
+    public interface IDataContainer<T> : IEnumerable<KeyValuePair<String, T>>, ICopyable<T>
     {
         Int32 Count { get; }
         T this[String key] { get; set; }

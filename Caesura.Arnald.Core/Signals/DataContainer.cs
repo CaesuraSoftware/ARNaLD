@@ -48,21 +48,23 @@ namespace Caesura.Arnald.Core.Signals
         
         public void Copy(Object o)
         {
-            if (o is DataContainer dc)
+            if (o is IDataContainer dc)
             {
                 foreach (var kvp in dc)
                 {
-                    if (kvp.Value is ICopyable ic)
+                    var val = kvp.Value;
+                    if (val is ICopyable icp)
                     {
-                        var nic = ic.Clone();
-                        this.Set(kvp.Key, nic);
+                        val = icp.Clone();
                     }
-                    else
-                    {
-                        this.Set(kvp.Key, kvp.Value);
-                    }
+                    this.Set(kvp.Key, val);
                 }
             }
+        }
+        
+        public void Copy(DataContainer dc)
+        {
+            this.Copy(dc as IDataContainer);
         }
         
         public ICopyable Clone()
