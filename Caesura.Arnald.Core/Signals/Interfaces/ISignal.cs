@@ -4,8 +4,9 @@ using System;
 namespace Caesura.Arnald.Core.Signals
 {
     using System.Collections.Generic;
+    using Caesura.Standard;
     
-    public interface ISignal
+    public interface ISignal : ICopyable
     {
         String Name { get; }
         String Namespace { get; }
