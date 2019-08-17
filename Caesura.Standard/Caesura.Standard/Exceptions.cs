@@ -37,4 +37,15 @@ namespace Caesura.Standard
         public ElementNotFoundException(String message) : base(message) { }
         public ElementNotFoundException(String message, Exception inner) : base(message, inner) { }
     }
+    
+    /// <summary>
+    /// Thrown when there was an attempt to add a value to a collection that is full.
+    /// </summary>
+    public class CollectionFullException : Exception
+    {
+        public CollectionFullException() : base() { }
+        public CollectionFullException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public CollectionFullException(String message) : base(message) { }
+        public CollectionFullException(String message, Exception inner) : base(message, inner) { }
+    }
 }
