@@ -6,6 +6,7 @@ namespace Caesura.Arnald.Core.Signals
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using Caesura.Standard;
     
     public sealed class DataContainer : IDataContainer
@@ -150,6 +151,28 @@ namespace Caesura.Arnald.Core.Signals
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+        
+        public override String ToString()
+        {
+            var items = this.internalDictionary.ToList();
+            
+            var sb = new StringBuilder();
+            sb.Append("{ ");
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items.ElementAt(i);
+                sb.Append(item.Key);
+                sb.Append(": ");
+                sb.Append(item.Value.ToString());
+                if (i < items.Count - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+            sb.Append(" }");
+            
+            return sb.ToString();
         }
     }
 }
