@@ -5,6 +5,7 @@ namespace Caesura.Standard
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     
     [Flags]
     public enum ForEachResult : Int32
@@ -46,6 +47,45 @@ namespace Caesura.Standard
                 {
                     break;
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Run a callback on all elements of a collection in parallel. If any of the
+        /// calls to the callback throw an exception, they are added to an AggregateException
+        /// and thrown at the end of execution.
+        /// No parallelization will occur if the collection contains 1 or less items.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void ParallelForEach<T>(this IEnumerable<T> collection, Action<T> callback)
+        {
+            if (collection.Count() == 0)
+            {
+                return;
+            }
+            if (collection.Count() == 1)
+            {
+                var item = collection.First();
+                callback.Invoke(item);
+            }
+            
+            var exceptions = new List<Exception>();
+            Parallel.ForEach(collection, (item) =>
+            {
+                try
+                {
+                    callback.Invoke(item);
+                }
+                catch (Exception e)
+                {
+                    exceptions.Add(e);
+                }
+            });
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException(exceptions);
             }
         }
     }

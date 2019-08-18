@@ -10,9 +10,4 @@ namespace Caesura.Standard
         void Copy(Object o);
         ICopyable Clone();
     }
-    
-    public interface ICopyable<T> : ICopyable
-    {
-        void Copy(T item);
-    }
 }
