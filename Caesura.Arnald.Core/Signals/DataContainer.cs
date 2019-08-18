@@ -9,18 +9,36 @@ namespace Caesura.Arnald.Core.Signals
     using System.Text;
     using Caesura.Standard;
     
-    public sealed class DataContainer : IDataContainer
+    // TODO: make sure these can be JSON serialized and back.
+    
+    /// <summary>
+    /// A key/value data store with a String key and an Object value.
+    /// </summary>
+    public class DataContainer : DataContainer<Object>, IDataContainer
+    {
+        public DataContainer() : base() { }
+        public DataContainer(Int32 capacity) : base(capacity) { }
+        public DataContainer(IDictionary<String, Object> dict) : base(dict) { }
+        public DataContainer(IDataContainer dc) : base(dc) { }
+        public DataContainer(DataContainer<Object> dc) : base(dc) { }
+    }
+    
+    /// <summary>
+    /// A key/value data store with a String key.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class DataContainer<T> : IDataContainer<T>
     {
         public Int32 Count => this.internalDictionary.Count;
         
-        private Dictionary<String, Object> __internalDictionary;
-        private Dictionary<String, Object> internalDictionary 
+        private Dictionary<String, T> __internalDictionary;
+        private Dictionary<String, T> internalDictionary 
         { 
             get
             {
                 if (this.__internalDictionary is null)
                 {
-                    this.__internalDictionary = new Dictionary<String, Object>();
+                    this.__internalDictionary = new Dictionary<String, T>();
                 }
                 return this.__internalDictionary;
             }
@@ -34,15 +52,20 @@ namespace Caesura.Arnald.Core.Signals
         
         public DataContainer(Int32 capacity)
         {
-            this.__internalDictionary = new Dictionary<String, Object>(capacity);
+            this.__internalDictionary = new Dictionary<String, T>(capacity);
         }
         
-        public DataContainer(IDictionary<String, Object> dict)
+        public DataContainer(IDictionary<String, T> dict)
         {
-            this.__internalDictionary = new Dictionary<String, Object>(dict);
+            this.__internalDictionary = new Dictionary<String, T>(dict);
         }
         
         public DataContainer(IDataContainer dc) : this(dc.Count)
+        {
+            this.Copy(dc);
+        }
+        
+        public DataContainer(DataContainer<T> dc) : this(dc.Count)
         {
             this.Copy(dc);
         }
@@ -58,23 +81,18 @@ namespace Caesura.Arnald.Core.Signals
                     {
                         val = icp.Clone();
                     }
-                    this.Set(kvp.Key, val);
+                    this.Set(kvp.Key, (T)val);
                 }
             }
         }
         
-        public void Copy(DataContainer dc)
-        {
-            this.Copy(dc as IDataContainer);
-        }
-        
         public ICopyable Clone()
         {
-            var dc = new DataContainer(this);
+            var dc = new DataContainer<T>(this);
             return dc;
         }
         
-        public void Set(String key, Object value)
+        public void Set(String key, T value)
         {
             if (this.HasValue(key))
             {
@@ -83,7 +101,7 @@ namespace Caesura.Arnald.Core.Signals
             this.Replace(key, value);
         }
         
-        public Boolean Replace(String key, Object value)
+        public Boolean Replace(String key, T value)
         {
             var replaced = false;
             if (this.HasValue(key))
@@ -95,19 +113,19 @@ namespace Caesura.Arnald.Core.Signals
             return replaced;
         }
         
-        public Object this[String key]
+        public T this[String key]
         {
             get => this.internalDictionary[key];
             set => this.internalDictionary[key] = value;
         }
         
-        public Maybe<Object> Get(String key)
+        public Maybe<T> Get(String key)
         {
             if (!this.HasValue(key))
             {
                 return Maybe.None;
             }
-            return Maybe<Object>.Some(this.internalDictionary[key]);
+            return Maybe<T>.Some(this.internalDictionary[key]);
         }
         
         public Maybe<M> Get<M>(String key)
@@ -143,7 +161,7 @@ namespace Caesura.Arnald.Core.Signals
             return false;
         }
         
-        public IEnumerator<KeyValuePair<String, Object>> GetEnumerator()
+        public IEnumerator<KeyValuePair<String, T>> GetEnumerator()
         {
             return this.internalDictionary.GetEnumerator();
         }

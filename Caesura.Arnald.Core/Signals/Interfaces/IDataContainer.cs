@@ -10,7 +10,7 @@ namespace Caesura.Arnald.Core.Signals
     /// A key/value data store with a String key.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDataContainer<T> : IEnumerable<KeyValuePair<String, T>>, ICopyable<T>
+    public interface IDataContainer<T> : IEnumerable<KeyValuePair<String, T>>, ICopyable
     {
         Int32 Count { get; }
         T this[String key] { get; set; }
@@ -40,13 +40,7 @@ namespace Caesura.Arnald.Core.Signals
         /// <param name="key"></param>
         /// <returns></returns>
         Boolean HasValue(String key);
-    }
-    
-    /// <summary>
-    /// A key/value data store with a String key and an Object value.
-    /// </summary>
-    public interface IDataContainer : IDataContainer<Object>
-    {
+        
         /// <summary>
         /// Get a value using a key, and attempt to cast the Object type to the generic argument.
         /// Return None if the key was not found or if the value cannot be cast to that type.
@@ -62,5 +56,13 @@ namespace Caesura.Arnald.Core.Signals
         /// <typeparam name="M"></typeparam>
         /// <returns></returns>
         Boolean HasValue<M>(String key);
+    }
+    
+    /// <summary>
+    /// A key/value data store with a String key and an Object value.
+    /// </summary>
+    public interface IDataContainer : IDataContainer<Object>
+    {
+        
     }
 }
