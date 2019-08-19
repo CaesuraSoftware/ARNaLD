@@ -9,6 +9,7 @@ namespace Caesura.Arnald.Core.Signals
     {
         String Name { get; }
         String Namespace { get; }
+        Int32 SubscriberCount { get; }
         /// <summary>
         /// Get or set whether Activators can get this event or not.
         /// </summary>

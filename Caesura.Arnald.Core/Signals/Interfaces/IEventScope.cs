@@ -6,6 +6,8 @@ namespace Caesura.Arnald.Core.Signals
     using System.Collections.Generic;
     using Caesura.Standard;
     
+    // TODO: OnX event properties, mainly for logging
+    
     public interface IEventScope
     {
         /// <summary>

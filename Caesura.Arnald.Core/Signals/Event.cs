@@ -13,6 +13,7 @@ namespace Caesura.Arnald.Core.Signals
         
         public String Name { get; set; }
         public String Namespace { get; set; }
+        public Int32 SubscriberCount => this.Activators.Count;
         public Boolean Blocked { get; private set; }
         public Boolean UseActivatorPriority { get; set; }
         
@@ -90,6 +91,9 @@ namespace Caesura.Arnald.Core.Signals
             };
             this.Activators.Add(activator);
             this.Activators.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+            
+            // TODO: log subscription
+            
             return activator;
         }
         
@@ -100,6 +104,8 @@ namespace Caesura.Arnald.Core.Signals
                 throw new ArgumentNullException(nameof(activator));
             }
             this.Activators.Remove(activator);
+            
+            // TODO: log unsub
         }
         
         public void Block(IActivator blocker)
@@ -110,6 +116,8 @@ namespace Caesura.Arnald.Core.Signals
             }
             this.EventBlocker = blocker;
             this.Blocked = true;
+            
+            // TODO: log blocking
         }
         
         public void Unblock(IActivator blocker)
@@ -127,6 +135,8 @@ namespace Caesura.Arnald.Core.Signals
             }
             this.EventBlocker = null;
             this.Blocked = false;
+            
+            // TODO: log unblocking
         }
         
         public void Raise(IActivator activator)
@@ -136,8 +146,8 @@ namespace Caesura.Arnald.Core.Signals
         
         public void Raise(IActivator activator, IDataContainer data)
         {
-            // TODO: maybe put raising in it's own thread or something, so it doesn't block?
-            // actually maybe just do an async variant
+            // TODO: async variant?
+            // TODO: log raising
             this.GetRaisedEvents(activator, data);
         }
         
