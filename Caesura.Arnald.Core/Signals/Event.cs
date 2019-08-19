@@ -24,7 +24,7 @@ namespace Caesura.Arnald.Core.Signals
         {
             this.Namespace              = DefaultNamespace;
             this.Blocked                = false;
-            this.UseActivatorPriority   = false;
+            this.UseActivatorPriority   = true;
             
             this.Activators             = new List<IActivator>();
         }
@@ -71,10 +71,10 @@ namespace Caesura.Arnald.Core.Signals
             switch (config.PreferredPriority)
             {
                 case SubscriptionConfigurationPriority.Highest:
-                    priority = this.GetHighestPriorityActivator();
+                    priority = this.GetHighestPriorityActivator() + 1;
                     break;
                 case SubscriptionConfigurationPriority.Lowest:
-                    priority = this.GetLowestPriorityActivator();
+                    priority = this.GetLowestPriorityActivator() -1;
                     break;
                 case SubscriptionConfigurationPriority.Midrange:
                     priority = this.GetHighestPriorityActivator() / 2;
@@ -86,11 +86,12 @@ namespace Caesura.Arnald.Core.Signals
                 Namespace       = this.Namespace,
                 Version         = config.Version,
                 Priority        = priority,
+                SelfActivate    = config.SelfActivate,
                 OnActivate      = config.OnActivate,
                 OnUnsubscribe   = config.OnUnsubscribe,
             };
             this.Activators.Add(activator);
-            this.Activators.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+            this.Activators.Sort((x, y) => -1 * x.Priority.CompareTo(y.Priority));
             
             // TODO: log subscription
             
@@ -155,22 +156,8 @@ namespace Caesura.Arnald.Core.Signals
             this.GetRaisedEvents(activator, data);
         }
         
-        private void GetRaisedEvents(IActivator activator, IDataContainer data)
+        public void Raise(ISignal signal)
         {
-            if (activator is null)
-            {
-                throw new ArgumentNullException(nameof(activator));
-            }
-            
-            var signal = new Signal(this.Name, this.Namespace, activator.Version)
-            {
-                Sender = activator.Name,
-            };
-            if (!(data is null))
-            {
-                signal.Data = data;
-            }
-            
             /**/ if (this.Blocked)
             {
                 this.EventBlocker.Activate(signal);
@@ -187,7 +174,7 @@ namespace Caesura.Arnald.Core.Signals
                     }
                     if (a.Name == signal.Sender && !a.SelfActivate)
                     {
-                        break;
+                        continue;
                     }
                     a.Activate(signal);
                 }
@@ -208,6 +195,25 @@ namespace Caesura.Arnald.Core.Signals
                     }
                 });
             }
+        }
+        
+        private void GetRaisedEvents(IActivator activator, IDataContainer data)
+        {
+            if (activator is null)
+            {
+                throw new ArgumentNullException(nameof(activator));
+            }
+            
+            var signal = new Signal(this.Name, this.Namespace, activator.Version)
+            {
+                Sender = activator.Name,
+            };
+            if (!(data is null))
+            {
+                signal.Data = data;
+            }
+            
+            this.Raise(signal);
         }
     }
 }

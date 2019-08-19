@@ -26,8 +26,13 @@ namespace Caesura.Arnald.Core.Signals
         public EventScope()
         {
             this.Events                 = new List<Event>();
-            this.b_UseactivatorPriority = false;
+            this.b_UseactivatorPriority = true;
             this.b_Namespace            = Event.DefaultNamespace;
+        }
+        
+        public EventScope(String nameSpace) : this()
+        {
+            this.b_Namespace = nameSpace;
         }
         
         public Maybe<IEvent> GetEvent(String eventName)
@@ -108,6 +113,35 @@ namespace Caesura.Arnald.Core.Signals
                 return mev.Value.Subscribe(config);
             }
             throw new ElementNotFoundException(eventName);
+        }
+        
+        public void Raise(String eventName)
+        {
+            this.Raise(eventName, null);
+        }
+        
+        public void Raise(String eventName, IDataContainer data)
+        {
+            var signal = new Signal()
+            {
+                Name        = eventName,
+                Namespace   = this.Namespace,
+            };
+            if (data != null)
+            {
+                signal.Data = data;
+            }
+            this.Raise(signal);
+        }
+        
+        public void Raise(ISignal signal)
+        {
+            var ev = this.Events.Find(x => x.Name == signal.Name);
+            if (ev is null)
+            {
+                throw new ElementNotFoundException($"No event registered with name of \"{signal.Name}\"");
+            }
+            ev.Raise(signal);
         }
     }
 }

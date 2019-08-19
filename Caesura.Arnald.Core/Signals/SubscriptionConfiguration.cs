@@ -20,6 +20,7 @@ namespace Caesura.Arnald.Core.Signals
         public String Namespace { get; set; }
         public Version Version { get; set; }
         public Int32 Priority { get; set; }
+        public Boolean SelfActivate { get; set; }
         public ActivatorCallback OnActivate { get; set; }
         public Action<IActivator> OnUnsubscribe { get; set; }
         
@@ -30,6 +31,7 @@ namespace Caesura.Arnald.Core.Signals
             this.Name               = Guid.NewGuid().ToString().ToUpper();
             this.Namespace          = Event.DefaultNamespace;
             this.Version            = new Version(1, 0, 0, 0);
+            this.SelfActivate       = false;
             
             this.PreferredPriority  = SubscriptionConfigurationPriority.Highest;
         }

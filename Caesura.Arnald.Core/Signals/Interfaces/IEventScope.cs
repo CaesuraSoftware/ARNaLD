@@ -47,5 +47,8 @@ namespace Caesura.Arnald.Core.Signals
         /// <param name="name"></param>
         /// <returns></returns>
         IActivator Subscribe(String eventName, SubscriptionConfiguration config);
+        void Raise(String eventName);
+        void Raise(String eventName, IDataContainer data);
+        void Raise(ISignal signal);
     }
 }
