@@ -14,15 +14,17 @@ namespace Caesura.Arnald.Core.Signals
         public String Name { get; set; }
         public String Namespace { get; set; }
         public Boolean Blocked { get; private set; }
+        public Boolean UseActivatorPriority { get; set; }
         
         private IActivator EventBlocker { get; set; }
         private List<IActivator> Activators { get; set; }
         
         public Event()
         {
-            this.Namespace = DefaultNamespace;
+            this.Namespace              = DefaultNamespace;
+            this.UseActivatorPriority   = false;
             
-            this.Activators = new List<IActivator>();
+            this.Activators             = new List<IActivator>();
         }
         
         public Event(String name) : this()
@@ -30,38 +32,76 @@ namespace Caesura.Arnald.Core.Signals
             this.Name = name;
         }
         
-        public IActivator Subscribe()
+        public Int32 GetLowestPriorityActivator()
         {
-            var name = Guid.NewGuid().ToString().ToUpper();
-            var ver  = new Version(1, 0, 0, 0);
-            return this.Subscribe(name, ver);
+            var priority = 0;
+            if (this.Activators.Count > 0)
+            {
+                var first = this.Activators.First();
+                priority = first.Priority;
+            }
+            return priority;
         }
         
-        public IActivator Subscribe(String name, Version version)
+        public Int32 GetHighestPriorityActivator()
+        {
+            var priority = 0;
+            if (this.Activators.Count > 0)
+            {
+                var last = this.Activators.Last();
+                priority = last.Priority;
+            }
+            return priority;
+        }
+        
+        public IActivator Subscribe(ActivatorCallback callback)
+        {
+            var name     = Guid.NewGuid().ToString().ToUpper();
+            var ver      = new Version(1, 0, 0, 0);
+            var priority = this.GetHighestPriorityActivator();
+            return this.Subscribe(name, ver, priority, callback);
+        }
+        
+        public IActivator Subscribe(String name, Version version, Int32 priority, ActivatorCallback callback)
         {
             var activator = new Activator(this)
             {
                 Name        = name,
                 Namespace   = this.Namespace,
                 Version     = version,
+                Priority    = priority,
+                OnReceive   = callback,
             };
             this.Activators.Add(activator);
+            this.Activators.Sort((x, y) => x.Priority.CompareTo(y.Priority));
             return activator;
         }
         
         public void Unsubscribe(IActivator activator)
         {
+            if (activator is null)
+            {
+                throw new ArgumentNullException(nameof(activator));
+            }
             this.Activators.Remove(activator);
         }
         
         public void Block(IActivator blocker)
         {
+            if (blocker is null)
+            {
+                throw new ArgumentNullException(nameof(blocker));
+            }
             this.EventBlocker = blocker;
             this.Blocked = true;
         }
         
         public void Unblock(IActivator blocker)
         {
+            if (blocker is null)
+            {
+                throw new ArgumentNullException(nameof(blocker));
+            }
             if (!(this.EventBlocker is null) && !Object.ReferenceEquals(blocker, this.EventBlocker))
             {
                 throw new InvalidOperationException(
@@ -80,6 +120,18 @@ namespace Caesura.Arnald.Core.Signals
         
         public void Raise(IActivator activator, IDataContainer data)
         {
+            // TODO: maybe put raising in it's own thread or something, so it doesn't block?
+            // actually maybe just do an async variant
+            this.GetRaisedEvents(activator, data);
+        }
+        
+        private void GetRaisedEvents(IActivator activator, IDataContainer data)
+        {
+            if (activator is null)
+            {
+                throw new ArgumentNullException(nameof(activator));
+            }
+            
             var signal = new Signal(this.Name, this.Namespace, activator.Version);
             if (!(data is null))
             {
@@ -90,9 +142,30 @@ namespace Caesura.Arnald.Core.Signals
             {
                 this.EventBlocker.Activate(signal);
             }
+            else if (this.UseActivatorPriority)
+            {
+                foreach (var a in this.Activators)
+                {
+                    if (this.Blocked)
+                    {
+                        // if a previously-activated activator blocked this event,
+                        // then do not activate any further activators.
+                        break;
+                    }
+                    a.Activate(signal);
+                }
+            }
             else
             {
-                this.Activators.ParallelForEach(a => a.Activate(signal));
+                this.Activators.ParallelForEach(a => 
+                {
+                    // same philosophy as the previous comment, except this is more
+                    // of wishful thinking than hard logic given this is multithreaded.
+                    if (!this.Blocked)
+                    {
+                        a.Activate(signal);
+                    }
+                });
             }
         }
     }

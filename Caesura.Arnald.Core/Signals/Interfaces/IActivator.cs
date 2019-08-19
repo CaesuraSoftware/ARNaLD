@@ -5,16 +5,20 @@ namespace Caesura.Arnald.Core.Signals
 {
     using System.Collections.Generic;
     using System.Threading;
-    
-    // TODO: we shouldn't block the thread for only one event, need to rethink this
-    // instead, have ONE Activator that blocks until it gets Raised
+    public delegate void ActivatorCallback(IActivator self, ISignal signal);
     
     public interface IActivator : IDisposable
     {
         String Name { get; }
         String Namespace { get; }
         Version Version { get; }
+        Int32 Priority { get; }
         
+        /// <summary>
+        /// Set the callback for the activator.
+        /// </summary>
+        /// <param name="callback"></param>
+        void SetActivation(ActivatorCallback callback);
         /// <summary>
         /// Run when a signal is raised.
         /// </summary>

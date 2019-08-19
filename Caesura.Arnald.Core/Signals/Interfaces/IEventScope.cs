@@ -5,15 +5,8 @@ namespace Caesura.Arnald.Core.Signals
 {
     using System.Collections.Generic;
     
-    public interface IEvent
+    public interface IEventScope
     {
-        String Name { get; }
-        String Namespace { get; }
-        /// <summary>
-        /// Get or set whether Activators can get this event or not.
-        /// </summary>
-        /// <value></value>
-        Boolean Blocked { get; }
         /// <summary>
         /// Configure whether more than one Activator will get
         /// an event sequentially or in parallel.
@@ -21,21 +14,34 @@ namespace Caesura.Arnald.Core.Signals
         /// <value></value>
         Boolean UseActivatorPriority { get; set; }
         
-        Int32 GetLowestPriorityActivator();
-        Int32 GetHighestPriorityActivator();
+        IEvent GetEvent(String eventName);
+        Boolean IsEventRegistered(String eventName);
+        /// <summary>
+        /// Register a new event.
+        /// </summary>
+        /// <param name="eventName"></param>
+        void Register(String eventName);
+        /// <summary>
+        /// Unregister an event.
+        /// </summary>
+        /// <param name="eventName"></param>
+        void Unregister(String eventName);
+        
+        Int32 GetLowestPriorityActivator(String eventName);
+        Int32 GetHighestPriorityActivator(String eventName);
         /// <summary>
         /// Subscribe to this event, returning an IActivator.
         /// The name of the IActivator will be a new GUID and
         /// the priority will be set to highest.
         /// </summary>
         /// <returns></returns>
-        IActivator Subscribe(ActivatorCallback callback);
+        IActivator Subscribe(String eventName, ActivatorCallback callback);
         /// <summary>
         /// Subscribe to this event, returning an IActivator with the
         /// given name and version.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        IActivator Subscribe(String name, Version version, Int32 priority, ActivatorCallback callback);
+        IActivator Subscribe(String eventName, String name, Version version, Int32 priority, ActivatorCallback callback);
     }
 }
