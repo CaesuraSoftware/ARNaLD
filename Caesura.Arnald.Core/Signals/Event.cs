@@ -105,6 +105,10 @@ namespace Caesura.Arnald.Core.Signals
                 throw new ArgumentNullException(nameof(activator));
             }
             this.Activators.Remove(activator);
+            if (Object.ReferenceEquals(this.EventBlocker, activator))
+            {
+                this.Unblock(activator);
+            }
             
             // TODO: log unsub
         }
