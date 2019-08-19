@@ -19,7 +19,7 @@ namespace Caesura.Standard
     public delegate MapResult MapCallback<T>(T element);
     public delegate MapResult MapIteratorCallback<T>(T element, ref Int32 iterator);
     
-    public static class ForEachExtension
+    public static class InteratorExtensions
     {
         public static void Map<T>(this IEnumerable<T> collection, Action<T> callback)
         {
@@ -74,7 +74,7 @@ namespace Caesura.Standard
         /// <param name="collection"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public static void ParallelForEach<T>(this IEnumerable<T> collection, Action<T> callback)
+        public static void ParallelMap<T>(this IEnumerable<T> collection, Action<T> callback)
         {
             if (collection.Count() == 0)
             {

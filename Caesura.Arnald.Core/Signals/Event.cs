@@ -173,7 +173,7 @@ namespace Caesura.Arnald.Core.Signals
             }
             else
             {
-                this.Activators.ParallelForEach(a => 
+                this.Activators.ParallelMap(a => 
                 {
                     // same philosophy as the previous comment, except this is more
                     // of wishful thinking than hard logic given this is multithreaded.
