@@ -23,53 +23,80 @@ namespace Caesura.Arnald.Core.Signals
             this.b_UseactivatorPriority = false;
         }
         
-        public IEvent GetEvent(String eventName)
+        public Maybe<IEvent> GetEvent(String eventName)
         {
-            throw new NotImplementedException();
+            if (this.IsEventRegistered(eventName))
+            {
+                var ev = this.Events.Find(x => x.Name == eventName);
+                return Maybe<IEvent>.Some(ev);
+            }
+            return Maybe.None;
         }
         
         public Boolean IsEventRegistered(String eventName)
         {
-            throw new NotImplementedException();
+            return this.Events.Exists(x => x.Name == eventName);
         }
         
         public void Register(String eventName)
         {
-            throw new NotImplementedException();
+            if (this.IsEventRegistered(eventName))
+            {
+                throw new ElementExistsException(eventName);
+            }
+            var ev = new Event(eventName);
+            this.Events.Add(ev);
         }
         
         public void Unregister(String eventName)
         {
-            throw new NotImplementedException();
+            if (!this.IsEventRegistered(eventName))
+            {
+                throw new ElementNotFoundException(eventName);
+            }
+            var ev = this.GetEvent(eventName).Value as Event;
+            this.Events.Remove(ev);
         }
         
         
         public Int32 GetLowestPriorityActivator(String eventName)
         {
-            throw new NotImplementedException();
+            var mev = this.GetEvent(eventName);
+            if (mev)
+            {
+                return mev.Value.GetLowestPriorityActivator();
+            }
+            throw new ElementNotFoundException(eventName);
         }
         
         public Int32 GetHighestPriorityActivator(String eventName)
         {
-            throw new NotImplementedException();
+            var mev = this.GetEvent(eventName);
+            if (mev)
+            {
+                return mev.Value.GetHighestPriorityActivator();
+            }
+            throw new ElementNotFoundException(eventName);
         }
         
         public IActivator Subscribe(String eventName, ActivatorCallback callback)
         {
-            throw new NotImplementedException();
+            var mev = this.GetEvent(eventName);
+            if (mev)
+            {
+                return mev.Value.Subscribe(callback);
+            }
+            throw new ElementNotFoundException(eventName);
         }
         
         public IActivator Subscribe(String eventName, String name, Version version, Int32 priority, ActivatorCallback callback)
         {
-            throw new NotImplementedException();
-        }
-        
-        private void SetUseActivatorPriority(Boolean value)
-        {
-            foreach (var ev in this.Events)
+            var mev = this.GetEvent(eventName);
+            if (mev)
             {
-                ev.UseActivatorPriority = value;
+                return mev.Value.Subscribe(name, version, priority, callback);
             }
+            throw new ElementNotFoundException(eventName);
         }
     }
 }

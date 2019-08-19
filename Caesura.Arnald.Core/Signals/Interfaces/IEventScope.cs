@@ -4,6 +4,7 @@ using System;
 namespace Caesura.Arnald.Core.Signals
 {
     using System.Collections.Generic;
+    using Caesura.Standard;
     
     public interface IEventScope
     {
@@ -14,7 +15,7 @@ namespace Caesura.Arnald.Core.Signals
         /// <value></value>
         Boolean UseActivatorPriority { get; set; }
         
-        IEvent GetEvent(String eventName);
+        Maybe<IEvent> GetEvent(String eventName);
         Boolean IsEventRegistered(String eventName);
         /// <summary>
         /// Register a new event.

@@ -22,6 +22,7 @@ namespace Caesura.Arnald.Core.Signals
         public Event()
         {
             this.Namespace              = DefaultNamespace;
+            this.Blocked                = false;
             this.UseActivatorPriority   = false;
             
             this.Activators             = new List<IActivator>();
