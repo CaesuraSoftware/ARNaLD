@@ -5,6 +5,7 @@ namespace Caesura.Arnald.Core.Signals
 {
     using System.Collections.Generic;
     using System.Threading;
+    
     public delegate void ActivatorCallback(IActivator self, ISignal signal);
     
     public interface IActivator : IDisposable
