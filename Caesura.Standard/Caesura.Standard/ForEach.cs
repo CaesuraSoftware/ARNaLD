@@ -10,10 +10,10 @@ namespace Caesura.Standard
     [Flags]
     public enum MapResult : Int32
     {
-        None        = 1 << 0,
-        Success     = 1 << 1,
-        Failure     = 1 << 2,
-        Halt        = 1 << 3,
+        None        =      0,
+        Success     = 1 << 0,
+        Failure     = 1 << 1,
+        Halt        = 1 << 2,
     }
     
     public delegate MapResult MapCallback<T>(T element);
