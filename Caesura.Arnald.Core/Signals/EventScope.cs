@@ -14,13 +14,20 @@ namespace Caesura.Arnald.Core.Signals
         public Boolean UseActivatorPriority
         {
             get => this.b_UseactivatorPriority;
-            set => this.Events.Map(ev => ev.UseActivatorPriority = value);
+            set { this.b_UseactivatorPriority = value; this.Events.Map(ev => ev.UseActivatorPriority = value); }
+        }
+        private String b_Namespace;
+        public String Namespace
+        { 
+            get => this.b_Namespace;
+            set { this.b_Namespace = value; this.Events.Map(ev => ev.Namespace = value); }
         }
         
         public EventScope()
         {
             this.Events                 = new List<Event>();
             this.b_UseactivatorPriority = false;
+            this.b_Namespace            = Event.DefaultNamespace;
         }
         
         public Maybe<IEvent> GetEvent(String eventName)
@@ -44,7 +51,11 @@ namespace Caesura.Arnald.Core.Signals
             {
                 throw new ElementExistsException(eventName);
             }
-            var ev = new Event(eventName);
+            var ev = new Event(eventName)
+            {
+                UseActivatorPriority    = this.UseActivatorPriority,
+                Namespace               = this.Namespace,
+            };
             this.Events.Add(ev);
         }
         
@@ -89,12 +100,12 @@ namespace Caesura.Arnald.Core.Signals
             throw new ElementNotFoundException(eventName);
         }
         
-        public IActivator Subscribe(String eventName, String name, Version version, Int32 priority, ActivatorCallback callback)
+        public IActivator Subscribe(String eventName, SubscriptionConfiguration config)
         {
             var mev = this.GetEvent(eventName);
             if (mev)
             {
-                return mev.Value.Subscribe(name, version, priority, callback);
+                return mev.Value.Subscribe(config);
             }
             throw new ElementNotFoundException(eventName);
         }

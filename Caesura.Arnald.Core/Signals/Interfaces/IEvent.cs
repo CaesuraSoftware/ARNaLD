@@ -36,6 +36,6 @@ namespace Caesura.Arnald.Core.Signals
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        IActivator Subscribe(String name, Version version, Int32 priority, ActivatorCallback callback);
+        IActivator Subscribe(SubscriptionConfiguration config);
     }
 }

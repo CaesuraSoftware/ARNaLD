@@ -13,12 +13,9 @@ namespace Caesura.Arnald.Core.Signals
         String Namespace { get; }
         Version Version { get; }
         Int32 Priority { get; }
+        ActivatorCallback OnActivate { get; set; }
+        Action<IActivator> OnUnsubscribe { get; set; }
         
-        /// <summary>
-        /// Set the callback for the activator.
-        /// </summary>
-        /// <param name="callback"></param>
-        void SetActivation(ActivatorCallback callback);
         /// <summary>
         /// Run when a signal is raised.
         /// </summary>

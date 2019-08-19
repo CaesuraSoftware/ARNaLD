@@ -60,18 +60,26 @@ namespace Caesura.Arnald.Core.Signals
             var name     = Guid.NewGuid().ToString().ToUpper();
             var ver      = new Version(1, 0, 0, 0);
             var priority = this.GetHighestPriorityActivator();
-            return this.Subscribe(name, ver, priority, callback);
+            var config = new SubscriptionConfiguration()
+            {
+                Name        = name,
+                Version     = ver,
+                Priority    = priority,
+                OnActivate  = callback,
+            };
+            return this.Subscribe(config);
         }
         
-        public IActivator Subscribe(String name, Version version, Int32 priority, ActivatorCallback callback)
+        public IActivator Subscribe(SubscriptionConfiguration config)
         {
             var activator = new Activator(this)
             {
-                Name        = name,
-                Namespace   = this.Namespace,
-                Version     = version,
-                Priority    = priority,
-                OnReceive   = callback,
+                Name            = config.Name,
+                Namespace       = this.Namespace,
+                Version         = config.Version,
+                Priority        = config.Priority,
+                OnActivate      = config.OnActivate,
+                OnUnsubscribe   = config.OnUnsubscribe,
             };
             this.Activators.Add(activator);
             this.Activators.Sort((x, y) => x.Priority.CompareTo(y.Priority));

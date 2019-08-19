@@ -14,6 +14,7 @@ namespace Caesura.Arnald.Core.Signals
         /// </summary>
         /// <value></value>
         Boolean UseActivatorPriority { get; set; }
+        String Namespace { get; set; }
         
         Maybe<IEvent> GetEvent(String eventName);
         Boolean IsEventRegistered(String eventName);
@@ -43,6 +44,6 @@ namespace Caesura.Arnald.Core.Signals
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        IActivator Subscribe(String eventName, String name, Version version, Int32 priority, ActivatorCallback callback);
+        IActivator Subscribe(String eventName, SubscriptionConfiguration config);
     }
 }

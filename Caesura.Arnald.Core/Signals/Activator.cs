@@ -13,7 +13,8 @@ namespace Caesura.Arnald.Core.Signals
         public String Namespace { get; set; }
         public Version Version { get; set; }
         public Int32 Priority { get; set; }
-        public ActivatorCallback OnReceive { get; set; }
+        public ActivatorCallback OnActivate { get; set; }
+        public Action<IActivator> OnUnsubscribe { get; set; }
         
         private Event HostEvent { get; set; }
         
@@ -27,14 +28,9 @@ namespace Caesura.Arnald.Core.Signals
             this.HostEvent = ev;
         }
         
-        public void SetActivation(ActivatorCallback callback)
-        {
-            this.OnReceive = callback;
-        }
-        
         public virtual void Activate(ISignal signal)
         {
-            this.OnReceive?.Invoke(this, signal);
+            this.OnActivate?.Invoke(this, signal);
         }
         
         public void Block()
@@ -65,6 +61,7 @@ namespace Caesura.Arnald.Core.Signals
         private void internalUnsubscribe()
         {
             this.HostEvent.Unsubscribe(this);
+            this.OnUnsubscribe?.Invoke(this);
         }
         
         public void Dispose()
