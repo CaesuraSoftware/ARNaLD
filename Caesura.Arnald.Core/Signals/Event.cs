@@ -57,14 +57,8 @@ namespace Caesura.Arnald.Core.Signals
         
         public IActivator Subscribe(ActivatorCallback callback)
         {
-            var name     = Guid.NewGuid().ToString().ToUpper();
-            var ver      = new Version(1, 0, 0, 0);
-            var priority = this.GetHighestPriorityActivator();
             var config = new SubscriptionConfiguration()
             {
-                Name        = name,
-                Version     = ver,
-                Priority    = priority,
                 OnActivate  = callback,
             };
             return this.Subscribe(config);
@@ -72,12 +66,25 @@ namespace Caesura.Arnald.Core.Signals
         
         public IActivator Subscribe(SubscriptionConfiguration config)
         {
+            var priority = config.Priority;
+            switch (config.PreferredPriority)
+            {
+                case SubscriptionConfigurationPriority.Highest:
+                    priority = this.GetHighestPriorityActivator();
+                    break;
+                case SubscriptionConfigurationPriority.Lowest:
+                    priority = this.GetLowestPriorityActivator();
+                    break;
+                case SubscriptionConfigurationPriority.Midrange:
+                    priority = this.GetHighestPriorityActivator() / 2;
+                    break;
+            }
             var activator = new Activator(this)
             {
                 Name            = config.Name,
                 Namespace       = this.Namespace,
                 Version         = config.Version,
-                Priority        = config.Priority,
+                Priority        = priority,
                 OnActivate      = config.OnActivate,
                 OnUnsubscribe   = config.OnUnsubscribe,
             };
