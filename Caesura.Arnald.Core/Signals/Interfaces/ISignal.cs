@@ -24,6 +24,7 @@ namespace Caesura.Arnald.Core.Signals
         /// The version of the signal, so subsystems can look for specific versions of newer or older signals.
         /// </summary>
         Version Version { get; }
+        String Sender { get; }
         /// <summary>
         /// The data of the signal, which is essentially the arguments for which ever subsystem gets the signal.
         /// </summary>

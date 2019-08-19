@@ -14,6 +14,7 @@ namespace Caesura.Arnald.Core.Signals
         String Namespace { get; }
         Version Version { get; }
         Int32 Priority { get; }
+        Boolean SelfActivate { get; set; }
         ActivatorCallback OnActivate { get; set; }
         Action<IActivator> OnUnsubscribe { get; set; }
         

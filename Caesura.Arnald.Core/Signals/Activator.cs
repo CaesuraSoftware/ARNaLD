@@ -13,6 +13,7 @@ namespace Caesura.Arnald.Core.Signals
         public String Namespace { get; set; }
         public Version Version { get; set; }
         public Int32 Priority { get; set; }
+        public Boolean SelfActivate { get; set; }
         public ActivatorCallback OnActivate { get; set; }
         public Action<IActivator> OnUnsubscribe { get; set; }
         
@@ -20,10 +21,10 @@ namespace Caesura.Arnald.Core.Signals
         
         public Activator()
         {
-            
+            this.SelfActivate = false;
         }
         
-        public Activator(Event ev)
+        public Activator(Event ev) : this()
         {
             this.HostEvent = ev;
         }

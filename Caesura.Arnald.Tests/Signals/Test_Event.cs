@@ -39,6 +39,7 @@ namespace Caesura.Arnald.Tests.Signals
             
             // Test proper
             IActivator sub1 = ev.Subscribe(onactivate1);
+            sub1.SelfActivate = true;
             sub1.OnUnsubscribe = onunsub1;
             sub1.Raise();
             sub1.Unsubscribe();
@@ -69,6 +70,7 @@ namespace Caesura.Arnald.Tests.Signals
             // Test proper
             IActivator sub1 = ev.Subscribe(onactivate1);
             IActivator sub2 = ev.Subscribe(onactivate2);
+            sub1.SelfActivate = true;
             sub1.Raise();
             
             // Assertions
@@ -105,6 +107,7 @@ namespace Caesura.Arnald.Tests.Signals
             // Test proper
             IActivator sub1 = ev.Subscribe(onactivate1);
             IActivator sub2 = ev.Subscribe(onactivate2);
+            sub1.SelfActivate = true;
             sub1.Raise(data);
             
             // Assertions
@@ -134,6 +137,7 @@ namespace Caesura.Arnald.Tests.Signals
             // Test proper
             IActivator sub1 = ev.Subscribe(onactivate1);
             IActivator sub2 = ev.Subscribe(onactivate2);
+            sub1.SelfActivate = false; // sub1 blocking should always make sub1 get the signal.
             sub1.Block();
             sub1.Raise();
             

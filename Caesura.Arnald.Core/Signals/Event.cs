@@ -158,7 +158,10 @@ namespace Caesura.Arnald.Core.Signals
                 throw new ArgumentNullException(nameof(activator));
             }
             
-            var signal = new Signal(this.Name, this.Namespace, activator.Version);
+            var signal = new Signal(this.Name, this.Namespace, activator.Version)
+            {
+                Sender = activator.Name,
+            };
             if (!(data is null))
             {
                 signal.Data = data;
@@ -178,6 +181,10 @@ namespace Caesura.Arnald.Core.Signals
                         // then do not activate any further activators.
                         break;
                     }
+                    if (a.Name == signal.Sender && !a.SelfActivate)
+                    {
+                        break;
+                    }
                     a.Activate(signal);
                 }
             }
@@ -189,6 +196,10 @@ namespace Caesura.Arnald.Core.Signals
                     // of wishful thinking than hard logic given this is multithreaded.
                     if (!this.Blocked)
                     {
+                        if (a.Name == signal.Sender && !a.SelfActivate)
+                        {
+                            return;
+                        }
                         a.Activate(signal);
                     }
                 });

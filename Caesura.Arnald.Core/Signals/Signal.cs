@@ -33,6 +33,7 @@ namespace Caesura.Arnald.Core.Signals
         public String Name { get; set; }
         public String Namespace { get; set; }
         public Version Version { get; set; }
+        public String Sender { get; set; }
         public IDataContainer<T> Data { get; set; }
         
         public Signal()
