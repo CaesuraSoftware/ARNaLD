@@ -34,6 +34,8 @@ namespace Caesura.Arnald.Core.Signals
         Boolean HasData<M>(String key);
         Maybe<M> GetData<M>(String key);
         void AddData(String key, T value);
+        void AssertData(String key);
+        void AssertData<M>(String key);
     }
     
     /// <summary>

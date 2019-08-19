@@ -108,5 +108,21 @@ namespace Caesura.Arnald.Core.Signals
         {
             this.Data.Replace(key, value);
         }
+        
+        public void AssertData(String key)
+        {
+            if (!this.HasData(key))
+            {
+                throw new ElementNotFoundException(key);
+            }
+        }
+        
+        public void AssertData<M>(String key)
+        {
+            if (!this.HasData<M>(key))
+            {
+                throw new ElementNotFoundException(key);
+            }
+        }
     }
 }
