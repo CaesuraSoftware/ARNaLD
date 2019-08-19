@@ -84,6 +84,7 @@ namespace Caesura.Standard
             {
                 var item = collection.First();
                 callback.Invoke(item);
+                return;
             }
             
             var exceptions = new List<Exception>();
