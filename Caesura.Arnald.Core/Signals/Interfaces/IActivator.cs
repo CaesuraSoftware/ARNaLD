@@ -15,6 +15,7 @@ namespace Caesura.Arnald.Core.Signals
         Version Version { get; }
         Int32 Priority { get; }
         Boolean SelfActivate { get; set; }
+        Boolean Blocking { get; }
         ActivatorCallback OnActivate { get; set; }
         Action<IActivator> OnUnsubscribe { get; set; }
         

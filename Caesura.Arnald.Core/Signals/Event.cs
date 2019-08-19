@@ -16,8 +16,8 @@ namespace Caesura.Arnald.Core.Signals
         public Int32 SubscriberCount => this.Activators.Count;
         public Boolean Blocked { get; private set; }
         public Boolean UseActivatorPriority { get; set; }
+        public IActivator EventBlocker { get; private set; }
         
-        private IActivator EventBlocker { get; set; }
         private List<IActivator> Activators { get; set; }
         
         public Event()
@@ -113,6 +113,10 @@ namespace Caesura.Arnald.Core.Signals
             if (blocker is null)
             {
                 throw new ArgumentNullException(nameof(blocker));
+            }
+            if (this.Blocked)
+            {
+                throw new InvalidOperationException($"Event is already blocked by \"{this.EventBlocker.Name}\"");
             }
             this.EventBlocker = blocker;
             this.Blocked = true;

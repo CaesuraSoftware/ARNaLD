@@ -14,6 +14,7 @@ namespace Caesura.Arnald.Core.Signals
         public Version Version { get; set; }
         public Int32 Priority { get; set; }
         public Boolean SelfActivate { get; set; }
+        public Boolean Blocking => Object.ReferenceEquals(this.HostEvent.EventBlocker, this);
         public ActivatorCallback OnActivate { get; set; }
         public Action<IActivator> OnUnsubscribe { get; set; }
         

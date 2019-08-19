@@ -126,7 +126,7 @@ namespace Caesura.Arnald.Tests.Signals
             Boolean activated1 = false;
             ActivatorCallback onactivate1 = (self, signal) =>
             {
-                activated1 = true;
+                activated1 = self.Blocking;
             };
             Boolean activated2 = false;
             ActivatorCallback onactivate2 = (self, signal) =>

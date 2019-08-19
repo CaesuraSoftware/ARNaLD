@@ -15,6 +15,7 @@ namespace Caesura.Arnald.Core.Signals
         /// </summary>
         /// <value></value>
         Boolean Blocked { get; }
+        IActivator EventBlocker { get; }
         /// <summary>
         /// Configure whether more than one Activator will get
         /// an event sequentially or in parallel.
