@@ -39,5 +39,9 @@ namespace Caesura.Arnald.Core.Signals
         /// <param name="name"></param>
         /// <returns></returns>
         IActivator Subscribe(SubscriptionConfiguration config);
+        /// <summary>
+        /// Force this event to unblock.
+        /// </summary>
+        void Unblock();
     }
 }

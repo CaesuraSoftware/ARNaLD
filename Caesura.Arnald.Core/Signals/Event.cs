@@ -113,6 +113,24 @@ namespace Caesura.Arnald.Core.Signals
             // TODO: log unsub
         }
         
+        public IActivator Intercept(ActivatorCallback callback)
+        {
+            ActivatorCallback cb = (self, signal) =>
+            {
+                if (self.Blocking)
+                {
+                    self.Unblock();
+                }
+                else
+                {
+                    self.Block();
+                    callback.Invoke(self, signal);
+                }
+            };
+            var activator = this.Subscribe(cb);
+            return activator;
+        }
+        
         public void Block(IActivator blocker)
         {
             if (blocker is null)
@@ -142,10 +160,15 @@ namespace Caesura.Arnald.Core.Signals
                     $"Event was blocked by \"{this.EventBlocker.Name}\" and can only be unblocked by it"
                 );
             }
-            this.EventBlocker = null;
-            this.Blocked = false;
+            this.Unblock();
             
             // TODO: log unblocking
+        }
+        
+        public void Unblock()
+        {
+            this.EventBlocker = null;
+            this.Blocked = false;
         }
         
         public void Raise(IActivator activator)

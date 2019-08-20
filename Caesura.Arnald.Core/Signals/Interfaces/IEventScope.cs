@@ -18,6 +18,10 @@ namespace Caesura.Arnald.Core.Signals
         Boolean UseActivatorPriority { get; set; }
         String Namespace { get; set; }
         
+        /// <summary>
+        /// Run the main event for this scope.
+        /// </summary>
+        void Run();
         Maybe<IEvent> GetEvent(String eventName);
         Boolean IsEventRegistered(String eventName);
         /// <summary>
@@ -50,5 +54,33 @@ namespace Caesura.Arnald.Core.Signals
         void Raise(String eventName);
         void Raise(String eventName, IDataContainer data);
         void Raise(ISignal signal);
+        /// <summary>
+        /// Force unblock all events.
+        /// </summary>
+        void UnblockAll();
+        /// <summary>
+        /// Block an event from being raised to instead raise another event.
+        /// Will automatically unblock when the event is raised again.
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="eventNameToCall"></param>
+        /// <returns></returns>
+        IActivator Intercept(String eventName, String eventNameToCall);
+        /// <summary>
+        /// Block an event from being raised to instead raise another event.
+        /// Will automatically unblock when the event is raised again.
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="signal"></param>
+        /// <returns></returns>
+        IActivator Intercept(String eventName, ISignal signal);
+        /// <summary>
+        /// Block an event from being raised and instead run a callback.
+        /// Will automatically unblock when the event is raised again.
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        IActivator Intercept(String eventName, ActivatorCallback callback);
     }
 }

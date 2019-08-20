@@ -9,6 +9,8 @@ namespace Caesura.Arnald.Core.Signals
     
     public class EventScope : IEventScope
     {
+        public static String MainEventName => "__main";
+        
         private List<Event> Events { get; set; }
         private Boolean b_UseactivatorPriority;
         public Boolean UseActivatorPriority
@@ -28,11 +30,19 @@ namespace Caesura.Arnald.Core.Signals
             this.Events                 = new List<Event>();
             this.b_UseactivatorPriority = true;
             this.b_Namespace            = Event.DefaultNamespace;
+            
+            this.Register(EventScope.MainEventName);
         }
         
         public EventScope(String nameSpace) : this()
         {
-            this.b_Namespace = nameSpace;
+            this.Namespace = nameSpace;
+        }
+        
+        public void Run()
+        {
+            this.UnblockAll();
+            this.Raise(EventScope.MainEventName);
         }
         
         public Maybe<IEvent> GetEvent(String eventName)
@@ -142,6 +152,38 @@ namespace Caesura.Arnald.Core.Signals
                 throw new ElementNotFoundException($"No event registered with name of \"{signal.Name}\"");
             }
             ev.Raise(signal);
+        }
+        
+        public void UnblockAll()
+        {
+            this.Events.Map(ev => ev.Unblock());
+        }
+        
+        public IActivator Intercept(String eventName, String eventNameToCall)
+        {
+            var signal = new Signal(eventNameToCall)
+            {
+                Namespace = this.Namespace,
+            };
+            return this.Intercept(eventName, signal);
+        }
+        
+        public IActivator Intercept(String eventName, ISignal signal)
+        {
+            return this.Intercept(eventName, (self, s) =>
+            {
+                this.Raise(signal);
+            });
+        }
+        
+        public IActivator Intercept(String eventName, ActivatorCallback callback)
+        {
+            var ev = this.Events.Find(x => x.Name == eventName);
+            if (ev is null)
+            {
+                throw new ElementNotFoundException($"No event registered with name of \"{eventName}\"");
+            }
+            return ev.Intercept(callback);
         }
     }
 }
