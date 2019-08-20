@@ -17,6 +17,7 @@ namespace Caesura.Arnald.Tests.Signals
             this.AddTest(nameof(RaiseTest_1)        , this.RaiseTest_1);
             this.AddTest(nameof(RaiseTest_2)        , this.RaiseTest_2);
             this.AddTest(nameof(BlockTest_1)        , this.BlockTest_1);
+            this.AddTest(nameof(ShowAdDemo)         , this.ShowAdDemo);
         }
         
         [Fact]
@@ -145,6 +146,103 @@ namespace Caesura.Arnald.Tests.Signals
             Assert.NotEqual(sub1.Name, sub2.Name);
             Assert.True(activated1);
             Assert.False(activated2);
+        }
+        
+        [Fact]
+        public void ShowAdDemo()
+        {
+            // Inspired by the Luca Matteis "B-Threads" talks.
+            // This function is split up as three "iterations" to represent
+            // incremental versions of a program. In this case, we're simulating an ATM.
+            // In the first version of the program, we log the user in and show them
+            // their account information. In the second version, we show an ad before
+            // showing the account details. In the third version, we don't show an ad
+            // for people with premium accounts. We do all this without changing the old
+            // program in any way, only adding on to it.
+            
+            // Setup
+            IEventScope scope = new EventScope("ATM");
+            
+            // --- Iteration 1 --- //
+            this.WriteLine("--- Iteration 1 (log in and show account) ---");
+            
+            var eventName_login = "login";
+            var eventName_showAccount = "showAccount";
+            scope.Register(eventName_login);
+            scope.Register(eventName_showAccount);
+            
+            scope.Subscribe(EventScope.MainEventName, (self, signal) =>
+            {
+                scope.Raise(eventName_login);
+            });
+            scope.Subscribe(eventName_login, (self, signal) =>
+            {
+                this.WriteLine("Logging in...");
+                scope.Raise(eventName_showAccount);
+            });
+            scope.Subscribe(eventName_showAccount, (self, signal) =>
+            {
+                this.WriteLine("Showing account! The end!");
+            });
+            
+            // Start iteration 1
+            scope.Run();
+            
+            // --- Iteration 2 --- //
+            this.WriteLine("--- Iteration 2 (show an ad) ---");
+            
+            var eventName_showAd = "showAd";
+            scope.Register(eventName_showAd);
+            
+            scope.Intercept(eventName_showAccount, eventName_showAd);
+            scope.Subscribe(eventName_showAd, (self, signal) =>
+            {
+                this.WriteLine("Showing ad!");
+                scope.Raise(eventName_showAccount);
+            });
+            
+            // Start iteration 2
+            scope.Run();
+            
+            // --- Iteration 3 --- //
+            this.WriteLine("--- Iteration 3 (don't show ads for premium user) ---");
+            
+            Boolean premiumUser = true;
+            
+            scope.Intercept(eventName_showAd, (self, signal) =>
+            {
+                if (premiumUser)
+                {
+                    this.WriteLine("Premium user! No ads here.");
+                    scope.Raise(eventName_showAccount);
+                }
+                else
+                {
+                    self.Unblock();
+                }
+            });
+            
+            scope.Run();
+            
+            this.WriteLine("--- Iteration 3.1 (premium user again) ---");
+            
+            premiumUser = true;
+            scope.Run();
+            
+            this.WriteLine("--- Iteration 3.2 (not premium user) ---");
+            
+            premiumUser = false;
+            scope.Run();
+            
+            this.WriteLine("--- Iteration 3.3 (ditto) ---");
+            
+            premiumUser = false;
+            scope.Run();
+            
+            this.WriteLine("--- Iteration 3.4 (premium user) ---");
+            
+            premiumUser = true;
+            scope.Run();
         }
     }
 }
