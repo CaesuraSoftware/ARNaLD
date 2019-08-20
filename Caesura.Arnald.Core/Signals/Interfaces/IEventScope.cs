@@ -17,11 +17,13 @@ namespace Caesura.Arnald.Core.Signals
         /// <value></value>
         Boolean UseActivatorPriority { get; set; }
         String Namespace { get; set; }
+        IEventStack EventStack { get; set; }
         
         /// <summary>
         /// Run the main event for this scope.
         /// </summary>
         void Run();
+        void Run(Boolean repeat);
         Maybe<IEvent> GetEvent(String eventName);
         Boolean IsEventRegistered(String eventName);
         /// <summary>
@@ -82,5 +84,14 @@ namespace Caesura.Arnald.Core.Signals
         /// <param name="callback"></param>
         /// <returns></returns>
         IActivator Intercept(String eventName, ActivatorCallback callback);
+        /// <summary>
+        /// Block an event from being raised to instead raise another event while
+        /// calling a callback. Will automatically unblock when the event is raised again.
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="callNext"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        IActivator Intercept(String eventName, String callNext, ActivatorCallback callback);
     }
 }

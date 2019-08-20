@@ -24,12 +24,14 @@ namespace Caesura.Arnald.Core.Signals
             get => this.b_Namespace;
             set { this.b_Namespace = value; this.Events.Map(ev => ev.Namespace = value); }
         }
+        public IEventStack EventStack { get; set; }
         
         public EventScope()
         {
             this.Events                 = new List<Event>();
             this.b_UseactivatorPriority = true;
             this.b_Namespace            = Event.DefaultNamespace;
+            this.EventStack             = new EventStack();
             
             this.Register(EventScope.MainEventName);
         }
@@ -43,6 +45,18 @@ namespace Caesura.Arnald.Core.Signals
         {
             this.UnblockAll();
             this.Raise(EventScope.MainEventName);
+        }
+        
+        public void Run(Boolean repeat)
+        {
+            this.UnblockAll();
+            this.EventStack.Reset();
+            this.EventStack.Repeat = repeat;
+            while (this.EventStack.Index != -1)
+            {
+                var item = this.EventStack.Next();
+                this.Raise(item);
+            }
         }
         
         public Maybe<IEvent> GetEvent(String eventName)
@@ -184,6 +198,16 @@ namespace Caesura.Arnald.Core.Signals
                 throw new ElementNotFoundException($"No event registered with name of \"{eventName}\"");
             }
             return ev.Intercept(callback);
+        }
+        
+        public IActivator Intercept(String eventName, String callNext, ActivatorCallback callback)
+        {
+            var ev = this.Events.Find(x => x.Name == eventName);
+            if (ev is null)
+            {
+                throw new ElementNotFoundException($"No event registered with name of \"{eventName}\"");
+            }
+            return ev.Intercept(this, callNext, callback);
         }
     }
 }

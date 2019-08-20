@@ -131,6 +131,25 @@ namespace Caesura.Arnald.Core.Signals
             return activator;
         }
         
+        public IActivator Intercept(EventScope scope, String callNext, ActivatorCallback callback)
+        {
+            ActivatorCallback cb = (self, signal) =>
+            {
+                if (self.Blocking)
+                {
+                    self.Unblock();
+                }
+                else
+                {
+                    self.Block();
+                    callback.Invoke(self, signal);
+                    scope.Raise(callNext);
+                }
+            };
+            var activator = this.Subscribe(cb);
+            return activator;
+        }
+        
         public void Block(IActivator blocker)
         {
             if (blocker is null)

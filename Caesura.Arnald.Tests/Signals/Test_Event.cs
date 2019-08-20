@@ -171,22 +171,23 @@ namespace Caesura.Arnald.Tests.Signals
             scope.Register(eventName_login);
             scope.Register(eventName_showAccount);
             
-            scope.Subscribe(EventScope.MainEventName, (self, signal) =>
-            {
-                scope.Raise(eventName_login);
-            });
             scope.Subscribe(eventName_login, (self, signal) =>
             {
                 this.WriteLine("Logging in...");
-                scope.Raise(eventName_showAccount);
             });
             scope.Subscribe(eventName_showAccount, (self, signal) =>
             {
                 this.WriteLine("Showing account! The end!");
             });
             
+            scope.EventStack.SetStack(new String[]
+            {
+                eventName_login,
+                eventName_showAccount,
+            });
+            
             // Start iteration 1
-            scope.Run();
+            scope.Run(false);
             
             // --- Iteration 2 --- //
             this.WriteLine("--- Iteration 2 (show an ad) ---");
@@ -194,15 +195,15 @@ namespace Caesura.Arnald.Tests.Signals
             var eventName_showAd = "showAd";
             scope.Register(eventName_showAd);
             
-            scope.Intercept(eventName_showAccount, eventName_showAd);
             scope.Subscribe(eventName_showAd, (self, signal) =>
             {
                 this.WriteLine("Showing ad!");
-                scope.Raise(eventName_showAccount);
             });
             
+            scope.EventStack.Insert(eventName_showAd, eventName_showAccount);
+            
             // Start iteration 2
-            scope.Run();
+            scope.Run(false);
             
             // --- Iteration 3 --- //
             this.WriteLine("--- Iteration 3 (don't show ads for premium user) ---");
@@ -214,7 +215,6 @@ namespace Caesura.Arnald.Tests.Signals
                 if (premiumUser)
                 {
                     this.WriteLine("Premium user! No ads here.");
-                    scope.Raise(eventName_showAccount);
                 }
                 else
                 {
@@ -222,27 +222,43 @@ namespace Caesura.Arnald.Tests.Signals
                 }
             });
             
-            scope.Run();
+            scope.Run(false);
             
             this.WriteLine("--- Iteration 3.1 (premium user again) ---");
             
             premiumUser = true;
-            scope.Run();
+            scope.Run(false);
             
             this.WriteLine("--- Iteration 3.2 (not premium user) ---");
             
             premiumUser = false;
-            scope.Run();
+            scope.Run(false);
             
             this.WriteLine("--- Iteration 3.3 (ditto) ---");
             
             premiumUser = false;
-            scope.Run();
+            scope.Run(false);
             
             this.WriteLine("--- Iteration 3.4 (premium user) ---");
             
             premiumUser = true;
-            scope.Run();
+            scope.Run(false);
+            
+            // --- Iteration 4 --- //
+            this.WriteLine("--- Iteration 4 (security checking) ---");
+            
+            var eventName_securityCheck = "securityCheck";
+            scope.Register(eventName_securityCheck);
+            
+            scope.Subscribe(eventName_securityCheck, (self, signal) =>
+            {
+                this.WriteLine("Extra security checking!");
+            });
+            
+            scope.EventStack.Insert(eventName_securityCheck, eventName_showAd);
+            
+            // Start iteration 4
+            scope.Run(false);
         }
     }
 }
